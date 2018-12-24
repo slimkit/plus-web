@@ -8,15 +8,17 @@ module.exports = {
     parser: 'babel-eslint'
   },
   extends: [
-    'plugin:vue/recommended'
+    'plugin:vue/recommended',
+    '@vue/standard',
   ],
-  // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
-  // add your custom rules here
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+    'comma-dangle': ['error', 'always-multiline'],
+    'prefer-promise-reject-errors': ['off'],
+    'vue/max-attributes-per-line': ['error', { singleline: 2 }],
+    'vue/singleline-html-element-content-newline': ['off'],
+    'vue/no-use-v-if-with-v-for': ['off'],
+    'vue/no-v-html': ['off'],
   }
 }
