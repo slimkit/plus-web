@@ -16,6 +16,5 @@ export default {
 
 <style lang="less" scoped>
 .p-feed-index {
-  background-color: @primary-color;
 }
 </style>

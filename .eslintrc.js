@@ -20,5 +20,6 @@ module.exports = {
     'vue/singleline-html-element-content-newline': ['off'],
     'vue/no-use-v-if-with-v-for': ['off'],
     'vue/no-v-html': ['off'],
+    'vue/component-name-in-template-casing': ['off'],
   }
 }

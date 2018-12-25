@@ -1,6 +1,16 @@
 <template>
   <div>
-    <!-- eslint-disable-next-line vue/component-name-in-template-casing -->
+    <CommonHeader />
     <nuxt />
   </div>
 </template>
+
+<script>
+import CommonHeader from '@/components/common/CommonHeader.vue'
+
+export default {
+  components: {
+    CommonHeader,
+  },
+}
+</script>
