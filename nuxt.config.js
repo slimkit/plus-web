@@ -29,10 +29,16 @@ module.exports = {
   css: [
   ],
 
+  styleResources: {
+    // inject the theme variables into every Vue components
+    less: '@/assets/less/theme.less',
+  },
+
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '@/plugins/iview', ssr: true },
   ],
 
   /*
@@ -41,6 +47,7 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
+    '@nuxtjs/style-resources',
   ],
   /*
   ** Axios module configuration
@@ -66,6 +73,7 @@ module.exports = {
           exclude: /(node_modules)/,
         })
       }
+      ctx.loaders.less.javascriptEnabled = true
     },
   },
 }
