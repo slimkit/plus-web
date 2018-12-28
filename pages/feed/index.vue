@@ -63,7 +63,8 @@ export default {
   data () {
     return {
       typeMap,
-      feeds: [],
+      new: [],
+      hot: [],
       pinneds: [],
     }
   },
@@ -79,6 +80,9 @@ export default {
         this.$router.push({ ...this.$route, query: { type: val } })
       },
     },
+    feeds () {
+      return this.$data[this.type]
+    },
   },
   watch: {
     type () {
@@ -89,7 +93,7 @@ export default {
     const { type = defaultType } = query
     const { feeds, pinned } = await $axios.$get('/feeds', { params: { type } })
     return {
-      feeds,
+      [type]: feeds,
       pinneds: pinned,
     }
   },
@@ -100,7 +104,7 @@ export default {
     async fetchFeeds () {
       const params = { type: this.type }
       const { feeds, pinned } = await this.$axios.$get('/feeds', { params })
-      this.feeds = feeds
+      this.$data[this.type] = feeds
       this.pinneds = pinned
     },
   },
