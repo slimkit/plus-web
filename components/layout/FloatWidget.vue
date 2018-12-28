@@ -24,7 +24,17 @@ export default {
     returnTop (el, binding) {
       // 点击返回顶部
       el.addEventListener('click', function (event) {
-        document.documentElement.scrollTop = document.body.scrollTop = 0
+        const scroll = function () {
+          let top = document.documentElement.scrollTop || document.body.scrollTop
+          const speed = Math.floor(-top / 3)
+          if (top > 40) {
+            requestAnimationFrame(scroll)
+          } else {
+            top = 0
+          }
+          document.documentElement.scrollTop = document.body.scrollTop = top + speed
+        }
+        requestAnimationFrame(scroll)
       })
 
       // 滑动距离超过 binding.value 后才显示 (with throttle)
