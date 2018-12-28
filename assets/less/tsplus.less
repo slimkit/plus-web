@@ -1,4 +1,5 @@
 @import './theme';
+@import './mixins';
 
 .container {
   max-width: @screen-lg;
@@ -34,3 +35,11 @@
     vertical-align: -0.1125em;
   }
 }
+
+.text-cut {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-cut-generator(4);

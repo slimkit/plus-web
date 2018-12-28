@@ -6,3 +6,16 @@
 .border() when (default()) {
   border: 1px solid @border-color-base;
 }
+
+.text-cut-generator(@n) when (@n >= 2) {
+  .text-cut-generator((@n - 1));
+  .text-cut-@{n} {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: @n;
+    // autoprefixer: off
+    -webkit-box-orient: vertical;
+    // autoprefixer: on
+  }
+}

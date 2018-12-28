@@ -28,43 +28,7 @@
             class="user-item"
           >
             <Avatar :user="user" />
-            <span class="username">{{ user.name }}</span>
-          </li>
-        </ul>
-      </SideWidget>
-      <SideWidget v-if="recommendUsers.length" title="推荐用户">
-        <ul class="user-list">
-          <li
-            v-for="user in recommendUsers"
-            :key="user.id"
-            class="user-item"
-          >
-            <Avatar :user="user" />
-            <span class="username">{{ user.name }}</span>
-          </li>
-        </ul>
-      </SideWidget>
-      <SideWidget v-if="recommendUsers.length" title="推荐用户">
-        <ul class="user-list">
-          <li
-            v-for="user in recommendUsers"
-            :key="user.id"
-            class="user-item"
-          >
-            <Avatar :user="user" />
-            <span class="username">{{ user.name }}</span>
-          </li>
-        </ul>
-      </SideWidget>
-      <SideWidget v-if="recommendUsers.length" title="推荐用户">
-        <ul class="user-list">
-          <li
-            v-for="user in recommendUsers"
-            :key="user.id"
-            class="user-item"
-          >
-            <Avatar :user="user" />
-            <span class="username">{{ user.name }}</span>
+            <span class="username text-cut">{{ user.name }}</span>
           </li>
         </ul>
       </SideWidget>
@@ -183,9 +147,6 @@ export default {
   }
 
   .right-container {
-    align-self: flex-end;
-    position: sticky;
-    bottom: 30px;
     flex: none;
     width: 235px;
 
@@ -205,6 +166,7 @@ export default {
           margin-top: 8px;
           font-size: @font-size-small;
           text-align: center;
+          max-width: 5em;
         }
       }
     }
