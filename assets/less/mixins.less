@@ -1,0 +1,8 @@
+@import '~assets/less/theme';
+
+.border(@direction) when (iskeyword(@direction)) {
+  border-@{direction}: 1px solid @border-color-base;
+}
+.border() when (default()) {
+  border: 1px solid @border-color-base;
+}

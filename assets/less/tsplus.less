@@ -2,4 +2,35 @@
 
 .container {
   max-width: @screen-lg;
+  min-width: @screen-md;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+
+  &.lg {
+    width: 2em;
+    height: 2em;
+    vertical-align: -0.3em;
+  }
+
+  &.xl {
+    width: 3em;
+    height: 3em;
+    vertical-align: -0.45em;
+  }
+
+  &.sm {
+    width: 0.75em;
+    height: 0.75em;
+    vertical-align: -0.1125em;
+  }
 }
