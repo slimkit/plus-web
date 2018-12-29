@@ -1,8 +1,9 @@
 require('dotenv').config()
 const pkg = require('./package')
 let debug = eval(process.env.DEBUG) // eslint-disable-line no-eval
-debug = debug !== undefined ? debug : process.env.NODE_ENV === 'development'
-const baseURL = process.env.NUXT_ENV_API_HOST || 'http://localhost:3000'
+const IS_DEV = process.env.NODE_ENV === 'development'
+debug = debug !== undefined ? debug : IS_DEV
+const baseURL = process.env.NUXT_ENV_API_HOST || 'http://localhost'
 
 module.exports = {
   mode: 'universal',
@@ -27,7 +28,7 @@ module.exports = {
   },
 
   env: {
-    debug: debug !== undefined ? debug : process.env.NODE_ENV === 'development',
+    debug: debug !== undefined ? debug : IS_DEV,
   },
 
   /*
@@ -79,8 +80,12 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     // baseURL: https?://[host]:[port][prefix]
     baseURL: `${baseURL}/api/v2`,
-    // prefix: '/api/v2',
-    debug: false,
+    proxy: true,
+    prefix: '/api/v2',
+  },
+
+  proxy: {
+    '/api': baseURL,
   },
 
   styleResources: {

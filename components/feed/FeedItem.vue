@@ -7,13 +7,27 @@
       </div>
       <div
         class="post-info"
+        @click="viewDetail"
         @mouseenter="hoverTime = true"
         @mouseleave="hoverTime = false"
       >
         {{ hoverTime ? '查看详情' : feed.created_at | fromNow }}
       </div>
     </div>
-    <div class="feed-content">
+    <div v-if="images.length" class="feed-content image-wrap">
+      <AsyncFile
+        v-for="(image, index) in images"
+        v-if="!index"
+        :key="image.file"
+        type="image"
+        :file="image"
+      />
+    </div>
+    <div
+      v-else
+      class="feed-content"
+      @click="viewDetail"
+    >
       {{ feed.feed_content }}
     </div>
     <footer class="feed-meta">
@@ -30,7 +44,7 @@
           </svg>
           <span>{{ feed.feed_comment_count }}</span>
         </span>
-        <span class="meta">
+        <span class="meta view" @click="viewDetail">
           <svg class="icon lg">
             <use xlink:href="#icon-chakan" />
           </svg>
@@ -49,6 +63,21 @@ export default {
   name: 'FeedItem',
   props: {
     feed: { type: Object, required: true },
+  },
+  data () {
+    return {
+      hoverTime: false,
+    }
+  },
+  computed: {
+    images () {
+      return this.feed.images || []
+    },
+  },
+  methods: {
+    viewDetail () {
+      this.$router.push(`/feed/${this.feed.id}`)
+    },
   },
 }
 </script>
@@ -83,11 +112,17 @@ export default {
       color: @text-info-color;
       font-size: @font-size-small;
       font-weight: bold;
+      cursor: pointer;
     }
   }
 
   .feed-content {
     margin: 16px 0;
+    cursor: pointer;
+
+    .image {
+      width: 100%;
+    }
   }
 
   .feed-meta {
@@ -102,6 +137,10 @@ export default {
       margin-right: 2em;
       font-size: @font-size-small;
       color: @text-info-color;
+
+      &.view {
+        cursor: pointer;
+      }
 
       > span {
         margin-left: 0.3em;
