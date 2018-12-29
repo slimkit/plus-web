@@ -78,8 +78,8 @@ export default {
   }
 
   &.def {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     font-size: 26px;
   }
 

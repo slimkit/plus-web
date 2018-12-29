@@ -47,10 +47,7 @@ export function fromNow (target) {
   const zulu = toZuluTimezone(target)
   const date = new Date(zulu)
   const offset = (new Date() - new Date(date)) / 1000
-  if (Number.isNaN(offset)) {
-    console.error('时间解析错误:', target) // eslint-disable-line no-console
-    return String(target)
-  }
+  if (Number.isNaN(offset)) return target
   let relative = offset
 
   // 今天

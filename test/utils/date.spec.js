@@ -22,6 +22,9 @@ test('fromNow', t => {
 
   const before45d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 45, 12, 34, 56)
   t.is(fromNow(before45d), `${before45d.getMonth() + 1}-${before45d.getDate()}`, 'x天前 (x > 9')
+
+  const notTime = '不要解析我'
+  t.is(fromNow(notTime), notTime, '不应该解析非时间文本')
 })
 
 test('isYesterday', t => {

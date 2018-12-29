@@ -5,7 +5,13 @@
         <Avatar :user="feed.user" />
         <span class="username">{{ feed.user.name }}</span>
       </div>
-      <div class="post-info">{{ feed.created_at | fromNow }}</div>
+      <div
+        class="post-info"
+        @mouseenter="hoverTime = true"
+        @mouseleave="hoverTime = false"
+      >
+        {{ hoverTime ? '查看详情' : feed.created_at | fromNow }}
+      </div>
     </div>
     <div class="feed-content">
       {{ feed.feed_content }}
