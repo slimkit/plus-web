@@ -54,14 +54,19 @@ export default {
 <style lang="less" scoped>
 .c-float-widget {
   position: sticky;
-  bottom: 10vh;
+  bottom: 15vh;
+  left: 0;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  width: @screen-lg;
+  width: 100%;
+  max-width: @screen-lg;
+  min-width: @screen-md;
   height: 0;
+  padding: 0 32px;
   margin: 0 auto;
   overflow: visible;
+  transition: all 0.4s ease;
 
   .float-items {
     display: flex;
@@ -87,25 +92,35 @@ export default {
       }
 
       svg {
-        transition: transform 0.2s;
+        transition: all 0.3s;
       }
 
       &:hover svg {
-        transform: scale(1.2);
+        font-size: 120%;
       }
     }
 
     .return-top {
       position: relative;
-      top: 30vh;
+      top: 40px;
+      opacity: 0;
       background-color: @primary-color;
+      transition: all .4s ease;
+      pointer-events: none;
       font-size: 140%;
-      transition: top .4s ease-in-out;
 
       &.active {
         top: 0;
+        opacity: 1;
+        pointer-events: auto;
       }
     }
+  }
+}
+
+@media (min-width: @screen-lg + 48 * 2) {
+  .c-float-widget {
+    transform: translateX(48 + 32px)
   }
 }
 </style>

@@ -116,19 +116,19 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: 100%;
 
   .left-navigation {
     position: sticky;
     top: 0;
     flex: none;
+    width: 140px;
   }
 
   .feed-container {
     flex: auto;
-    min-width: 480px;
-    margin: 0 30px;
+    min-width: 0px;
     padding: 22px 40px;
+    margin: 0 30px;
     background-color: #fff;
 
     .sort-items {

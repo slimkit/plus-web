@@ -6,9 +6,9 @@
       <nuxt />
     </div>
 
-    <FloatWidget />
+    <FloatWidget class="bottom" />
 
-    <CommonFooter class="footer" />
+    <CommonFooter />
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
     margin: 36px auto;
   }
 
-  .footer {
+  .bottom {
     margin-top: auto;
   }
 }

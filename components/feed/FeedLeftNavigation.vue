@@ -41,7 +41,6 @@ export default {
 .c-feed-left-navigation {
   display: flex;
   flex-direction: column;
-  width: 150px;
   padding: 20px 0;
 
   .item {
