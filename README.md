@@ -38,19 +38,22 @@ $ yarn test
 ## nuxt
 
 [官方教程](https://zh.nuxtjs.org/guide)
+
 [API](https://zh.nuxtjs.org/api)
 
 ## iView
 
 iView 使用按需加载，如果要使用某组件，在 `plugins/iview` 中加载即可
 
-iView 样式表使用less重新导入在 `assets/less/iview/` 下
+iView 样式表使用 less 重新导入在 `assets/less/iview/` 下
 
 [组件手册](https://www.iviewui.com/docs/guide/start)
 
-## axios for Nuxt
+## axios
 
-[官方文档(英文)](https://axios.nuxtjs.org/)
+[axios (英文)](https://github.com/axios/axios)
+
+[axios for nuxt (英文) ](https://axios.nuxtjs.org/)
 
 ## less
 
@@ -58,7 +61,7 @@ iView 样式表使用less重新导入在 `assets/less/iview/` 下
 
 ## flex 布局教程
 
-[阮一峰的flex布局教程](http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html?utm_source=tuicool)
+[阮一峰的 flex 布局教程](http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)
 
 ## ava (单元测试)
 

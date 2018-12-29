@@ -1,5 +1,5 @@
 <template>
-  <section class="c-feed-item">
+  <section class="c-feed-list-item">
     <div class="author-info">
       <div class="user-info">
         <Avatar :user="feed.user" />
@@ -60,7 +60,7 @@
 
 <script>
 export default {
-  name: 'FeedItem',
+  name: 'FeedListItem',
   props: {
     feed: { type: Object, required: true },
   },
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.c-feed-item {
+.c-feed-list-item {
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;

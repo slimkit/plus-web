@@ -1,12 +1,12 @@
 <template>
   <div class="c-feed-list">
-    <FeedItem
+    <FeedListItem
       v-for="feed in pinneds"
       :key="`pinned-${feed.id}`"
       :feed="feed"
       :pinned="true"
     />
-    <FeedItem
+    <FeedListItem
       v-for="feed in feeds"
       :key="`feed-${feed.id}`"
       :feed="feed"
@@ -15,12 +15,12 @@
 </template>
 
 <script>
-import FeedItem from './FeedItem.vue'
+import FeedListItem from './FeedListItem.vue'
 
 export default {
   name: 'FeedList',
   components: {
-    FeedItem,
+    FeedListItem,
   },
   props: {
     pinneds: { type: Array, default: () => [] },
