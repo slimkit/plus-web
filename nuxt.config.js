@@ -58,6 +58,7 @@ module.exports = {
   plugins: [
     { src: '@/plugins/iview', ssr: true },
     { src: '@/plugins/components', ssr: true },
+    { src: '@/plugins/filters', ssr: true },
   ],
 
   /*

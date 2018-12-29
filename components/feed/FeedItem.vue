@@ -5,7 +5,7 @@
         <Avatar :user="feed.user" />
         <span class="username">{{ feed.user.name }}</span>
       </div>
-      <div class="post-info">17小时前</div>
+      <div class="post-info">{{ feed.created_at | fromNow }}</div>
     </div>
     <div class="feed-content">
       {{ feed.feed_content }}
