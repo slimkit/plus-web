@@ -67,6 +67,6 @@ export function fromNow (target) {
   if (relative < 9) return `${relative}天前`
 
   // 超过 9 天
-  const dateString = `${date.getMonth()}-${date.getDate()}`
+  const dateString = `${date.getMonth() + 1}-${date.getDate()}`
   return dateString
 }
