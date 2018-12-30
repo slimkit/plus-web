@@ -23,7 +23,25 @@ $ yarn test
 
 ```
 
-# 开发文档 （占位）
+# 开发文档
+
+## 开发前准备
+
+- nodejs > 10
+- [yarn 包管理器](https://yarnpkg.com/) (安装依赖提速)
+- vscode (或其他支持 eslint、vue 高亮的插件)
+- chorome 或 firefox 的 [vue-devtools 插件](https://github.com/vuejs/vue-devtools)
+
+### vscode 插件推荐
+- \* `vetur` vue 语法高亮
+- \* `ESLint` 代码风格检查与自动修正
+- `Path Intellisense` 路径感知（文件跳转）
+- `Vue Peek` vue 组件跳转
+- `Toggle Quotes` 快速切换引号 按 `ctrl+'` 在[`'` `"` `` ` ``]中快速切换
+
+### 其他编辑器必装插件
+- vue 语法高亮, less 语法高亮，es6 语法支持
+- eslint (最好开启保存时自动修复 auto-fix on save)
 
 # 参考资料
 
