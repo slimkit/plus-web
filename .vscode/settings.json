@@ -1,0 +1,39 @@
+{
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.associations": {
+    ".env": "properties",
+    ".env.template": "properties",
+  },
+
+  "eslint.packageManager": "yarn",
+    "eslint.autoFixOnSave": true,
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      {
+          "language": "vue",
+          "autoFix": true,
+      }
+  ],
+
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false,
+    "editor.trimAutoWhitespace": false,
+    "editor.formatOnSave": false,
+  },
+
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "vetur.format.defaultFormatterOptions": {
+    "js-beautify-html": {
+      "wrap_attributes": "force-expand-multiline",
+      "wrap-attributes-indent-size": 2,
+      "brace-style": "",
+    }
+  },
+
+  "togglequotes.chars": [ "\"", "'", "`" ],
+
+}
