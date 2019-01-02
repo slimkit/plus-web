@@ -2,10 +2,12 @@ import Vue from 'vue'
 import '../assets/less/index.less'
 
 import {
+  Button,
   Input,
 } from 'iview'
 
 const components = {
+  Button,
   Input,
 }
 
