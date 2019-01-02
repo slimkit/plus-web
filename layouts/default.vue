@@ -18,6 +18,7 @@ import CommonFooter from '@/components/layout/CommonFooter.vue'
 import FloatWidget from '@/components/layout/FloatWidget.vue'
 
 export default {
+  name: 'DefaultLayout',
   components: {
     CommonHeader,
     CommonFooter,

@@ -1,3 +1,146 @@
 <template>
-  <div class="p-auth-login" />
+  <div class="p-auth-login">
+    <form class="form">
+      <input type="text" placeholder="输入手机号/邮箱/昵称">
+      <input type="password" placeholder="输入密码">
+      <div class="others">
+        <span class="use-code">验证码登录</span>
+        <nuxt-link to="/auth/find">忘记密码</nuxt-link>
+      </div>
+      <Button
+        size="large"
+        type="primary"
+        @click="onSubmit"
+      >
+        登录
+      </Button>
+      <div class="footage">
+        <span>没有账号？<nuxt-link class="active" to="/auth/register">注册</nuxt-link></span>
+        <span class="right">三方登录：</span>
+        <svg class="icon socialite-button" :style="{color: '#f97d72'}"><use xlink:href="#icon-weibo" /></svg>
+        <svg class="icon socialite-button" :style="{color: '#54c58c'}"><use xlink:href="#icon-weixin" /></svg>
+        <svg class="icon socialite-button" :style="{color: '#5fbddf'}"><use xlink:href="#icon-qq" /></svg>
+      </div>
+    </form>
+    <div class="welcome">
+      <h1 class="title">欢迎来到ThinkSNS+</h1>
+      <img class="qrcode" src="https://www.pgyer.com/app/qrcode/thinksns-plus">
+      <p class="placeholder">扫描二维码体验APP</p>
+    </div>
+  </div>
 </template>
+
+<script>
+export default {
+  name: 'AuthLogin',
+  layout: 'auth',
+  data () {
+    return {
+      form: {
+        account: '',
+        password: '',
+      },
+    }
+  },
+  methods: {
+    onSubmit () {},
+  },
+}
+</script>
+
+<style lang="less" scoped>
+.p-auth-login {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  width: 640px;
+  background-color: #fff;
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: auto;
+    padding: 50px;
+    color: @text-info-color;
+
+    a {
+      color: @text-info-color;
+
+      &.active {
+        color: @primary-color;
+      }
+    }
+
+    > * {
+      margin-bottom: 24px;
+    }
+
+    input {
+      height: 40px;
+      line-height: 40px;
+      padding: 0 15px;
+      border: none;
+      border-radius: @btn-border-radius-small;
+      background-color: @background-color-base;
+      font-size: @font-size-base;
+      .placeholder-color(@text-info-color);
+    }
+
+    .others {
+      display: flex;
+      justify-content: space-between;
+
+      .use-code {
+        cursor: pointer;
+      }
+    }
+
+    .footage {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      .right {
+        margin-left: auto;
+      }
+    }
+
+    .socialite-button {
+      box-sizing: content-box;
+      margin-left: 2px;
+      padding: 2px;
+      .border();
+      border-radius: 100%;
+      cursor: pointer;
+    }
+  }
+
+  .welcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: none;
+    width: 240px;
+    min-height: 360px;
+    background: linear-gradient(120deg, #5f52ad, #5dd1e1);
+    color: #fff;
+
+    .title {
+      margin-bottom: 36px;
+      font-size: @font-size-base * 1.5;
+      font-weight: normal;
+    }
+
+    .qrcode {
+      width: 120px;
+      height: 120px;
+    }
+
+    .placeholder {
+      margin-top: 36px;
+    }
+  }
+}
+</style>
