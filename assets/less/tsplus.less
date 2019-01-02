@@ -45,6 +45,24 @@
 
 .text-cut-generator(4); /* .text-cut-2, .text-cut-3, .text-cut-4 */
 
-.no-content {
+// empty directive
+.v-empty {
+  &-content,
+  &-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 500px;
+    color: @primary-color;
+    font-weight: bold;
+  }
 
+  &-content::before {
+    content: url(~assets/images/pic_default_people.png);
+  }
+  &-search::before {
+    content: url(~assets/images/pic_default_people.png);
+  }
 }

@@ -1,11 +1,10 @@
 <template>
-  <div class="c-async-file" :class="type">
-    <img
-      v-if="type === 'image'"
-      class="async-image"
-      :src="src"
-    >
-  </div>
+  <img
+    v-if="type === 'image'"
+    class="c-async-file"
+    :class="type"
+    :src="src"
+  >
 </template>
 
 <script>
@@ -14,7 +13,6 @@ export default {
   props: {
     type: { type: String, default: 'image' },
     file: { type: Object, required: true },
-    classes: { type: null, default: '' },
   },
   data: function () {
     return {
@@ -35,8 +33,6 @@ export default {
 
 <style lang="less" scoped>
 .c-async-file {
-  .async-image {
-    max-width: 100%;
-  }
+  max-width: 100%;
 }
 </style>

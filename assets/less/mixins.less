@@ -1,21 +1,34 @@
 @import '~assets/less/theme';
-
 .border(@direction) when (iskeyword(@direction)) {
   border-@{direction}: 1px solid @border-color-base;
 }
+
 .border() when (default()) {
   border: 1px solid @border-color-base;
 }
 
-.text-cut-generator(@n) when (@n >= 2) {
+.text-cut-generator(@n) when (@n >=2) {
   .text-cut-generator((@n - 1));
   .text-cut-@{n} {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: @n;
-    // autoprefixer: off
-    -webkit-box-orient: vertical;
-    // autoprefixer: on
+    -webkit-line-clamp: @n; // autoprefixer: off
+    -webkit-box-orient: vertical; // autoprefixer: on
+  }
+}
+
+.placeholder-color(@color) {
+  &::-webkit-input-placeholder { /* WebKit browsers */
+    color: @color;
+  }
+  &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: @color;
+  }
+  &::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: @color;
+  }
+  &:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: @color;
   }
 }

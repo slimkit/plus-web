@@ -71,7 +71,7 @@ export default {
   .float-items {
     display: flex;
     flex-direction: column-reverse;
-    font-size: @font-size-small * 2;
+    font-size: @font-size-large;
 
     .float-item {
       flex: none;

@@ -1,6 +1,10 @@
-export default function ({ $axios, $loading }) {
+export default function (context) {
+  const { $axios, env } = context
+
   $axios.onRequest(config => {
-    console.log(`Making request to ${config.url}`) // eslint-disable-line no-console
+    if (env.debug) {
+      console.log(`[axios] request to ${config.url}`) // eslint-disable-line no-console
+    }
   })
 
   $axios.onError(error => {
@@ -58,6 +62,6 @@ export default function ({ $axios, $loading }) {
     } else {
       error.tips = '网络不可用，请检查！'
     }
-    // Message.error(error.tips)
+    console.error(error) // eslint-disable-line no-console
   })
 }

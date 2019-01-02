@@ -57,9 +57,11 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '@/plugins/axios', ssr: true },
     { src: '@/plugins/iview', ssr: true },
     { src: '@/plugins/components', ssr: true },
     { src: '@/plugins/filters', ssr: true },
+    { src: '@/plugins/directives', ssr: true },
   ],
 
   /*
