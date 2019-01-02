@@ -1,22 +1,22 @@
 <template>
   <section class="c-article-like">
     <div class="meta-item">
-      <Button
+      <IButton
         size="large"
         class="meta-button"
         @click="$emit('collect')"
       >
         <svg class="icon"><use xlink:href="#icon-collect" /></svg>
         {{ collectCount }} 人收藏
-      </Button>
-      <Button
+      </IButton>
+      <IButton
         size="large"
         class="meta-button"
         @click="$emit('like')"
       >
         <svg class="icon"><use xlink:href="#icon-like" /></svg>
         {{ likeCount }} 人喜欢
-      </Button>
+      </IButton>
     </div>
 
     <div class="meta-item">

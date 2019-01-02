@@ -1,12 +1,12 @@
 <template>
   <section class="c-article-reward">
-    <Button
+    <IButton
       type="error"
       size="large"
       class="reward-button"
     >
       打 赏
-    </Button>
+    </IButton>
     <p class="reward-info">
       <span>{{ count }}</span> 人打赏，
       共 <span>{{ amount }}</span> 积分

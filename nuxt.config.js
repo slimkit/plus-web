@@ -102,6 +102,10 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    extractCSS: true,
+    vendor: [
+      'lodash',
+    ],
     /*
     ** You can extend webpack config here
     */

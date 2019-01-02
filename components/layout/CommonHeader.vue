@@ -22,7 +22,7 @@
       <div class="extra">
         <nuxt-link class="login-btn" :to="{name: 'auth-login'}">登录</nuxt-link>
         <nuxt-link class="login-btn" :to="{name: 'auth-register'}">注册</nuxt-link>
-        <Input
+        <IInput
           class="search-box"
           search
           placeholder="输入关键词搜索"

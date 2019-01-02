@@ -1,19 +1,33 @@
 <template>
   <div class="p-auth-login">
-    <form class="form">
-      <input type="text" placeholder="输入手机号/邮箱/昵称">
-      <input type="password" placeholder="输入密码">
+    <IForm
+      ref="form"
+      class="form"
+      :rules="validator"
+    >
+      <IFormItem>
+        <IInput
+          v-model="form.account"
+          type="text"
+          placeholder="输入手机号/邮箱/昵称"
+        />
+      </IFormItem>
+      <IInput
+        v-model="form.password"
+        type="password"
+        placeholder="输入密码"
+      />
       <div class="others">
-        <span class="use-code">验证码登录</span>
+        <span class="use-code" title="验证码登录">验证码登录</span>
         <nuxt-link to="/auth/find">忘记密码</nuxt-link>
       </div>
-      <Button
+      <IButton
         size="large"
         type="primary"
         @click="onSubmit"
       >
         登录
-      </Button>
+      </IButton>
       <div class="footage">
         <span>没有账号？<nuxt-link class="active" to="/auth/register">注册</nuxt-link></span>
         <span class="right">三方登录：</span>
@@ -21,7 +35,7 @@
         <svg class="icon socialite-button" :style="{color: '#54c58c'}"><use xlink:href="#icon-weixin" /></svg>
         <svg class="icon socialite-button" :style="{color: '#5fbddf'}"><use xlink:href="#icon-qq" /></svg>
       </div>
-    </form>
+    </IForm>
     <div class="welcome">
       <h1 class="title">欢迎来到ThinkSNS+</h1>
       <img class="qrcode" src="https://www.pgyer.com/app/qrcode/thinksns-plus">
@@ -31,19 +45,43 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
+const validator = {
+  account: [
+    { required: true, message: '输入手机号/邮箱/昵称', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { type: 'string', min: 6, max: 16, message: '密码的长度要求在6-16位之间', trigger: 'blur' },
+  ],
+}
+
 export default {
   name: 'AuthLogin',
   layout: 'auth',
+  head: {
+    title: '登录',
+  },
   data () {
     return {
       form: {
         account: '',
         password: '',
       },
+      validator,
     }
   },
   methods: {
-    onSubmit () {},
+    ...mapActions('auth', {
+      getAccessToken: 'getAccessToken',
+    }),
+    onSubmit () {
+      this.$refs.form.validate(valid => {
+        console.log(valid)
+        if (valid) return
+      })
+    },
   },
 }
 </script>
@@ -76,15 +114,12 @@ export default {
       margin-bottom: 24px;
     }
 
-    input {
+    /deep/ .ivu-input { // scoped 穿透
       height: 40px;
       line-height: 40px;
       padding: 0 15px;
-      border: none;
-      border-radius: @btn-border-radius-small;
       background-color: @background-color-base;
       font-size: @font-size-base;
-      .placeholder-color(@text-info-color);
     }
 
     .others {

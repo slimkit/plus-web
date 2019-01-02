@@ -2,22 +2,22 @@
   <div class="c-post-text">
     <textarea class="editor" placeholder="说点什么吧" />
     <div class="tools">
-      <Button
+      <IButton
         type="text"
         class="button tool"
         @click="showMention"
       >
         <svg class="icon"><use xlink:href="#icon-mention" /></svg>
         某人
-      </Button>
+      </IButton>
       <span class="count">可输入 <span>255</span> 字</span>
-      <Button
+      <IButton
         type="primary"
         class="button submit-button"
         @click="onSubmit"
       >
         评 论
-      </Button>
+      </IButton>
     </div>
   </div>
 </template>
