@@ -1,4 +1,12 @@
+/**
+ * 全局混入
+ * 用于快捷生成样式
+ * 已经由 @nuxtjs/style-resources 注入到每个 vue 组件中，可以直接食用
+ */
+
 @import '~assets/less/theme';
+
+// border
 .border(@direction) when (iskeyword(@direction)) {
   border-@{direction}: 1px solid @border-color-base;
 }
@@ -7,17 +15,21 @@
   border: 1px solid @border-color-base;
 }
 
+// text
 .text-cut-generator(@n) when (@n >=2) {
   .text-cut-generator((@n - 1));
   .text-cut-@{n} {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: @n; // autoprefixer: off
-    -webkit-box-orient: vertical; // autoprefixer: on
+    -webkit-line-clamp: @n;
+    // autoprefixer: off
+    -webkit-box-orient: vertical;
+    // autoprefixer: on
   }
 }
 
+// placeholder
 .placeholder-color(@color) {
   &::-webkit-input-placeholder { /* WebKit browsers */
     color: @color;
