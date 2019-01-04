@@ -24,6 +24,11 @@ export default {
     CommonFooter,
     FloatWidget,
   },
+  mounted () {
+    if (this.$store.state.auth.token) {
+      this.$store.dispatch('user/getCurrentUser')
+    }
+  },
 }
 </script>
 

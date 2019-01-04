@@ -1,12 +1,12 @@
 <template>
-  <header v-once class="c-common-header">
+  <header class="c-common-header">
     <div class="container">
       <nuxt-link
         :to="{name: 'index'}"
         class="logo"
         :style="{backgroundImage: `url(${require('@/assets/images/logo.png')})`}"
       />
-      <nav class="main-navigation">
+      <nav v-once class="main-navigation">
         <ul class="menu">
           <nuxt-link
             v-for="(item, index) in menu"
@@ -20,8 +20,18 @@
         </ul>
       </nav>
       <div class="extra">
-        <nuxt-link class="login-btn" :to="{name: 'auth-login'}">登录</nuxt-link>
-        <nuxt-link class="login-btn" :to="{name: 'auth-register'}">注册</nuxt-link>
+        <nuxt-link
+          v-if="logged"
+          :to="`/user/${logged.id}`"
+          class="logged-user"
+        >
+          <Avatar :user="logged" size="sm" />
+          <span class="username text-cut">{{ logged.name }}</span>
+        </nuxt-link>
+        <template v-else v-once>
+          <nuxt-link class="login-btn" :to="{name: 'auth-login'}">登录</nuxt-link>
+          <nuxt-link class="login-btn" :to="{name: 'auth-register'}">注册</nuxt-link>
+        </template>
         <IInput
           class="search-box"
           search
@@ -33,6 +43,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 const menu = [
   { name: 'feed', label: '动态', to: { name: 'feed' } },
   { name: 'news', label: '资讯', to: { name: 'news' } },
@@ -48,6 +60,9 @@ export default {
     return {
       menu,
     }
+  },
+  computed: {
+    ...mapState('user', { logged: 'logged' }),
   },
 }
 </script>
@@ -121,6 +136,18 @@ export default {
     align-items: center;
     height: 100%;
     margin-right: 24px;
+
+    .logged-user {
+      display: flex;
+      align-items: center;
+      margin-left: 24px;
+
+      .username {
+        flex: none;
+        margin-left: 12px;
+        max-width: 8em;
+      }
+    }
 
     .login-btn {
       display: flex;

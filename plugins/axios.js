@@ -1,9 +1,17 @@
 export default function (context) {
-  const { $axios, env } = context
+  const { $axios, env, store } = context
 
   $axios.onRequest(config => {
     if (env.debug) {
       console.log(`[axios] request to ${config.url}`) // eslint-disable-line no-console
+    }
+
+    config.headers.common['Accept'] = 'application/json'
+
+    // auth
+    const authToken = store.state.auth.token
+    if (authToken) {
+      config.headers.common['Authorization'] = `Bearer ${authToken}`
     }
   })
 

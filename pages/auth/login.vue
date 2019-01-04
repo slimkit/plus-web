@@ -3,20 +3,26 @@
     <IForm
       ref="form"
       class="form"
+      :model="form"
       :rules="validator"
     >
-      <IFormItem>
+      <IFormItem prop="account">
         <IInput
           v-model="form.account"
           type="text"
           placeholder="输入手机号/邮箱/昵称"
+          autocomplete="on"
         />
       </IFormItem>
-      <IInput
-        v-model="form.password"
-        type="password"
-        placeholder="输入密码"
-      />
+      <IFormItem prop="password">
+        <IInput
+          v-model="form.password"
+          type="password"
+          placeholder="输入密码"
+          :maxlength="16"
+          @on-enter="onSubmit"
+        />
+      </IFormItem>
       <div class="others">
         <span class="use-code" title="验证码登录">验证码登录</span>
         <nuxt-link to="/auth/find">忘记密码</nuxt-link>
@@ -66,8 +72,8 @@ export default {
   data () {
     return {
       form: {
-        account: '',
-        password: '',
+        account: '木头',
+        password: '123456',
       },
       validator,
     }
@@ -76,11 +82,18 @@ export default {
     ...mapActions('auth', {
       getAccessToken: 'getAccessToken',
     }),
-    onSubmit () {
-      this.$refs.form.validate(valid => {
-        console.log(valid)
-        if (valid) return
+    validateForm () {
+      return new Promise((resolve, reject) => {
+        this.$refs.form.validate(valid => {
+          if (!valid) return reject('[validate] 字段校验失败!')
+          resolve()
+        })
       })
+    },
+    async onSubmit () {
+      await this.validateForm()
+      await this.getAccessToken(this.form)
+      this.$router.replace('/')
     },
   },
 }
