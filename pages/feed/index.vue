@@ -13,11 +13,17 @@
           {{ item.label }}
         </a>
       </nav>
-      <FeedList
-        class="feed-list"
-        :feeds="feeds"
-        :pinneds="pinneds"
-      />
+      <Loadmore
+        ref="loadmore"
+        @refresh="onRefresh"
+        @loadmore="onLoadmore"
+      >
+        <FeedList
+          class="feed-list"
+          :feeds="feeds"
+          :pinneds="pinneds"
+        />
+      </Loadmore>
     </main>
     <div class="right-container">
       <SideWidget
@@ -31,7 +37,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
@@ -57,14 +63,16 @@ export default {
   data () {
     return {
       typeMap,
-      new: [],
+      new: this.$store.state.feed.new || [],
       hot: [],
-      pinneds: [],
     }
   },
   computed: {
     ...mapState('user', {
       recommendUsers: 'recommend',
+    }),
+    ...mapState('feed', {
+      pinneds: 'pinned',
     }),
     type: {
       get () {
@@ -80,26 +88,33 @@ export default {
   },
   watch: {
     type () {
-      this.fetchFeeds()
+      this.$refs.loadmore.beforeRefresh()
     },
   },
-  async asyncData ({ $axios, query }) {
-    const { type = defaultType } = query
-    const { feeds, pinned } = await $axios.$get('/feeds', { params: { type } })
-    return {
-      [type]: feeds,
-      pinneds: pinned,
-    }
-  },
-  async fetch ({ store, params }) {
-    await store.dispatch('user/fetchRecommendUsers')
+  mounted () {
+    this.$store.dispatch('user/fetchRecommendUsers')
   },
   methods: {
-    async fetchFeeds () {
-      const params = { type: this.type }
-      const { feeds, pinned } = await this.$axios.$get('/feeds', { params })
+    ...mapActions('feed', {
+      getFeedList: 'getFeedList',
+    }),
+    async onRefresh () {
+      let params = { type: this.type }
+      const feeds = await this.getFeedList(params)
       this.$data[this.type] = feeds
-      this.pinneds = pinned
+      this.$refs.loadmore.afterRefresh(feeds.length < 15)
+    },
+    async onLoadmore () {
+      let params = { type: this.type }
+      const last = [...this.feeds].pop() || {}
+      if (this.type === 'hot') {
+        params.hot = last.hot
+      } else {
+        params.after = last.id
+      }
+      const feeds = await this.getFeedList(params)
+      this.$data[this.type] = [...this.$data[this.type], ...feeds]
+      this.$refs.loadmore.afterLoadmore(feeds.length < 15)
     },
   },
 }
