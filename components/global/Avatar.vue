@@ -15,7 +15,11 @@
         :class="sex"
         :style="avatarStyle"
       />
-      <i class="verify" :style="verify" />
+      <i
+        class="verify"
+        :style="verify"
+        :class="verifyType"
+      />
     </template>
   </div>
 </template>
@@ -47,10 +51,14 @@ export default {
     },
     verify () {
       const { verified = null } = this.user
-      if (!verified) return {}
+      if (!verified) return false
       if (verified.icon) return { backgroundImage: `url(${verified.icon})` }
-      else if (verified.type) return { backgroundImage: `url(${require('@/assets/images/vip_icon.svg')})` }
-      return {}
+      if (verified.type) return {}
+      return false
+    },
+    verifyType () {
+      if (!this.verify) return
+      return this.user.verified.type
     },
     sex () {
       const sexMap = ['secret', 'man', 'woman']
@@ -77,10 +85,59 @@ export default {
     background: @avatar-bg center / cover no-repeat;
   }
 
+  .verify {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    display: block;
+    background: transparent center / cover no-repeat;
+
+    &.user {
+      background-image: url(~assets/images/cert_user.png);
+    }
+    &.org {
+      background-image: url(~assets/images/cert_org.png);
+    }
+  }
+
   &.def {
-    width: 48px;
-    height: 48px;
-    font-size: 26px;
+    width: @avatar-size-base;
+    height: @avatar-size-base;
+    font-size: @avatar-font-size-base;
+    .verify {
+      width: @avatar-size-base / 2.5;
+      height: @avatar-size-base / 2.5;
+    }
+  }
+
+  &.sm {
+    width: @avatar-size-sm;
+    height: @avatar-size-sm;
+    font-size: @avatar-font-size-sm;
+    .verify {
+      width: @avatar-size-sm / 2.3;
+      height: @avatar-size-sm / 2.3;
+    }
+  }
+
+  &.xs {
+    width: @avatar-size-base / 2;
+    height: @avatar-size-base / 2;
+    font-size: @avatar-font-size-base / 1.5;
+    .verify {
+      width: @avatar-size-base / 5;
+      height: @avatar-size-base / 5;
+    }
+  }
+
+  &.lg {
+    width: @avatar-size-lg;
+    height: @avatar-size-lg;
+    font-size: @avatar-font-size-lg;
+    .verify {
+      width: @avatar-size-lg / 2.5;
+      height: @avatar-size-lg / 2.5;
+    }
   }
 
   .user-avatar {
@@ -99,14 +156,5 @@ export default {
     }
   }
 
-  .verify {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    display: block;
-    width: 18px;
-    height: 18px;
-    background: transparent center / cover no-repeat;
-  }
 }
 </style>
