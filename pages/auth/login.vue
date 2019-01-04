@@ -66,6 +66,7 @@ const validator = {
 export default {
   name: 'AuthLogin',
   layout: 'auth',
+  middleware: ['forGuest'],
   head: {
     title: '登录',
   },
@@ -93,7 +94,9 @@ export default {
     async onSubmit () {
       await this.validateForm()
       await this.getAccessToken(this.form)
-      this.$router.replace('/')
+      const { redirect } = this.$route.query
+      if (redirect) this.$router.replace(redirect)
+      else this.$router.back()
     },
   },
 }
