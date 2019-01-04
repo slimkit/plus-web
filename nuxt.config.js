@@ -34,12 +34,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: {
-    color: '#59b6d7',
-    failedColor: '#ed4014',
-    throttle: 20,
-    duration: 10,
-  },
+  loading: '@/components/common/Progress.vue',
 
   /*
   ** Global CSS

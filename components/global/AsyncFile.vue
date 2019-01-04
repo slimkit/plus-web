@@ -25,7 +25,7 @@ export default {
   methods: {
     async getFileURL () {
       const id = this.file.file || this.file.id
-      const { url } = await this.$axios.$get(`/files/${id}?json=1`)
+      const { url } = await this.$axios.$get(`/files/${id}?json=1`, { progress: false })
       this.src = url
     },
   },

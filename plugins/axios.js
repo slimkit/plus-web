@@ -1,6 +1,4 @@
-export default function (context) {
-  const { $axios, env, store } = context
-
+export default function ({ $axios, env, store }) {
   $axios.onRequest(config => {
     if (env.debug) {
       console.log(`[axios] request to ${config.url}`) // eslint-disable-line no-console
