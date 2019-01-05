@@ -1,11 +1,13 @@
 <template>
   <div class="c-feed-list">
-    <FeedListItem
-      v-for="feed in pinneds"
-      :key="`pinned-${feed.id}`"
-      :feed="feed"
-      :pinned="true"
-    />
+    <keep-alive>
+      <FeedListItem
+        v-for="feed in pinneds"
+        :key="`pinned-${feed.id}`"
+        :feed="feed"
+        :pinned="true"
+      />
+    </keep-alive>
     <FeedListItem
       v-for="feed in feeds"
       :key="`feed-${feed.id}`"

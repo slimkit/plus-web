@@ -21,7 +21,7 @@
         <FeedList
           class="feed-list"
           :feeds="feeds"
-          :pinneds="pinneds"
+          :pinneds="type === 'hot' ? pinneds : []"
         />
       </Loadmore>
     </main>
@@ -89,6 +89,7 @@ export default {
   },
   watch: {
     type () {
+      this.$refs.loadmore.afterRefresh()
       this.$refs.loadmore.beforeRefresh()
     },
   },
