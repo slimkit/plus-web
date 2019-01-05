@@ -22,11 +22,7 @@
             :file="image"
           />
         </div>
-        <div
-          v-else
-          class="text-wrap"
-          @click="viewDetail"
-        >
+        <div v-else class="text-wrap">
           {{ feed.feed_content }}
         </div>
       </main>
@@ -80,7 +76,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import SideWidget from '@/components/common/SideWidget.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
 import ArticleReward from '@/components/common/ArticleReward.vue'
@@ -129,6 +125,9 @@ export default {
     this.fetchRecommendUsers()
   },
   methods: {
+    ...mapActions('user', {
+      fetchRecommendUsers: 'fetchRecommendUsers',
+    }),
     async fetchRewards () {
       const list = await this.$axios.$get(`/feeds/${this.feed.id}/rewards`)
       this.rewards = list
@@ -137,9 +136,6 @@ export default {
       const { comments, pinneds } = await this.$axios.$get(`/feeds/${this.feed.id}/comments`)
       this.comments = comments
       this.pinnedComments = pinneds
-    },
-    async fetchRecommendUsers () {
-      this.$store.dispatch('user/fetchRecommendUsers')
     },
     onLike () {
       console.log('on like clicked')
