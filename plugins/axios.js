@@ -1,3 +1,8 @@
+/**
+ * Nuxt axios 插件配置
+ * TODO: 路由切换时取消正在进行的请求
+ */
+
 export default function ({ $axios, env, store }) {
   $axios.onRequest(config => {
     if (env.debug) {

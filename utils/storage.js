@@ -148,6 +148,6 @@ function setCookie (key, value, attributes) {
   return (document.cookie = key + '=' + value + stringifiedAttributes)
 }
 
-function removeCookie (key, attributes) {
+function removeCookie (key, attributes = {}) {
   setCookie(key, '', Object.assign(attributes, { expires: -1 }))
 }

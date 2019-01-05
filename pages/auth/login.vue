@@ -79,6 +79,12 @@ export default {
       validator,
     }
   },
+  beforeRouteEnter (to, from, next) {
+    if (to.query.redirect) next()
+    const query = { ...to.query }
+    query.redirect = encodeURIComponent(from.fullPath)
+    next({ ...to, query })
+  },
   methods: {
     ...mapActions('auth', {
       getAccessToken: 'getAccessToken',
@@ -94,8 +100,9 @@ export default {
     async onSubmit () {
       await this.validateForm()
       await this.getAccessToken(this.form)
+      this.$Message.success('登录成功')
       const { redirect } = this.$route.query
-      if (redirect) this.$router.replace(redirect)
+      if (redirect) this.$router.replace(decodeURIComponent(redirect))
       else this.$router.back()
     },
   },

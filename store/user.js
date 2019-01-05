@@ -23,7 +23,11 @@ export const mutations = {
 
   [TYPES.SAVE_CURRENT_USER] (state, user) {
     state.logged = user
-    local.set(LOCAL_KEY.CURRENT_USER, user)
+    if (user) {
+      local.set(LOCAL_KEY.CURRENT_USER, user)
+    } else {
+      local.remove(LOCAL_KEY.CURRENT_USER)
+    }
   },
 
   [TYPES.SAVE_RECOMMEND_USERS] (state, users) {

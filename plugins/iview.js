@@ -6,6 +6,10 @@ import {
   Form,
   FormItem,
   Input,
+  Poptip,
+  Message,
+  Modal,
+  Notice,
 } from 'iview'
 
 const components = {
@@ -13,6 +17,7 @@ const components = {
   Form,
   FormItem,
   Input,
+  Poptip,
 }
 
 const install = function (Vue, opts = {}) {
@@ -22,6 +27,10 @@ const install = function (Vue, opts = {}) {
     Vue.component(`I${key}`, components[key])
   })
 
+  Vue.prototype.$Message = Message
+  Vue.prototype.$Modal = Modal
+  Vue.prototype.$Notice = Notice
+
   Vue.prototype.$IVIEW = {
     size: opts.size || '',
     transfer: 'transfer' in opts ? opts.transfer : '',
@@ -29,3 +38,9 @@ const install = function (Vue, opts = {}) {
 }
 
 Vue.use({ install })
+
+export {
+  Message,
+  Notice,
+  Modal,
+}

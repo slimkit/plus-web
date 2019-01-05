@@ -20,15 +20,26 @@
         </ul>
       </nav>
       <div class="extra">
-        <nuxt-link
-          v-if="logged"
-          :to="`/user/${logged.id}`"
-          class="logged-user"
-        >
-          <Avatar :user="logged" size="sm" />
-          <span class="username text-cut">{{ logged.name }}</span>
-        </nuxt-link>
-        <template v-else v-once>
+        <IPoptip v-if="logged" trigger="hover">
+          <div class="user-wrap">
+            <Avatar :user="logged" size="sm" />
+            <span class="username text-cut">{{ logged.name }}</span>
+          </div>
+
+          <template slot="content">
+            <ul class="popup">
+              <nuxt-link class="popup-item" :to="`/user/${logged.id}`">个人主页</nuxt-link>
+              <hr>
+              <nuxt-link class="popup-item" to="/setting">
+                <svg class="icon"><use xlink:href="#icon-setting" /></svg>
+                设置
+              </nuxt-link>
+              <hr>
+              <a class="popup-item" @click="onLogout">退出登录</a>
+            </ul>
+          </template>
+        </IPoptip>
+        <template v-else>
           <nuxt-link class="login-btn" :to="{name: 'auth-login'}">登录</nuxt-link>
           <nuxt-link class="login-btn" :to="{name: 'auth-register'}">注册</nuxt-link>
         </template>
@@ -64,10 +75,25 @@ export default {
   computed: {
     ...mapState('user', { logged: 'logged' }),
   },
+  methods: {
+    onLogout () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '是否确认退出当前账号？',
+        loading: true,
+        onOk: async () => {
+          await this.$store.dispatch('auth/logout')
+          this.$Modal.remove()
+          this.$Message.success('退出登录成功！')
+          this.$router.push('/')
+        },
+      })
+    },
+  },
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .c-common-header {
   height: @layout-header-height;
   background-color: @head-bg;
@@ -137,15 +163,38 @@ export default {
     height: 100%;
     margin-right: 24px;
 
-    .logged-user {
+    .ivu-poptip {
       display: flex;
       align-items: center;
-      margin-left: 24px;
+      padding: 0 24px;
+      cursor: pointer;
+      height: 100%;
+
+      /deep/ .ivu-poptip-rel {
+        height: 100%;
+      }
+
+      .user-wrap {
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
 
       .username {
         flex: none;
         margin-left: 12px;
         max-width: 8em;
+      }
+    }
+
+    .popup {
+      .popup-item {
+        display: list-item;
+        padding: 16px;
+
+        .icon {
+          margin-right: 8px;
+        }
       }
     }
 
