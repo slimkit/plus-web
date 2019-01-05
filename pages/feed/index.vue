@@ -4,11 +4,11 @@
     <main class="feed-container">
       <nav class="sort-items">
         <a
-          v-for="item in typeMap"
-          :key="item.name"
+          v-for="(item, name) in typeMap"
+          :key="name"
           class="sort-item"
-          :class="{active: type === item.name}"
-          @click="type = item.name"
+          :class="{active: type === name}"
+          @click="type = name"
         >
           {{ item.label }}
         </a>
@@ -43,10 +43,10 @@ import FeedList from '@/components/feed/FeedList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
 
 const defaultType = 'new'
-const typeMap = [
-  { name: 'new', label: '最新' },
-  { name: 'hot', label: '热门' },
-]
+const typeMap = {
+  new: { label: '最新' },
+  hot: { label: '热门' },
+}
 
 export default {
   name: 'FeedHome',
@@ -63,8 +63,6 @@ export default {
   data () {
     return {
       typeMap,
-      new: this.$store.state.feed.new || [],
-      hot: [],
     }
   },
   computed: {
@@ -72,18 +70,21 @@ export default {
       recommendUsers: 'recommend',
     }),
     ...mapState('feed', {
+      new: 'new',
+      hot: 'hot',
       pinneds: 'pinned',
     }),
     type: {
       get () {
-        return this.$route.query.type || defaultType
+        const { type } = this.$route.query
+        return Object.keys(typeMap).includes(type) ? type : defaultType
       },
       set (val) {
         this.$router.push({ ...this.$route, query: { type: val } })
       },
     },
     feeds () {
-      return this.$data[this.type]
+      return this[this.type]
     },
   },
   watch: {
@@ -100,9 +101,8 @@ export default {
     }),
     async onRefresh () {
       let params = { type: this.type }
-      const feeds = await this.getFeedList(params)
-      this.$data[this.type] = feeds
-      this.$refs.loadmore.afterRefresh(feeds.length < 15)
+      const noMore = await this.getFeedList(params)
+      this.$refs.loadmore.afterRefresh(noMore)
     },
     async onLoadmore () {
       let params = { type: this.type }
@@ -112,9 +112,8 @@ export default {
       } else {
         params.after = last.id
       }
-      const feeds = await this.getFeedList(params)
-      this.$data[this.type] = [...this.$data[this.type], ...feeds]
-      this.$refs.loadmore.afterLoadmore(feeds.length < 15)
+      const noMore = await this.getFeedList(params)
+      this.$refs.loadmore.afterLoadmore(noMore)
     },
   },
 }
