@@ -4,12 +4,14 @@ const LOCAL_KEY = {
   PINNED: 'feed_pinned',
   HOT: 'feed_hot',
   NEW: 'feed_new',
+  FOLLOW: 'feed_follow',
 }
 
 export const state = () => ({
   pinned: [],
   hot: [],
   new: [],
+  follow: [],
 })
 
 export const TYPES = {

@@ -3,15 +3,17 @@
     <FeedLeftNavigation class="left-navigation" current="feed" />
     <main class="feed-container">
       <nav class="sort-items">
-        <a
-          v-for="(item, name) in typeMap"
-          :key="name"
-          class="sort-item"
-          :class="{active: type === name}"
-          @click="type = name"
-        >
-          {{ item.label }}
-        </a>
+        <template v-for="(item, name) in typeMap">
+          <a
+            v-if="!item.requireAuth || logged"
+            :key="name"
+            class="sort-item"
+            :class="{active: type === name}"
+            @click="type = name"
+          >
+            {{ item.label }}
+          </a>
+        </template>
       </nav>
       <Loadmore
         ref="loadmore"
@@ -46,6 +48,7 @@ const defaultType = 'new'
 const typeMap = {
   new: { label: '最新' },
   hot: { label: '热门' },
+  follow: { label: '关注的', requireAuth: true },
 }
 
 export default {
@@ -72,12 +75,17 @@ export default {
     ...mapState('feed', {
       new: 'new',
       hot: 'hot',
+      follow: 'follow',
       pinneds: 'pinned',
     }),
     type: {
       get () {
         const { type } = this.$route.query
-        return Object.keys(typeMap).includes(type) ? type : defaultType
+        if (
+          !Object.keys(typeMap).includes(type) ||
+          (typeMap[type].requireAuth && !this.logged)
+        ) return defaultType
+        return type
       },
       set (val) {
         this.$router.push({ ...this.$route, query: { type: val } })
@@ -136,12 +144,20 @@ export default {
   .feed-container {
     flex: auto;
     min-width: 0px;
-    padding: 22px 40px;
     margin: 0 30px;
-    background-color: #fff;
+
+    > div,
+    > nav {
+      padding: 30px;
+      background-color: #fff;
+    }
+
+    .post-container {
+      margin-bottom: 30px;
+    }
 
     .sort-items {
-      margin-bottom: 16px;
+      padding-bottom: 0;
 
       .sort-item {
         margin-right: 20px;
@@ -152,6 +168,10 @@ export default {
           color: @text-color;
         }
       }
+    }
+
+    .c-loadmore {
+      padding-top: 0;
     }
 
     .feed-list {
