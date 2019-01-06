@@ -54,6 +54,7 @@ module.exports = {
   plugins: [
     { src: '@/plugins/axios', ssr: true },
     { src: '@/plugins/iview', ssr: true },
+    { src: '@/plugins/mixins', ssr: true },
     { src: '@/plugins/components', ssr: true },
     { src: '@/plugins/filters', ssr: true },
     { src: '@/plugins/directives', ssr: true },

@@ -54,8 +54,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 const menu = [
   { name: 'feed', label: '动态', to: { name: 'feed' } },
   { name: 'news', label: '资讯', to: { name: 'news' } },
@@ -71,9 +69,6 @@ export default {
     return {
       menu,
     }
-  },
-  computed: {
-    ...mapState('user', { logged: 'logged' }),
   },
   methods: {
     onLogout () {
