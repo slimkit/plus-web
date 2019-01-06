@@ -107,6 +107,12 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
+      // source map
+      if (debug && ctx.isClient) {
+        if (ctx.isDev) config.devtool = '#cheap-module-eval-source-map '
+        else config.devtool = '#source-map'
+      }
+
       // Run ESLint on save
       if (ctx.isDev && !ctx.isClient) {
         config.module.rules.push({
