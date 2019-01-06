@@ -29,6 +29,7 @@ module.exports = {
 
   env: {
     debug: debug !== undefined ? debug : IS_DEV,
+    apiURL: baseURL + '/api/v2',
   },
 
   /*

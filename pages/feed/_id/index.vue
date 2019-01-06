@@ -14,13 +14,14 @@
 
       <main class="article-content">
         <div v-if="images.length" class="image-wrap">
-          <AsyncFile
-            v-for="(image, index) in images"
-            v-if="!index"
-            :key="image.file"
-            type="image"
-            :file="image"
-          />
+          <template v-for="(image, index) in images">
+            <AsyncFile
+              v-if="!index"
+              :key="image.file"
+              type="image"
+              :file="image"
+            />
+          </template>
         </div>
         <div v-else class="text-wrap">
           {{ feed.feed_content }}
