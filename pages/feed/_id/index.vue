@@ -43,10 +43,12 @@
         <hr>
 
         <ArticleComment
+          ref="comment"
           :count="feed.feed_comment_count"
           :comments="comments"
           :pinneds="pinnedComments"
           @comment="onComment"
+          @comment:delete="onCommentDelete"
         />
       </footer>
     </div>
@@ -144,8 +146,31 @@ export default {
     onCollect () {
       console.log('on collect clicked')
     },
-    onComment (content, reply) {
-      console.log(content, reply)
+    async onComment (content, replyUser = {}) {
+      const ret = await this.$axios.$post(`/feeds/${this.feed.id}/comments`, {
+        body: content,
+        reply_user: replyUser.id,
+      })
+      this.$Message.success('评论成功')
+
+      // 更新评论列表
+      if (replyUser.id) ret.comment.reply = replyUser
+      this.comments.unshift(ret.comment)
+      this.feed.feed_comment_count += 1
+
+      // 清空评论框
+      this.$refs.comment.clean()
+    },
+    async onCommentDelete (comment, callback) {
+      await this.$axios.$delete(`/feeds/${comment.commentable_id}/comments/${comment.id}`)
+      this.$Message.success('删除成功')
+      // 更新评论列表
+      this.comments = this.comments.filter(item => item.id !== comment.id)
+      this.pinnedComments = this.pinnedComments.filter(item => item.id !== comment.id)
+      this.feed_comment_count -= 1
+
+      // 删除成功会调(关闭对话框)
+      callback()
     },
   },
 }

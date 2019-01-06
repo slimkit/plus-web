@@ -71,3 +71,17 @@
     content: url(~assets/images/pic_default_people.png);
   }
 }
+
+ul.options {
+  padding: 8px;
+
+  > li {
+    padding: 8px;
+    cursor: pointer;
+    transition: color .4s;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+}

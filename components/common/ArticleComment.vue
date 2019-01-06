@@ -1,7 +1,7 @@
 <template>
   <section class="c-article-comment">
     <h3 class="total"><span>{{ count }}</span> 人评论</h3>
-    <PostText />
+    <PostText ref="editor" @submit="onComment" />
     <div v-if="!count" v-empty:content />
     <ul class="comments">
       <ArticleCommentItem
@@ -9,11 +9,15 @@
         :key="`comment-pinned-${comment.id}`"
         :comment="comment"
         :pinned="true"
+        @reply="onReply"
+        @delete="onDelete"
       />
       <ArticleCommentItem
         v-for="comment in comments"
         :key="`comment-${comment.id}`"
         :comment="comment"
+        @reply="onReply"
+        @delete="onDelete"
       />
     </ul>
   </section>
@@ -35,6 +39,20 @@ export default {
     pinnedComments: { type: Array, default: () => [] },
   },
   computed: {
+  },
+  methods: {
+    onComment (content, replyUser) {
+      this.$emit('comment', content, replyUser)
+    },
+    onReply (user) {
+      this.$refs.editor.reply(user)
+    },
+    onDelete (comment, callback) {
+      this.$emit('comment:delete', comment, callback)
+    },
+    clean () {
+      this.$refs.editor.clean()
+    },
   },
 }
 </script>

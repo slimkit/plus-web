@@ -2,6 +2,10 @@
   <div class="p-feed-index">
     <FeedLeftNavigation class="left-navigation" current="feed" />
     <main class="feed-container">
+      <div v-if="logged" class="post-container">
+        <PostText />
+      </div>
+
       <nav class="sort-items">
         <template v-for="(item, name) in typeMap">
           <a
@@ -43,6 +47,7 @@ import { mapState, mapActions } from 'vuex'
 import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
+import PostText from '@/components/common/PostText.vue'
 
 const defaultType = 'new'
 const typeMap = {
@@ -62,6 +67,7 @@ export default {
     FeedLeftNavigation,
     FeedList,
     SideWidget,
+    PostText,
   },
   data () {
     return {
