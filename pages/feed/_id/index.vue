@@ -30,6 +30,8 @@
       <footer class="article-footer">
         <ArticleLike
           :like-count="feed.like_count"
+          :liked="feed.has_like"
+          :collected="feed.has_collect"
           @like="onLike"
           @collect="onCollect"
         />
@@ -140,11 +142,31 @@ export default {
       this.comments = comments
       this.pinnedComments = pinneds
     },
-    onLike () {
-      console.log('on like clicked')
+    async onLike () {
+      if (!this.feed.has_like) {
+        // 喜欢
+        await this.$axios.$post(`/feeds/${this.feed.id}/like`)
+        this.feed.like_count += 1
+        this.feed.has_like = true
+      } else {
+        // 取消喜欢
+        this.$axios.$delete(`/feeds/${this.feed.id}/unlike`)
+        this.feed.like_count -= 1
+        this.feed.has_like = false
+      }
     },
-    onCollect () {
-      console.log('on collect clicked')
+    async onCollect () {
+      if (!this.feed.has_collect) {
+        // 收藏
+        await this.$axios.$post(`/feeds/${this.feed.id}/collections`)
+        // this.feed.collect_count += 1
+        this.feed.has_collect = true
+      } else {
+        // 取消收藏
+        this.$axios.$delete(`/feeds/${this.feed.id}/uncollect`)
+        // this.feed.collect_count -= 1
+        this.feed.has_collect = false
+      }
     },
     async onComment (content, replyUser = {}) {
       const ret = await this.$axios.$post(`/feeds/${this.feed.id}/comments`, {

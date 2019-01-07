@@ -4,14 +4,16 @@
       <IButton
         size="large"
         class="meta-button"
+        :class="{active: collected}"
         @click="$emit('collect')"
       >
         <svg class="icon"><use xlink:href="#icon-collect" /></svg>
-        {{ collectCount }} 人收藏
+        {{ collected ? '取消收藏' : '收藏' }}
       </IButton>
       <IButton
         size="large"
         class="meta-button"
+        :class="{active: liked}"
         @click="$emit('like')"
       >
         <svg class="icon"><use xlink:href="#icon-like" /></svg>
@@ -32,9 +34,10 @@
 export default {
   name: 'ArticleLike',
   props: {
-    collectCount: { type: Number, default: 0 },
     likeCount: { type: Number, default: 0 },
+    collectCount: { type: Number, default: 0 },
     liked: { type: Boolean, default: false },
+    collected: { type: Boolean, default: false },
 
     /**
      * @property {Object} share
@@ -61,6 +64,10 @@ export default {
 
   .meta-button {
     margin-right: 12px;
+
+    &.active {
+      color: @primary-color;
+    }
 
     .icon {
       margin-right: 4px;
