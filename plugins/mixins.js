@@ -7,6 +7,9 @@ import { mapState } from 'vuex'
 
 const mixins = {
   computed: {
+    ...mapState({
+      boot: 'boot',
+    }),
     ...mapState('user', {
       logged: 'logged',
     }),

@@ -6,6 +6,9 @@ import {
   Form,
   FormItem,
   Input,
+  InputNumber,
+  Radio,
+  RadioGroup,
   Poptip,
   Message,
   Modal,
@@ -17,7 +20,11 @@ const components = {
   Form,
   FormItem,
   Input,
+  InputNumber,
+  Radio,
+  RadioGroup,
   Poptip,
+  Modal,
 }
 
 const install = function (Vue, opts = {}) {

@@ -97,10 +97,6 @@ export default {
         margin-right: 16px;
         padding-left: 0;
         padding-right: 0;
-
-        .icon {
-          color: @disabled-color;
-        }
       }
 
       &.submit-button {

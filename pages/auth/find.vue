@@ -5,6 +5,6 @@
 <script>
 export default {
   name: 'AuthFind',
-  middleware: ['forGuest'],
+  // middleware: ['forGuest'],
 }
 </script>

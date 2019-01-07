@@ -37,9 +37,10 @@
         />
 
         <ArticleReward
-          :count="Number(feed.reward.count)"
-          :amount="Number(feed.reward.amount)"
+          :count="rewardCount"
+          :amount="rewardAmount"
           :rewards="rewards"
+          @reward="onReward"
         />
 
         <hr>
@@ -119,6 +120,22 @@ export default {
     images () {
       return this.feed.images || []
     },
+    rewardAmount: {
+      get () {
+        return Number(this.feed.reward.amount)
+      },
+      set (val) {
+        this.feed.reward.amount = val
+      },
+    },
+    rewardCount: {
+      get () {
+        return Number(this.feed.reward.count)
+      },
+      set (val) {
+        this.feed.reward.count = val
+      },
+    },
   },
   async asyncData ({ $axios, params }) {
     const feed = await $axios.$get(`/feeds/${params.id}`)
@@ -135,7 +152,7 @@ export default {
     }),
     async fetchRewards () {
       const list = await this.$axios.$get(`/feeds/${this.feed.id}/rewards`)
-      this.rewards = list
+      this.rewards = list.slice(0, 10)
     },
     async fetchComments () {
       const { comments, pinneds } = await this.$axios.$get(`/feeds/${this.feed.id}/comments`)
@@ -167,6 +184,20 @@ export default {
         // this.feed.collect_count -= 1
         this.feed.has_collect = false
       }
+    },
+    onReward (amount, password, callback) {
+      this.$axios.$post(`/feeds/${this.feed.id}/new-rewards`, {
+        amount,
+        password,
+      }).then(() => {
+        this.$Message.success('打赏成功')
+        this.rewardCount += 1
+        this.rewardAmount += amount
+        this.fetchRewards()
+        callback()
+      }).catch(error => {
+        callback(error.response.data.message)
+      })
     },
     async onComment (content, replyUser = {}) {
       const ret = await this.$axios.$post(`/feeds/${this.feed.id}/comments`, {

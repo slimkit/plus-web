@@ -4,6 +4,7 @@
       type="error"
       size="large"
       class="reward-button"
+      @click="beforeReward"
     >
       打 赏
     </IButton>
@@ -16,19 +17,38 @@
         v-for="reward in rewards"
         :key="reward.id"
         :user="reward.user"
+        size="sm"
       />
-      <svg class="icon lg"><use xlink:href="#icon-arrow-right" /></svg>
+      <svg class="icon lg" @click="viewList"><use xlink:href="#icon-icon07" /></svg>
     </div>
+
+    <ModalReward ref="modal" @reward="onReward" />
   </section>
 </template>
 
 <script>
+import ModalReward from '@/components/common/ModalReward.vue'
+
 export default {
   name: 'ArticleReward',
+  components: {
+    ModalReward,
+  },
   props: {
     count: { type: Number, default: 0 },
     amount: { type: Number, default: 0 },
     rewards: { type: Array, default: () => [] },
+  },
+  methods: {
+    beforeReward () {
+      this.$refs.modal.open()
+    },
+    onReward (...args) {
+      this.$emit('reward', ...args)
+    },
+    viewList () {
+      console.log('on view list')
+    },
   },
 }
 </script>
@@ -51,6 +71,20 @@ export default {
 
     > span {
       color: @error-color;
+    }
+  }
+
+  .rewards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .c-avatar {
+      margin: 0 4px;
+    }
+
+    .icon {
+      cursor: pointer;
     }
   }
 }
