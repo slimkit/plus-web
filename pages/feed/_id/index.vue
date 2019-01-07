@@ -7,7 +7,22 @@
           <h3>{{ user.name }}</h3>
           <p class="time">{{ feed.created_at | fromNow }}</p>
         </div>
-        <svg class="icon lg more"><use xlink:href="#icon-more" /></svg>
+        <IPoptip
+          v-model="showMore"
+          placement="bottom"
+          class="more"
+        >
+          <svg class="icon lg"><use xlink:href="#icon-more" /></svg>
+
+          <ul
+            slot="content"
+            class="options"
+            @click="showMore = false"
+          >
+            <li @click="onRepostable"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
+            <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+          </ul>
+        </IPoptip>
       </header>
 
       <hr>
@@ -108,6 +123,8 @@ export default {
       rewards: [],
       comments: [],
       pinnedComments: [],
+
+      showMore: false,
     }
   },
   computed: {
@@ -225,6 +242,13 @@ export default {
       // 删除成功会调(关闭对话框)
       callback()
     },
+    async onReport () {
+      this.$root.$emit('report', {
+        type: 'feed',
+        id: this.feed.id,
+      })
+    },
+    async onRepostable () {},
   },
 }
 </script>
@@ -259,6 +283,7 @@ export default {
 
     .more {
       margin-left: auto;
+      cursor: pointer;
     }
   }
 

@@ -9,6 +9,8 @@
     <FloatWidget class="bottom" />
 
     <CommonFooter />
+
+    <ModalReport ref="report" />
   </div>
 </template>
 
@@ -16,6 +18,7 @@
 import CommonHeader from '@/components/layout/CommonHeader.vue'
 import CommonFooter from '@/components/layout/CommonFooter.vue'
 import FloatWidget from '@/components/layout/FloatWidget.vue'
+import ModalReport from '@/components/common/ModalReport.vue'
 
 export default {
   name: 'DefaultLayout',
@@ -23,6 +26,7 @@ export default {
     CommonHeader,
     CommonFooter,
     FloatWidget,
+    ModalReport,
   },
   mounted () {
     if (this.$store.state.auth.token) {

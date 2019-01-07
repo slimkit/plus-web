@@ -17,7 +17,11 @@
     <IPoptip v-model="more" placement="bottom">
       <svg class="icon lg more" @click="onMore"><use xlink:href="#icon-more" /></svg>
 
-      <ul slot="content" class="options">
+      <ul
+        slot="content"
+        class="options"
+        @click="more = false"
+      >
         <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
         <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除评论</li>
       </ul>
@@ -51,7 +55,6 @@ export default {
     },
     onPinned () {},
     onDelete () {
-      this.more = false
       this.$Modal.confirm({
         title: '提示',
         content: '确定删除这条评论？',
