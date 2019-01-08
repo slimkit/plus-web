@@ -4,14 +4,20 @@
     <PostText ref="editor" @submit="onComment" />
     <div v-if="!count" v-empty:content />
     <ul class="comments">
-      <ArticleCommentItem
-        v-for="comment in comments"
-        :key="`comment-${comment.id}`"
-        :type="type"
-        :comment="comment"
-        @reply="onReply"
-        @delete="onDelete"
-      />
+      <Loadmore
+        ref="loader"
+        @refresh="onRefresh"
+        @loadmore="onLoadmore"
+      >
+        <ArticleCommentItem
+          v-for="comment in comments"
+          :key="`comment-${comment.id}`"
+          :type="type"
+          :comment="comment"
+          @reply="onReply"
+          @delete="onDelete"
+        />
+      </Loadmore>
     </ul>
   </section>
 </template>
@@ -34,6 +40,17 @@ export default {
   computed: {
   },
   methods: {
+    onRefresh () {
+      this.$emit('fetch', null, noMore => {
+        this.$refs.loader.afterRefresh(noMore)
+      })
+    },
+    onLoadmore () {
+      const last = [...this.comments].pop() || {}
+      this.$emit('fetch', last.id, noMore => {
+        this.$refs.loader.afterLoadmore(noMore)
+      })
+    },
     onReply (user) {
       this.$refs.editor.reply(user)
     },

@@ -20,7 +20,7 @@
         </template>
       </nav>
       <Loadmore
-        ref="loadmore"
+        ref="loader"
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
@@ -103,8 +103,8 @@ export default {
   },
   watch: {
     type () {
-      this.$refs.loadmore.afterRefresh()
-      this.$refs.loadmore.beforeRefresh()
+      this.$refs.loader.afterRefresh()
+      this.$refs.loader.beforeRefresh()
     },
   },
   mounted () {
@@ -117,7 +117,7 @@ export default {
     async onRefresh () {
       let params = { type: this.type }
       const noMore = await this.getFeedList(params)
-      this.$refs.loadmore.afterRefresh(noMore)
+      this.$refs.loader.afterRefresh(noMore)
     },
     async onLoadmore () {
       let params = { type: this.type }
@@ -128,7 +128,7 @@ export default {
         params.after = last.id
       }
       const noMore = await this.getFeedList(params)
-      this.$refs.loadmore.afterLoadmore(noMore)
+      this.$refs.loader.afterLoadmore(noMore)
     },
   },
 }

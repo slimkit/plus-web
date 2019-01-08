@@ -67,6 +67,7 @@
           type="feed"
           :count="feed.feed_comment_count"
           :comments="comments"
+          @fetch="fetchComments"
           @comment="onComment"
           @comment:delete="onCommentDelete"
         />
@@ -101,6 +102,7 @@
 <script>
 import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
+import { noop, limit } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
 import ArticleReward from '@/components/common/ArticleReward.vue'
@@ -162,7 +164,6 @@ export default {
   },
   mounted () {
     this.fetchRewards()
-    this.fetchComments()
     this.fetchRecommendUsers()
   },
   methods: {
@@ -173,11 +174,17 @@ export default {
       const list = await this.$axios.$get(`/feeds/${this.feed.id}/rewards`)
       this.rewards = list.slice(0, 10)
     },
-    async fetchComments () {
-      const { comments, pinneds } = await this.$axios.$get(`/feeds/${this.feed.id}/comments`)
-      pinneds.forEach(comment => (comment.pinned = true))
-      const merged = _.unionBy(pinneds, comments, 'id') // 合并去重
-      this.comments = merged
+    async fetchComments (after = 0, callback = noop) {
+      const { comments, pinneds } = await this.$axios.$get(`/feeds/${this.feed.id}/comments`, { params: { after, limit } })
+      if (!after) {
+        pinneds.forEach(comment => (comment.pinned = true))
+        const merged = _.unionBy(pinneds, comments, 'id') // 合并去重
+        this.comments = merged
+      } else {
+        this.comments.push(...comments)
+      }
+      const noMore = comments.length < limit
+      callback(noMore)
     },
     async onLike () {
       if (!this.feed.has_like) {
@@ -255,7 +262,7 @@ export default {
     flex: auto;
     background-color: #fff;
     margin-right: 30px;
-    padding: 30px 30px 0;
+    padding: 30px;
   }
 
   .article-header {
