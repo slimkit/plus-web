@@ -4,6 +4,7 @@
  */
 
 import { cookie } from '@/utils/storage'
+import { errorMessageHandler } from '@/utils'
 import { Message } from 'iview'
 
 export default function ({ $axios, env, store, redirect }) {
@@ -37,6 +38,8 @@ export default function ({ $axios, env, store, redirect }) {
           break
         case 403:
           error.tips = '拒绝访问'
+          const { data } = error.response
+          error.tips = data || { message: '拒绝访问' }
           break
         case 404:
           error.tips = '请求错误,未找到该资源'
@@ -77,6 +80,7 @@ export default function ({ $axios, env, store, redirect }) {
       error.tips = '网络不可用，请检查！'
     }
     console.error(error) // eslint-disable-line no-console
-    Message.error(error.tips)
+    const message = errorMessageHandler(error.tips)
+    Message.error(message)
   })
 }

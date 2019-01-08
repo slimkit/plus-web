@@ -123,7 +123,6 @@ export default {
           this.callback(this.amount)
         })
         .catch(({ response }) => {
-          this.$Message.error(response.data.message)
           this.validatePassword()
         })
     },

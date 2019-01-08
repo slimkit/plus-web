@@ -8,6 +8,19 @@ export const noop = () => {}
  */
 export const limit = 15
 
+/**
+ * 错误消息处理
+ * @return {string} message
+ */
+export const errorMessageHandler = content => {
+  if (typeof content === 'string') return content
+  if (content instanceof Object) {
+    if (content.message instanceof Array) return content.message[0]
+    return content.message
+  }
+  return content
+}
+
 export default {
 
 }
