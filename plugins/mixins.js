@@ -14,6 +14,11 @@ const mixins = {
       logged: 'logged',
     }),
   },
+  methods: {
+    checkAuth () {
+      if (!this.logged) this.$router.push('/auth/login')
+    },
+  },
 }
 
 const install = function (Vue) {

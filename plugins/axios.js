@@ -3,7 +3,10 @@
  * TODO: 路由切换时取消正在进行的请求
  */
 
-export default function ({ $axios, env, store }) {
+import { cookie } from '@/utils/storage'
+import { Message } from 'iview'
+
+export default function ({ $axios, env, store, redirect }) {
   $axios.onRequest(config => {
     if (env.debug) {
       console.log(`[axios] request to ${config.url}`) // eslint-disable-line no-console
@@ -26,11 +29,11 @@ export default function ({ $axios, env, store }) {
           error.tips = '错误请求'
           break
         case 401:
-          // error.tips = lstore.hasData('H5_CUR_USER')
-          //   ? '登陆失效，请重新登录'
-          //   : '请登录'
-          // lstore.clearData()
-          // requireAuth()
+          error.tips = cookie.get('access_token')
+            ? '登陆失效，请重新登录'
+            : '请先登录'
+          cookie.remove('access_token')
+          redirect('/auth/login')
           break
         case 403:
           error.tips = '拒绝访问'
@@ -74,5 +77,6 @@ export default function ({ $axios, env, store }) {
       error.tips = '网络不可用，请检查！'
     }
     console.error(error) // eslint-disable-line no-console
+    Message.error(error.tips)
   })
 }

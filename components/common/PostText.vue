@@ -48,6 +48,7 @@ export default {
   methods: {
     showMention () {},
     onSubmit () {
+      this.checkAuth()
       if (this.content.length > this.maxlength) {
         return this.$Message.error('超出可输入的字数')
       }

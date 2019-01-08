@@ -101,6 +101,7 @@ module.exports = {
   build: {
     extractCSS: true,
     vendor: [
+      'iview',
       'lodash',
     ],
     /*
