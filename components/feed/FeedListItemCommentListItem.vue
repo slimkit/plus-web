@@ -3,6 +3,7 @@
     {{ comment.user.name }}:
     <span v-if="comment.reply">回复<nuxt-link :to="`/user/${comment.reply.id}`">{{ comment.reply.name }}</nuxt-link>: </span>
     {{ comment.body }}
+    <span v-if="pinned" class="pinned">置顶</span>
     <div class="options">
       <span v-if="isOwner" @click="onTop">置顶</span>
       <template v-if="isMine">
@@ -26,7 +27,10 @@ export default {
   },
   computed: {
     isMine () {
-      return this.comment.user.id === this.logged.id
+      return this.logged && this.comment.user.id === this.logged.id
+    },
+    pinned () {
+      return this.comment.pinned
     },
   },
   methods: {
@@ -64,6 +68,10 @@ export default {
 
   a {
     color: @primary-color;
+  }
+
+  .pinned {
+    color: @success-color;
   }
 
   .options {

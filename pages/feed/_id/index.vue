@@ -52,6 +52,8 @@
         />
 
         <ArticleReward
+          type="feed"
+          :article="feed.id"
           :count="rewardCount"
           :amount="rewardAmount"
           :rewards="rewards"
@@ -62,9 +64,9 @@
 
         <ArticleComment
           ref="comment"
+          type="feed"
           :count="feed.feed_comment_count"
           :comments="comments"
-          :pinneds="pinnedComments"
           @comment="onComment"
           @comment:delete="onCommentDelete"
         />
@@ -97,6 +99,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
 import SideWidget from '@/components/common/SideWidget.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
@@ -117,12 +120,11 @@ export default {
   validate ({ params, query }) {
     return /^\d+$/.test(params.id)
   },
-  data: function () {
+  data () {
     return {
       feed: {},
       rewards: [],
       comments: [],
-      pinnedComments: [],
 
       showMore: false,
     }
@@ -173,8 +175,9 @@ export default {
     },
     async fetchComments () {
       const { comments, pinneds } = await this.$axios.$get(`/feeds/${this.feed.id}/comments`)
-      this.comments = comments
-      this.pinnedComments = pinneds
+      pinneds.forEach(comment => (comment.pinned = true))
+      const merged = _.unionBy(pinneds, comments, 'id') // 合并去重
+      this.comments = merged
     },
     async onLike () {
       if (!this.feed.has_like) {
@@ -202,19 +205,10 @@ export default {
         this.feed.has_collect = false
       }
     },
-    onReward (amount, password, callback) {
-      this.$axios.$post(`/feeds/${this.feed.id}/new-rewards`, {
-        amount,
-        password,
-      }).then(() => {
-        this.$Message.success('打赏成功')
-        this.rewardCount += 1
-        this.rewardAmount += amount
-        this.fetchRewards()
-        callback()
-      }).catch(error => {
-        callback(error.response.data.message)
-      })
+    onReward (amount) {
+      this.rewardCount += 1
+      this.rewardAmount += amount
+      this.fetchRewards()
     },
     async onComment (content, replyUser = {}) {
       const ret = await this.$axios.$post(`/feeds/${this.feed.id}/comments`, {
@@ -236,7 +230,6 @@ export default {
       this.$Message.success('删除成功')
       // 更新评论列表
       this.comments = this.comments.filter(item => item.id !== comment.id)
-      this.pinnedComments = this.pinnedComments.filter(item => item.id !== comment.id)
       this.feed_comment_count -= 1
 
       // 删除成功会调(关闭对话框)
@@ -248,7 +241,7 @@ export default {
         id: this.feed.id,
       })
     },
-    async onRepostable () {},
+    async onRepostable () { },
   },
 }
 </script>

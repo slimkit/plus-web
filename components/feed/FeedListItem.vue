@@ -15,13 +15,14 @@
       </div>
     </div>
     <div v-if="images.length" class="feed-content image-wrap">
-      <AsyncFile
-        v-for="(image, index) in images"
-        v-if="!index"
-        :key="image.file"
-        type="image"
-        :file="image"
-      />
+      <template v-for="(image, index) in images">
+        <AsyncFile
+          v-if="!index"
+          :key="image.file"
+          type="image"
+          :file="image"
+        />
+      </template>
     </div>
     <div
       v-else
@@ -65,7 +66,8 @@
               class="options"
               @click="showMore = false"
             >
-              <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+              <li v-if="isMine" @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
+              <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
             </ul>
           </IPoptip>
         </div>
@@ -103,7 +105,7 @@ export default {
   },
   computed: {
     isMine () {
-      return this.feed.user.id === this.logged.id
+      return this.logged && this.feed.user.id === this.logged.id
     },
     images () {
       return this.feed.images || []
@@ -117,6 +119,12 @@ export default {
       this.$root.$emit('report', {
         type: 'feed',
         id: this.feed.id,
+      })
+    },
+    onPinned () {
+      this.$root.$emit('pinned', {
+        type: 'feed',
+        params: { feedId: this.feed.id },
       })
     },
   },

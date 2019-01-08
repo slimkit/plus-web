@@ -50,6 +50,9 @@ export default {
       this.open()
     })
   },
+  destroyed () {
+    this.$root.$off('report')
+  },
   methods: {
     open () {
       this.show = true

@@ -80,7 +80,7 @@ export default {
     content: '';
     position: absolute;
     top: -16px;
-    left: 76px;
+    left: 70px;
     display: block;
     width: 0px;
     height: 0px;

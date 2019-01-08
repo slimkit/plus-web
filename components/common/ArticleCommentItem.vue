@@ -14,18 +14,24 @@
         <a v-if="!isMine" @click="onReply(comment.user)">回复</a>
       </div>
     </div>
-    <IPoptip v-model="more" placement="bottom">
-      <svg class="icon lg more" @click="onMore"><use xlink:href="#icon-more" /></svg>
+    <div class="right">
+      <span v-if="pinned" class="pinned">置顶</span>
+      <IPoptip v-model="showMore" placement="bottom">
+        <svg class="icon lg more"><use xlink:href="#icon-more" /></svg>
 
-      <ul
-        slot="content"
-        class="options"
-        @click="more = false"
-      >
-        <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
-        <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除评论</li>
-      </ul>
-    </IPoptip>
+        <ul
+          slot="content"
+          class="options"
+          @click="showMore = false"
+        >
+          <template v-if="isOwner || isMine">
+            <li v-if="!pinned" @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> {{ isOwner ? '评论置顶' : '申请置顶' }}</li>
+            <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除评论</li>
+          </template>
+          <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+        </ul>
+      </IPoptip>
+    </div>
   </li>
 </template>
 
@@ -33,27 +39,35 @@
 export default {
   name: 'ArticleCommentItem',
   props: {
+    type: { type: String, required: true },
     comment: { type: Object, default: () => {} },
-    pinned: { type: Boolean, default: false },
   },
   data () {
     return {
-      more: false,
+      showMore: false,
     }
   },
   computed: {
+    isOwner () {
+      return this.logged && this.comment.target_user === this.logged.id
+    },
     isMine () {
-      return this.comment.user.id === this.logged.id
+      return this.logged && this.comment.user.id === this.logged.id
+    },
+    pinned () {
+      return this.comment.pinned
     },
   },
   methods: {
     onReply (user) {
       this.$emit('reply', user)
     },
-    onMore () {
-
+    onPinned () {
+      this.$root.$emit('pinned', {
+        type: `${this.type}Comment`,
+        params: { feedId: this.comment.commentable_id, commentId: this.comment.id },
+      })
     },
-    onPinned () {},
     onDelete () {
       this.$Modal.confirm({
         title: '提示',
@@ -64,6 +78,12 @@ export default {
             this.$Modal.remove()
           })
         },
+      })
+    },
+    onReport () {
+      this.$root.$emit('report', {
+        type: 'comment',
+        id: this.comment.id,
       })
     },
   },
@@ -119,10 +139,20 @@ export default {
     }
   }
 
-  .more {
+  .right {
     flex: none;
+    display: flex;
+    align-items: center;
     margin-top: 8px;
-    cursor: pointer;
+
+    .more {
+      cursor: pointer;
+    }
+
+    .pinned {
+      color: @success-color;
+      margin-right: 1em;
+    }
   }
 
   &:hover {

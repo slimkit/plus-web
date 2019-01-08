@@ -20,7 +20,16 @@ export const actions = {
   async nuxtServerInit ({ commit, dispatch }, { req }) {
     const token = cookie.get('access_token', req.headers.cookie)
     commit('auth/SAVE_TOKEN', token)
-    await dispatch('getBootstrappers')
+
+    const promises = [
+      dispatch('getBootstrappers'),
+    ]
+    if (token) {
+      promises.push(...[
+        dispatch('user/getCurrentUser'),
+      ])
+    }
+    await Promise.all(promises)
   },
 
   async getBootstrappers ({ commit }) {

@@ -10,7 +10,10 @@
 
     <CommonFooter />
 
-    <ModalReport ref="report" />
+    <ModalReport />
+    <ModalReward />
+    <ModalPinned />
+    <ModalPassword />
   </div>
 </template>
 
@@ -19,6 +22,9 @@ import CommonHeader from '@/components/layout/CommonHeader.vue'
 import CommonFooter from '@/components/layout/CommonFooter.vue'
 import FloatWidget from '@/components/layout/FloatWidget.vue'
 import ModalReport from '@/components/common/ModalReport.vue'
+import ModalReward from '@/components/common/ModalReward.vue'
+import ModalPinned from '@/components/common/ModalPinned.vue'
+import ModalPassword from '@/components/common/ModalPassword.vue'
 
 export default {
   name: 'DefaultLayout',
@@ -27,6 +33,9 @@ export default {
     CommonFooter,
     FloatWidget,
     ModalReport,
+    ModalReward,
+    ModalPinned,
+    ModalPassword,
   },
   mounted () {
     if (this.$store.state.auth.token) {

@@ -1,71 +1,43 @@
 <template>
-  <!-- 注意不要使用 .c-modal-reward 选择器，因为 iview modal 内部的元素会被放置在组件外部，导致选择器失效 -->
-  <div class="c-modal-reward">
-    <IModal
-      v-model="show"
-      title="打赏"
-      class-name="modal-reward"
-      width="300"
-      :loading="loading"
-      @on-ok="beforeSubmit"
+  <IModal
+    v-model="show"
+    class="c-modal-reward"
+    title="打赏"
+    width="300"
+    :loading="loading"
+    :transfer="false"
+    @on-ok="beforeSubmit"
+  >
+    <p>选择打赏金额</p>
+    <IRadioGroup
+      v-model="selected"
+      class="select-wrap"
+      type="button"
     >
-      <p>选择打赏金额</p>
-      <IRadioGroup
-        v-model="selected"
-        class="select-wrap"
-        type="button"
-      >
-        <IRadio
-          v-for="item in recommendItems"
-          :key="item"
-          :label="item"
-        />
-      </IRadioGroup>
-
-      <IInputNumber
-        ref="custom"
-        v-model="custom"
-        class="custom-wrap"
-        :min="0"
-        placeholder="自定义打赏金额，必须为整数"
+      <IRadio
+        v-for="item in recommendItems"
+        :key="item"
+        :label="item"
       />
-    </IModal>
+    </IRadioGroup>
 
-    <IModal
-      v-model="showPassword"
-      title="输入密码"
-      class-name="modal-reward"
-      width="300"
-      :footer-hide="true"
-      @on-cancel="resetLoading"
-    >
-      <div class="password-confirm-wrap">
-        <IInput
-          ref="password"
-          v-model="password"
-          class="password-input"
-          type="password"
-          placeholder="请输入登录密码"
-          @on-enter="onSubmit"
-        />
-        <IButton
-          type="primary"
-          class="password-button"
-          :disabled="password.length < 6 || password.length > 16"
-          :loading="passwordLoading"
-          @click="onSubmit"
-        >
-          确认
-        </IButton>
-      </div>
-      <div class="forgot">
-        <nuxt-link to="/auth/find">忘记密码?</nuxt-link>
-      </div>
-    </IModal>
-  </div>
+    <IInputNumber
+      ref="custom"
+      v-model="custom"
+      class="custom-wrap"
+      :min="0"
+      placeholder="自定义打赏金额，必须为整数"
+    />
+  </IModal>
 </template>
 
 <script>
+import { noop } from '@/utils'
+
+const apiMap = {
+  feed: id => `/feeds/${id}/new-rewards`,
+}
+
 export default {
   name: 'ModalReward',
   data () {
@@ -73,19 +45,17 @@ export default {
       show: false,
       selected: null,
       custom: null,
-      showPassword: false,
-      password: '',
-      passwordLoading: false,
       loading: true,
+
+      type: null,
+      article: null,
+      callback: noop,
     }
   },
   computed: {
     enable () {
       const { status = false } = this.boot.site.reward || {}
       return status
-    },
-    needVerifyPassword () {
-      return this.boot['pay-validate-user-password'] || false
     },
     recommendItems () {
       const { amounts = '' } = this.boot.site.reward || {}
@@ -103,6 +73,17 @@ export default {
       this.custom = null
     },
   },
+  created () {
+    this.$root.$on('reward', options => {
+      this.type = options.type
+      this.article = options.article
+      this.callback = options.callback || noop
+      this.open()
+    })
+  },
+  destoryed () {
+    this.$root.$off('reward')
+  },
   mounted () {
     this.selected = this.recommendItems[0] || null
   },
@@ -111,11 +92,10 @@ export default {
       this.show = true
     },
     close () {
+      this.$root.$emit('password:close')
       this.show = false
-      this.showPassword = false
       this.custom = null
       this.selected = null
-      this.passwordLoading = false
     },
     beforeSubmit () {
       if (!this.amount) {
@@ -126,32 +106,26 @@ export default {
       }
 
       // 密码校验
-      if (this.needVerifyPassword) {
-        this.openPassword()
-        return
-      }
-
-      this.onSubmit()
+      this.validatePassword()
     },
-    onSubmit () {
-      this.passwordLoading = true
-      this.$emit('reward', this.amount, this.password, (error) => {
-        if (error) {
-          this.$Message.error(error)
-          this.openPassword()
-          return
-        }
-        this.close()
+    validatePassword () {
+      this.$root.$emit('password', password => {
+        if (password === false) return this.resetLoading()
+        this.onSubmit(password)
       })
     },
-    openPassword () {
-      if (!this.needVerifyPassword) return
-      this.password = ''
-      this.passwordLoading = false
-      this.showPassword = true
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+    onSubmit (password) {
+      const api = apiMap[this.type](this.article)
+      this.$axios.$post(api, { amount: this.amount, password })
+        .then(() => {
+          this.close()
+          this.$Message.success('打赏成功')
+          this.callback(this.amount)
+        })
+        .catch(({ response }) => {
+          this.$Message.error(response.data.message)
+          this.validatePassword()
+        })
     },
     resetLoading () {
       this.loading = false
@@ -163,8 +137,8 @@ export default {
 }
 </script>
 
-<style lang="less">
-.modal-reward {
+<style lang="less" scoped>
+.c-modal-reward {
 
   .select-wrap {
     display: block;
@@ -175,32 +149,6 @@ export default {
     display: block;
     margin-top: 8px;
     width: 15em;
-  }
-
-  .password-confirm-wrap {
-    display: flex;
-
-    .password-input {
-      flex: auto;
-      display: inline-block;
-
-      input {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-    }
-
-    .password-button {
-      flex: none;
-      display: inline-block;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-  }
-
-  .forgot {
-    margin-top: 8px;
-    text-align: right;
   }
 }
 </style>

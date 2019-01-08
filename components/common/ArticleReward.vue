@@ -21,20 +21,16 @@
       />
       <svg class="icon lg" @click="viewList"><use xlink:href="#icon-icon07" /></svg>
     </div>
-
-    <ModalReward ref="modal" @reward="onReward" />
   </section>
 </template>
 
 <script>
-import ModalReward from '@/components/common/ModalReward.vue'
 
 export default {
   name: 'ArticleReward',
-  components: {
-    ModalReward,
-  },
   props: {
+    type: { type: String, required: true },
+    article: { type: Number, required: true }, // 文章id
     count: { type: Number, default: 0 },
     amount: { type: Number, default: 0 },
     rewards: { type: Array, default: () => [] },
@@ -44,7 +40,13 @@ export default {
       this.$refs.modal.open()
     },
     onReward (...args) {
-      this.$emit('reward', ...args)
+      this.$root.$emit('reward', {
+        type: this.type,
+        article: this.article,
+        callback: amount => {
+          this.$emit('reward', amount)
+        },
+      })
     },
     viewList () {
       console.log('on view list')

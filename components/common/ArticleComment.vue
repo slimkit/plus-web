@@ -5,16 +5,9 @@
     <div v-if="!count" v-empty:content />
     <ul class="comments">
       <ArticleCommentItem
-        v-for="comment in pinnedComments"
-        :key="`comment-pinned-${comment.id}`"
-        :comment="comment"
-        :pinned="true"
-        @reply="onReply"
-        @delete="onDelete"
-      />
-      <ArticleCommentItem
         v-for="comment in comments"
         :key="`comment-${comment.id}`"
+        :type="type"
         :comment="comment"
         @reply="onReply"
         @delete="onDelete"
@@ -34,21 +27,21 @@ export default {
     ArticleCommentItem,
   },
   props: {
+    type: { type: String, required: true },
     count: { type: Number, default: 0 },
     comments: { type: Array, default: () => [] },
-    pinnedComments: { type: Array, default: () => [] },
   },
   computed: {
   },
   methods: {
-    onComment (content, replyUser) {
-      this.$emit('comment', content, replyUser)
-    },
     onReply (user) {
       this.$refs.editor.reply(user)
     },
-    onDelete (comment, callback) {
-      this.$emit('comment:delete', comment, callback)
+    onComment (...args) {
+      this.$emit('comment', ...args)
+    },
+    onDelete (...args) {
+      this.$emit('comment:delete', ...args)
     },
     clean () {
       this.$refs.editor.clean()
