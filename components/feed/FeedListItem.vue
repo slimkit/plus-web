@@ -34,9 +34,13 @@
     <footer class="feed-meta">
       <div class="meta-wrap">
         <div class="left">
-          <span class="meta">
+          <span
+            class="meta"
+            :class="{liked: feed.has_like}"
+            @click="onLike"
+          >
             <svg class="icon lg">
-              <use xlink:href="#icon-like" />
+              <use :xlink:href="feed.has_like ? '#icon-likered' : '#icon-like'" />
             </svg>
             <span>{{ feed.like_count }}</span>
           </span>
@@ -115,6 +119,18 @@ export default {
     viewDetail () {
       this.$router.push(`/feed/${this.feed.id}`)
     },
+    async onLike () {
+      if (!this.feed.has_like) {
+        await this.$axios.$post(`/feeds/${this.feed.id}/like`)
+        this.feed.has_like = true
+        this.feed.like_count += 1
+        this.$Message.success('点赞成功')
+      } else {
+        await this.$axios.$delete(`/feeds/${this.feed.id}/unlike`)
+        this.feed.has_like = false
+        this.feed.like_count -= 1
+      }
+    },
     onReport () {
       this.$root.$emit('report', {
         type: 'feed',
@@ -192,6 +208,10 @@ export default {
         > span {
           margin-left: 0.3em;
           font-size: 120%;
+        }
+
+        &.liked {
+          color: @error-color;
         }
       }
 
