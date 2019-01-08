@@ -56,7 +56,6 @@ export default {
     reply (user) {
       this.replyUser = user
       this.$refs.editor.focus()
-      document.scrollingElement.scrollTop = this.$el.offsetTop
     },
     clean () {
       this.content = ''

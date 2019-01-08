@@ -23,6 +23,12 @@ import { noop } from '@/utils'
 
 const apiMap = {
   feed (id, reason) { return this.$axios.$post(`/feeds/${id}/reports`, { reason }) },
+  news (id, reason) { return this.$axios.$post(`/news/${id}/reports`, { reason }) },
+  group (id, reason) { return this.$axios.$post(`/plus-group/groups/${id}/reports`, { reason }) },
+  post (id, reason) { return this.$axios.$post(`/plus-group/reports/posts/${id}`, { content: reason }) },
+  question (id, reason) { return this.$axios.$post(`/questions/${id}/reports`, { reason }) },
+  answer (id, reason) { return this.$axios.$post(`/question-answers/${id}/reports`, { reason }) },
+  comment (id, reason) { return this.$axios.$post(`/report/comments/${id}`, { reason }) },
 }
 
 export default {
@@ -54,7 +60,7 @@ export default {
     },
     async onSubmit () {
       const api = apiMap[this.type].bind(this)
-      await api(this.id, this.content)// .bind(this)
+      await api(this.id, this.content)
       this.$Message.success('举报成功')
       this.close()
     },

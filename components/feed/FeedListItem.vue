@@ -31,45 +31,80 @@
       {{ feed.feed_content }}
     </div>
     <footer class="feed-meta">
-      <div class="left">
-        <span class="meta">
-          <svg class="icon lg">
-            <use xlink:href="#icon-like" />
-          </svg>
-          <span>{{ feed.like_count }}</span>
-        </span>
-        <span class="meta">
-          <svg class="icon lg">
-            <use xlink:href="#icon-comment" />
-          </svg>
-          <span>{{ feed.feed_comment_count }}</span>
-        </span>
-        <span class="meta view" @click="viewDetail">
-          <svg class="icon lg">
-            <use xlink:href="#icon-chakan" />
-          </svg>
-          <span>{{ feed.feed_view_count }}</span>
-        </span>
+      <div class="meta-wrap">
+        <div class="left">
+          <span class="meta">
+            <svg class="icon lg">
+              <use xlink:href="#icon-like" />
+            </svg>
+            <span>{{ feed.like_count }}</span>
+          </span>
+          <span class="meta" @click="showComments = !showComments">
+            <svg class="icon lg">
+              <use xlink:href="#icon-comment" />
+            </svg>
+            <span>{{ feed.feed_comment_count }}</span>
+          </span>
+          <span class="meta view" @click="viewDetail">
+            <svg class="icon lg">
+              <use xlink:href="#icon-chakan" />
+            </svg>
+            <span>{{ feed.feed_view_count }}</span>
+          </span>
+        </div>
+        <div class="right">
+          <IPoptip
+            v-model="showMore"
+            class="more"
+            placement="bottom"
+          >
+            <svg class="icon lg"><use xlink:href="#icon-more" /></svg>
+
+            <ul
+              slot="content"
+              class="options"
+              @click="showMore = false"
+            >
+              <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+            </ul>
+          </IPoptip>
+        </div>
       </div>
-      <div class="right">
-        <svg class="icon lg more"><use xlink:href="#icon-more" /></svg>
-      </div>
+      <Collapse>
+        <FeedListItemCommentList
+          v-if="showComments"
+          :feed-id="feed.id"
+          :count.sync="feed.feed_comment_count"
+          :comments.sync="feed.comments"
+          :is-owner="isMine"
+        />
+      </Collapse>
     </footer>
   </section>
 </template>
 
 <script>
+import FeedListItemCommentList from './FeedListItemCommentList.vue'
+
 export default {
   name: 'FeedListItem',
+  components: {
+    FeedListItemCommentList,
+  },
   props: {
     feed: { type: Object, required: true },
   },
   data () {
     return {
       hoverTime: false,
+      showMore: false,
+      showComments: false,
     }
   },
   computed: {
+    isMine () {
+      return this.feed.user.id === this.logged.id
+    },
     images () {
       return this.feed.images || []
     },
@@ -77,6 +112,12 @@ export default {
   methods: {
     viewDetail () {
       this.$router.push(`/feed/${this.feed.id}`)
+    },
+    onReport () {
+      this.$root.$emit('report', {
+        type: 'feed',
+        id: this.feed.id,
+      })
     },
   },
 }
@@ -126,30 +167,30 @@ export default {
   }
 
   .feed-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-
-    .meta {
-      display: inline-flex;
+    .meta-wrap {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      margin-right: 2em;
-      font-size: @font-size-small;
-      color: @text-info-color;
+      height: 48px;
 
-      &.view {
+      .meta {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 2em;
+        font-size: @font-size-small;
+        color: @text-info-color;
+        cursor: pointer;
+
+        > span {
+          margin-left: 0.3em;
+          font-size: 120%;
+        }
+      }
+
+      .more {
+        color: @disabled-color;
         cursor: pointer;
       }
-
-      > span {
-        margin-left: 0.3em;
-        font-size: 120%;
-      }
-    }
-
-    .more {
-      color: @disabled-color;
     }
   }
 }

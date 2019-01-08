@@ -1,5 +1,7 @@
 import { cookie } from '@/utils/storage'
 
+export const strict = false
+
 export const state = () => ({
   boot: {},
 })
