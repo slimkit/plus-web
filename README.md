@@ -43,6 +43,39 @@ $ yarn test
 - vue 语法高亮, less 语法高亮，es6 语法支持
 - eslint (最好开启保存时自动修复 auto-fix on save)
 
+## API
+
+### 全局组件
+
+以下组件可以在任意地方使用 `this.$root.$emit('xxx', payload)` 来呼出 modal
+
+- `reward` 打赏
+- `pinned` 置顶
+- `report` 举报
+- `password` 密码验证
+
+> 这些文件位于 `./components/common/ModalXXX.vue` 中
+
+例如要打赏id为12的动态
+
+``` js
+export default {
+  methods: {
+    onReward() {
+      this.$root.$emit('reward', {
+        type: 'feed',
+        article: 12,
+        callback: amount => {
+          console.log(`成功打赏${amount}积分！`)
+        }
+      })
+    }
+  }
+}
+```
+
+> `payload` 参数根据不同的需求有所不同，具体请参考组件中 `created` 钩子中注册事件（`this.$root.$on('xxx')`）的部分
+
 # 参考资料
 
 ## vue
