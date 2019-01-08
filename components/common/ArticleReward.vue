@@ -4,7 +4,7 @@
       type="error"
       size="large"
       class="reward-button"
-      @click="beforeReward"
+      @click="onReward"
     >
       打 赏
     </IButton>
@@ -14,20 +14,55 @@
     </p>
     <div v-if="rewards.length" class="rewards">
       <Avatar
-        v-for="reward in rewards"
+        v-for="reward in rewardsLimit"
         :key="reward.id"
         :user="reward.user"
         size="sm"
       />
-      <svg class="icon lg" @click="viewList"><use xlink:href="#icon-icon07" /></svg>
+      <svg class="icon lg" @click="showList = true"><use xlink:href="#icon-icon07" /></svg>
     </div>
+
+    <IModal
+      v-model="showList"
+      title="打赏列表"
+      :transfer="false"
+      :width="340"
+      :footer-hide="true"
+    >
+      <Loadmore
+        ref="loader"
+        @refresh="onRefresh"
+        @loadmore="onLoadmore"
+      >
+        <ul class="reward-list">
+          <li
+            v-for="reward in rewards"
+            :key="reward.id"
+            class="reward-item"
+          >
+            <Avatar :user="reward.user" size="sm" />
+            <span class="username">{{ reward.user.name }}</span>
+            打赏了 {{ reward.rewardable_type | rewardType }}
+          </li>
+        </ul>
+      </Loadmore>
+    </IModal>
   </section>
 </template>
 
 <script>
 
+const rewardTypeMap = {
+  feeds: '动态',
+}
+
 export default {
   name: 'ArticleReward',
+  filters: {
+    rewardType (val) {
+      return rewardTypeMap[val]
+    },
+  },
   props: {
     type: { type: String, required: true },
     article: { type: Number, required: true }, // 文章id
@@ -35,11 +70,28 @@ export default {
     amount: { type: Number, default: 0 },
     rewards: { type: Array, default: () => [] },
   },
-  methods: {
-    beforeReward () {
-      this.$refs.modal.open()
+  data: function () {
+    return {
+      showList: false,
+    }
+  },
+  computed: {
+    rewardsLimit () {
+      return this.rewards.slice(0, 10)
     },
-    onReward (...args) {
+  },
+  methods: {
+    onRefresh () {
+      this.$emit('fetch', null, noMore => {
+        this.$refs.loader.afterRefresh(noMore)
+      })
+    },
+    onLoadmore () {
+      this.$emit('fetch', this.rewards.length, noMore => {
+        this.$refs.loader.afterRefresh(noMore)
+      })
+    },
+    onReward () {
       this.$root.$emit('reward', {
         type: this.type,
         article: this.article,
@@ -47,9 +99,6 @@ export default {
           this.$emit('reward', amount)
         },
       })
-    },
-    viewList () {
-      console.log('on view list')
     },
   },
 }
@@ -87,6 +136,23 @@ export default {
 
     .icon {
       cursor: pointer;
+    }
+  }
+
+  .reward-list {
+    max-height: 70vh;
+    overflow: auto;
+
+    .reward-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      color: @text-info-color;
+
+      .username {
+        color: @text-color;
+        margin: 0 8px;
+      }
     }
   }
 }

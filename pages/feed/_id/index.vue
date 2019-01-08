@@ -57,6 +57,7 @@
           :count="rewardCount"
           :amount="rewardAmount"
           :rewards="rewards"
+          @fetch="fetchRewards"
           @reward="onReward"
         />
 
@@ -163,16 +164,21 @@ export default {
     return { feed }
   },
   mounted () {
-    this.fetchRewards()
     this.fetchRecommendUsers()
   },
   methods: {
     ...mapActions('user', {
       fetchRecommendUsers: 'fetchRecommendUsers',
     }),
-    async fetchRewards () {
-      const list = await this.$axios.$get(`/feeds/${this.feed.id}/rewards`)
-      this.rewards = list.slice(0, 10)
+    async fetchRewards (offset = 0, callback = noop) {
+      const list = await this.$axios.$get(`/feeds/${this.feed.id}/rewards`, { params: { offset, limit } })
+      if (!offset) {
+        this.rewards = list
+      } else {
+        this.rewards.push(...list)
+      }
+      const noMore = list.length < limit
+      callback(noMore)
     },
     async fetchComments (after = 0, callback = noop) {
       const { comments, pinneds } = await this.$axios.$get(`/feeds/${this.feed.id}/comments`, { params: { after, limit } })
