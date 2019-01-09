@@ -8,12 +8,12 @@ import { errorMessageHandler } from '@/utils'
 import { Message } from 'iview'
 
 export default function ({ $axios, env, store, redirect }) {
+  $axios.setHeader('Accept', 'application/json')
+
   $axios.onRequest(config => {
     if (env.debug) {
       console.log(`[axios] request to ${config.url}`) // eslint-disable-line no-console
     }
-
-    config.headers.common['Accept'] = 'application/json'
 
     // auth
     const authToken = store.state.auth.token
@@ -55,6 +55,9 @@ export default function ({ $axios, env, store, redirect }) {
           error.tips = data || { message: '错误请求' }
           break
         }
+        case 429:
+          error.tips = '请求次数过多'
+          break
         case 500:
           error.tips = '服务器端出错'
           break

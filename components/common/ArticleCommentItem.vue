@@ -66,6 +66,7 @@ export default {
       this.$root.$emit('pinned', {
         type: `${this.type}Comment`,
         params: { feedId: this.comment.commentable_id, commentId: this.comment.id },
+        isOwner: this.isOwner,
       })
     },
     onDelete () {

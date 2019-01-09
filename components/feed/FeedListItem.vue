@@ -146,6 +146,7 @@ export default {
       this.$root.$emit('pinned', {
         type: 'feed',
         params: { feedId: this.feed.id },
+        isOwner: this.isMine,
       })
     },
   },

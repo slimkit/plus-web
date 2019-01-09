@@ -102,9 +102,9 @@ export default {
       this.day = this.days[0] || null
     },
     beforeSubmit () {
-      if (!this.amount) {
+      if (!this.isOwner && !this.amount) {
         this.resetLoading()
-        this.$Message.error('请选择打赏金额')
+        this.$Message.error('请选择置顶金额')
         this.$refs.custom.focus()
         return
       }
@@ -136,11 +136,9 @@ export default {
         }).catch(({ response }) => {
           const { message } = response.data || {}
           if (message === '已经申请过') { // 服务器返回消息
-            this.$Message.error('您已经申请过置顶，请等待审核')
             this.close()
             return
           }
-          this.$Message.error(message)
           this.validatePassword()
         })
     },
