@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { local } from '@/utils/storage'
 
 const LOCAL_KEY = {
@@ -13,6 +14,27 @@ export const state = () => ({
   new: [],
   follow: [],
 })
+
+export const getters = {
+  pinned (state) {
+    // 注入 pinned 属性
+    return state.pinned.map(item => {
+      item.pinned = true
+      return item
+    })
+  },
+  hot (state, getters) {
+    // 混入置顶数据并去重
+    return _.unionBy(getters.pinned, state.hot, 'id')
+  },
+  new (state, getters) {
+    // 混入置顶数据并去重
+    return _.unionBy(getters.pinned, state.new, 'id')
+  },
+  follow (state) {
+    return state.follow
+  },
+}
 
 export const TYPES = {
   LOAD_FROM_STORAGE: 'LOAD_FROM_STORAGE',

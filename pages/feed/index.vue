@@ -27,7 +27,6 @@
         <FeedList
           class="feed-list"
           :feeds="feeds"
-          :pinneds="type === 'hot' ? pinneds : []"
         />
       </Loadmore>
     </main>
@@ -43,7 +42,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
@@ -78,11 +77,10 @@ export default {
     ...mapState('user', {
       recommendUsers: 'recommend',
     }),
-    ...mapState('feed', {
+    ...mapGetters('feed', {
       new: 'new',
       hot: 'hot',
       follow: 'follow',
-      pinneds: 'pinned',
     }),
     type: {
       get () {
@@ -94,7 +92,7 @@ export default {
         return type
       },
       set (val) {
-        this.$router.push({ ...this.$route, query: { type: val } })
+        this.$router.push({ query: { type: val } })
       },
     },
     feeds () {

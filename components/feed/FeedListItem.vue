@@ -5,6 +5,7 @@
         <Avatar :user="feed.user" />
         <span class="username">{{ feed.user.name }}</span>
       </div>
+      <span v-if="pinned" class="pinned">置顶</span>
       <div
         class="post-info"
         @click="viewDetail"
@@ -115,6 +116,9 @@ export default {
     images () {
       return this.feed.images || []
     },
+    pinned () {
+      return this.feed.pinned || false
+    },
   },
   methods: {
     viewDetail () {
@@ -161,17 +165,24 @@ export default {
 
   .author-info {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     height: 80px;
 
     .user-info {
       display: flex;
       align-items: center;
+      margin-right: auto;
 
       .username {
         margin-left: 1em;
       }
+    }
+
+    .pinned {
+      margin-right: 1em;
+      color: @success-color;
+      font-size: @font-size-small;
     }
 
     .post-info {
