@@ -3,7 +3,7 @@
     <FeedLeftNavigation class="left-navigation" current="feed" />
     <main class="feed-container">
       <div v-if="logged" class="post-container">
-        <PostText />
+        <PostFeed @post="onPost" />
       </div>
 
       <nav class="sort-items">
@@ -46,7 +46,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
-import PostText from '@/components/common/PostText.vue'
+import PostFeed from '@/components/feed/PostFeed.vue'
 
 const defaultType = 'new'
 const typeMap = {
@@ -66,7 +66,7 @@ export default {
     FeedLeftNavigation,
     FeedList,
     SideWidget,
-    PostText,
+    PostFeed,
   },
   data () {
     return {
@@ -127,6 +127,10 @@ export default {
       }
       const noMore = await this.getFeedList(params)
       this.$refs.loader.afterLoadmore(noMore)
+    },
+    onPost (id) {
+      this.type = 'new'
+      this.$refs.loader.beforeRefresh()
     },
   },
 }

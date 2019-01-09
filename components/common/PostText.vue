@@ -44,14 +44,16 @@ export default {
       if (this.replyUser.id) return `回复 ${this.replyUser.name}:`
       return '说点什么吧'
     },
+    disabled () {
+      if (!this.content) return true
+      if (this.content.length > this.maxlength) return true
+      return false
+    },
   },
   methods: {
     showMention () {},
     onSubmit () {
       this.checkAuth()
-      if (this.content.length > this.maxlength) {
-        return this.$Message.error('超出可输入的字数')
-      }
       this.$emit('submit', this.content, this.replyUser)
     },
     reply (user) {
