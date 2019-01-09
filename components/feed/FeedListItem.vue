@@ -72,8 +72,13 @@
               class="options"
               @click="showMore = false"
             >
-              <li v-if="isMine" @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
-              <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+              <template v-if="isMine">
+                <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
+                <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
+              </template>
+              <template v-else>
+                <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+              </template>
             </ul>
           </IPoptip>
         </div>
@@ -147,6 +152,19 @@ export default {
         type: 'feed',
         params: { feedId: this.feed.id },
         isOwner: this.isMine,
+      })
+    },
+    onDelete () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确定删除这条信息？',
+        loading: true,
+        onOk: async () => {
+          await this.$axios.$delete(`/feeds/${this.feed.id}/currency`)
+          this.$emit('delete', this.feed.id)
+          this.$Message.success('删除成功')
+          this.$Modal.remove()
+        },
       })
     },
   },
