@@ -13,6 +13,10 @@ export default {
   props: {
     type: { type: String, default: 'image' },
     file: { type: Object, required: true },
+    maxWidth: { type: Number, default: null },
+    maxHeight: { type: Number, default: null },
+    quility: { type: Number, default: null },
+    blur: { type: Number, default: null },
   },
   data: function () {
     return {
@@ -25,8 +29,16 @@ export default {
   methods: {
     async getFileURL () {
       const id = this.file.file || this.file.id
-      // const { url } = await this.$axios.$get(`/files/${id}?json=1`, { progress: false })
-      const url = `${process.env.apiURL}/files/${id}`
+      let url = `${process.env.apiURL}/files/${id}`
+
+      // query
+      const paramsString = new URLSearchParams()
+      if (this.maxWidth) paramsString.append('w', this.maxWidth)
+      if (this.maxHeight) paramsString.append('h', this.maxHeight)
+      if (this.quility) paramsString.append('q', this.quility)
+      if (this.blur) paramsString.append('b', this.blur)
+      if (paramsString.toString()) url += `?${paramsString.toString()}`
+
       this.src = url
     },
   },

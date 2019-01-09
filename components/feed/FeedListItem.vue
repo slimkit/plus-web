@@ -21,6 +21,7 @@
           :key="image.file"
           type="image"
           :file="image"
+          :max-height="400"
         />
       </template>
     </div>
@@ -186,7 +187,8 @@ export default {
     cursor: pointer;
 
     .image {
-      width: 100%;
+      max-width: 100%;
+      max-height: 400px;
     }
   }
 

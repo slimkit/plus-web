@@ -38,7 +38,7 @@
             />
           </template>
         </div>
-        <div v-else class="text-wrap">
+        <div class="text-wrap">
           {{ feed.feed_content }}
         </div>
       </main>
@@ -300,6 +300,7 @@ export default {
       display: flex;
       justify-content: center;
       background-color: @background-color-base;
+      margin-bottom: 24px;
     }
   }
 
