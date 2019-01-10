@@ -15,17 +15,12 @@
         {{ hoverTime ? '查看详情' : feed.created_at | fromNow }}
       </div>
     </div>
-    <div v-if="images.length" class="feed-content image-wrap">
-      <template v-for="(image, index) in images">
-        <AsyncFile
-          v-if="!index"
-          :key="image.file"
-          type="image"
-          :file="image"
-          :max-height="400"
-        />
-      </template>
-    </div>
+
+    <FeedListItemImageLayout
+      v-if="images.length"
+      class="feed-content"
+      :images="images"
+    />
     <div
       v-else
       class="feed-content"
@@ -98,11 +93,13 @@
 
 <script>
 import FeedListItemCommentList from './FeedListItemCommentList.vue'
+import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
 
 export default {
   name: 'FeedListItem',
   components: {
     FeedListItemCommentList,
+    FeedListItemImageLayout,
   },
   props: {
     feed: { type: Object, required: true },
