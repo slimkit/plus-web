@@ -30,6 +30,7 @@ export const actions = {
       ])
     }
     await Promise.all(promises)
+    return Promise.resolve()
   },
 
   async getBootstrappers ({ commit }) {
