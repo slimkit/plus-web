@@ -4,6 +4,7 @@
       v-for="feed in feeds"
       :key="`feed-${feed.id}`"
       :feed="feed"
+      @delete="onDelete"
     />
   </div>
 </template>
@@ -18,6 +19,11 @@ export default {
   },
   props: {
     feeds: { type: Array, default: () => [] },
+  },
+  methods: {
+    onDelete (feedId) {
+      this.$emit('delete', feedId)
+    },
   },
 }
 </script>

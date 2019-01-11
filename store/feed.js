@@ -39,6 +39,7 @@ export const getters = {
 export const TYPES = {
   LOAD_FROM_STORAGE: 'LOAD_FROM_STORAGE',
   SAVE_LIST: 'SAVE_LIST',
+  DELETE_FEED: 'DELETE_FEED',
 }
 
 export const mutations = {
@@ -54,6 +55,10 @@ export const mutations = {
     } else {
       state[type].push(...list)
     }
+  },
+  [TYPES.DELETE_FEED] (state, { type, feedId }) {
+    state.pinned = state.pinned.filter(item => item.id !== feedId)
+    state[type] = state[type].filter(item => item.id !== feedId)
   },
 }
 

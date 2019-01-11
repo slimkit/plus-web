@@ -27,6 +27,7 @@
         <FeedList
           class="feed-list"
           :feeds="feeds"
+          @delete="onDelete"
         />
       </Loadmore>
     </main>
@@ -131,6 +132,9 @@ export default {
     onPost (id) {
       this.type = 'new'
       this.$refs.loader.beforeRefresh()
+    },
+    onDelete (feedId) {
+      this.$store.commit('feed/DELETE_FEED', { feedId, type: this.type })
     },
   },
 }
