@@ -5,6 +5,8 @@
       class="form"
       :model="form"
       :rules="validator"
+      autocomplete="on"
+      @submit.native.prevent
     >
       <IFormItem prop="account">
         <IInput
@@ -20,7 +22,6 @@
           type="password"
           placeholder="输入密码"
           :maxlength="16"
-          @on-enter="onSubmit"
         />
       </IFormItem>
       <div class="others">
@@ -30,6 +31,7 @@
       <IButton
         size="large"
         type="primary"
+        html-type="submit"
         @click="onSubmit"
       >
         登录
@@ -73,14 +75,14 @@ export default {
   data () {
     return {
       form: {
-        account: '木头',
-        password: '123456',
+        account: '',
+        password: '',
       },
       validator,
     }
   },
   beforeRouteEnter (to, from, next) {
-    if (to.query.redirect) next()
+    if (to.query.redirect) return next()
     const query = { ...to.query }
     query.redirect = encodeURIComponent(from.fullPath)
     next({ ...to, query })

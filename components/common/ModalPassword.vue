@@ -22,6 +22,7 @@
         class="password-button"
         :disabled="password.length < 6 || password.length > 16"
         :loading="loading"
+        html-type="button"
         @click="onSubmit"
       >
         确认
