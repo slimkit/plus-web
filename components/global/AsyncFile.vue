@@ -1,15 +1,15 @@
 <template>
   <img
     v-if="type === 'image'"
+    v-lazyload="src"
     class="c-async-file"
     :class="type"
-    :src="src"
   >
   <div
     v-else-if="type==='image-wrap'"
+    v-lazyload:background="src"
     class="c-async-file"
     :class="type"
-    :style="{backgroundImage: `url(${src})`}"
   />
 </template>
 
@@ -24,16 +24,8 @@ export default {
     quility: { type: Number, default: null },
     blur: { type: Number, default: null },
   },
-  data: function () {
-    return {
-      src: false,
-    }
-  },
-  mounted () {
-    this.getFileURL()
-  },
-  methods: {
-    async getFileURL () {
+  computed: {
+    src () {
       const id = this.file.file || this.file.id
       let url = `${process.env.apiURL}/files/${id}`
 
@@ -44,8 +36,7 @@ export default {
       if (this.quility) paramsString.append('q', this.quility)
       if (this.blur) paramsString.append('b', this.blur)
       if (paramsString.toString()) url += `?${paramsString.toString()}`
-
-      this.src = url
+      return url
     },
   },
 }
@@ -58,7 +49,7 @@ export default {
   &.image-wrap {
     width: 100%;
     height: 100%;
-    background: transparent center / cover no-repeat;
+    background: @normal-color center / cover no-repeat;
   }
 }
 </style>
