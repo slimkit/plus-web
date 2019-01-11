@@ -62,10 +62,22 @@
         v-for="(image, index) in images"
         :key="index"
         class="upload-image"
+        :class="image.status"
         :style="{backgroundImage: `url(${image.preview})`}"
+        :title="uploadStatusMap[image.status]"
         @click="onImageView(image)"
       >
         <svg class="icon delete" @click.stop="onImageDelete(image, index)"><use xlink:href="#icon-close" /></svg>
+
+        <template v-if="image.status === 'uploading'">
+          <Loading type="circle" @click.stop="onImageReupload(image, index)" />
+        </template>
+
+        <template v-else-if="image.status === 'error'">
+          <svg class="icon" @click.stop="onImageReupload(image, index)">
+            <use xlink:href="#icon-warning" />
+          </svg>
+        </template>
       </li>
       <li
         v-if="images.length < 9"
@@ -84,6 +96,7 @@
       :multiple="true"
       :before-upload="beforeUpload"
       :preview-size="{width: 640, height:480}"
+      @update="onUploadUpdate"
     />
 
     <!-- 图片预览 modal -->
@@ -103,6 +116,13 @@
 <script>
 import PostText from '@/components/common/PostText.vue'
 
+const uploadStatusMap = {
+  success: '上传成功',
+  error: '出错了，点击重新上传',
+  pending: '等待上传',
+  uploading: '上传中...',
+}
+
 export default {
   name: 'PostFeed',
   mixins: [ PostText ],
@@ -115,6 +135,7 @@ export default {
       images: [],
       mark: null, // 唯一标识
 
+      uploadStatusMap,
       preview: {
         show: false,
         title: null,
@@ -178,6 +199,9 @@ export default {
     onUploadSuccess (images) {
       console.log(images)
     },
+    onUploadUpdate (image, index) {
+      this.images[index] = image
+    },
     onImageView (image) {
       this.preview.title = image.filename
       this.preview.src = image.preview
@@ -185,6 +209,9 @@ export default {
     },
     onImageDelete (image, index) {
       this.images.splice(index, 1)
+    },
+    onImageReupload (image, index) {
+
     },
   },
 }
@@ -288,15 +315,58 @@ export default {
 
       &.upload-image {
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: zoom-in;
 
+        > .c-loading,
+        > .icon {
+          z-index: 1;
+        }
+
         .delete {
+          display: none;
           position: absolute;
           top: 0;
           right: 0;
           color: #fff;
           background-color: @text-color;
           cursor: pointer;
+          z-index: 2;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          display: block;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+        }
+
+        &.uploading,
+        &.pending,
+        &.error {
+          &::after {
+            background-color: rgba(0, 0, 0, 0.4);
+
+          }
+        }
+
+        &.uploading {
+          cursor: progress;
+        }
+
+        &.error {
+          cursor: pointer;
+        }
+
+        &:hover {
+          .delete {
+            display: block;
+          }
         }
       }
 

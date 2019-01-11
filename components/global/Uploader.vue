@@ -100,7 +100,9 @@ export default {
       files = (result instanceof Array) ? result : files // 返回的不是数组的话就使用原始值
       this.update(files)
 
-      this.onUpload(files)
+      this.$nextTick(() => {
+        this.onUpload(files)
+      })
     },
 
     /**
@@ -129,11 +131,12 @@ export default {
      */
     async onUpload (files) {
       // 顺序上传 (也可以改为 Promise.all 并发上传)
+      // FIXME: 不知道为啥变成了并发上传 待研究
       files.forEach(async (file, index) => {
         // 如果不是 pneding 状态
         if (file.status !== 'pending') return
         file.status = 'uploading'
-        this.update(files)
+        this.$emit('update', file, index)
 
         // 开始上传
         try {
@@ -141,11 +144,11 @@ export default {
           if (!result) return
 
           Object.assign(file, result)
-          this.update(files)
+          this.$emit('update', file, index)
         } catch (error) {
           file.error = error
           file.status = 'error'
-          this.update(files)
+          this.$emit('update', file, index)
         }
       })
 
