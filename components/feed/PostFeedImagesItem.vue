@@ -7,6 +7,14 @@
     @click="onPreview(image)"
   >
     <svg class="icon delete" @click.stop="onDelete"><use xlink:href="#icon-close" /></svg>
+    <span
+      v-if="needPay"
+      class="amount-wrap"
+      @click.stop="onSetAmount"
+    >
+      <svg class="icon"><use xlink:href="#icon-money" /></svg>
+      {{ image.amount || '设置金额' }}
+    </span>
 
     <template v-if="image.status === 'uploading'">
       <Loading type="circle" @click.stop="onReupload" />
@@ -33,6 +41,7 @@ export default {
   props: {
     index: { type: Number, required: true },
     image: { type: Object, required: true },
+    needPay: { type: Boolean, default: false },
   },
   data () {
     return {
@@ -48,6 +57,9 @@ export default {
     },
     onImageReupload () {
       this.$emit('reupload', this.index)
+    },
+    onSetAmount () {
+      this.$emit('set-amount', this.index)
     },
   },
 }
@@ -77,6 +89,20 @@ export default {
     right: 0;
     color: #fff;
     background-color: @text-color;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .amount-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2px 0;
+    background-color: rgba(0, 0, 0, .4);
+    color: #fff;
+    text-align: center;
+    font-size: @font-size-small;
     cursor: pointer;
     z-index: 2;
   }

@@ -2,13 +2,15 @@
   <div class="c-post-feed-images">
     <ul class="image-list">
       <PostFeedImagesItem
-        v-for="(image, index) in images"
+        v-for="(image, index) in list"
         :key="index"
         :class="{zoom: canPreview}"
         :image="image"
         :index="index"
+        :need-pay="needPay"
         @preview="onPreview"
         @delete="onDelete"
+        @set-amount="onSetAmount"
       />
 
       <li
@@ -57,6 +59,7 @@ export default {
   props: {
     list: { type: Array, default: () => [] },
     canPreview: { type: Boolean, default: true },
+    needPay: { type: Boolean, default: false },
   },
   data: function () {
     return {
@@ -104,6 +107,9 @@ export default {
         this.previewSrc = await getImageCover(image.file, { width: 640 })
       }
     },
+    onSetAmount (index) {
+      this.$emit('set-amount', index)
+    },
   },
 }
 </script>
@@ -122,8 +128,8 @@ export default {
       align-items: center;
       justify-content: space-around;
       flex:none;
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       background: transparent center / cover no-repeat;
       margin-top: 8px;
       margin-right: 8px;

@@ -61,6 +61,8 @@
       v-show="images.length"
       ref="images"
       :list.sync="images"
+      :need-pay="needPay"
+      @set-amount="onSetAmount"
     />
 
     <IModal
@@ -68,10 +70,10 @@
       v-model="showPayModal"
       title="付费设置"
       :transfer="false"
-      :loading="true"
-      @on-ok="onSubmit"
+      :loading="!images.length"
+      @on-ok="afterSetAmount"
     >
-      <p>设置文字收费金额</p>
+      <p>设置{{ images.length ? '图片' :'文字' }}收费金额</p>
       <IRadioGroup
         v-model="selectedAmount"
         class="select-wrap"
@@ -115,21 +117,23 @@ export default {
       showPayModal: false,
       selectedAmount: null,
       customAmount: null,
+      setAmountIndex: null,
     }
   },
   computed: {
     form () {
       const images = this.images.map(image => ({
         id: image.value,
-        amount: undefined, // TODO: 收费图片
-        type: this.needPay ? 'read' : undefined,
+        amount: image.amount || undefined,
+        type: image.amount ? 'read' : undefined,
       }))
+      const amount = !this.images.length && this.amount
       return {
         feed_content: this.content,
-        amount: this.amount,
         feed_from: 1,
         feed_mark: this.mark,
         images,
+        amount: amount || undefined,
       }
     },
     amountItems () {
@@ -137,6 +141,7 @@ export default {
       return items.map(item => Number(item))
     },
     amount () {
+      if (!this.needPay) return undefined
       return this.customAmount || this.selectedAmount
     },
     disabled () {
@@ -157,8 +162,15 @@ export default {
   },
   methods: {
     async beforeSubmit () {
-      // 如果不需要付费
+      // 如果不需要付费 或者含有付费图片
       if (!this.needPay) return this.onSubmit()
+
+      if (this.images.length) {
+        if (!this.images.find(item => item.amount > 0)) {
+          return this.$Message.error('应配置至少一张图片费用')
+        }
+        return this.onSubmit()
+      }
 
       // 付费文字动态
       const minLength = this.boot.feed.limit
@@ -193,12 +205,26 @@ export default {
           this.loading = false
         })
     },
+    afterSetAmount () {
+      if (typeof this.setAmountIndex === 'number') {
+        // https://cn.vuejs.org/v2/api/#Vue-set
+        this.$set(this.images[this.setAmountIndex], 'amount', this.amount)
+        this.setAmountIndex = null
+      } else {
+        this.onSubmit()
+      }
+    },
     clear () {
       this.content = ''
       this.needPay = false
+      this.setAmountIndex = undefined
       this.images = []
       this.mark = null
       this.loading = false
+    },
+    onSetAmount (index) {
+      this.setAmountIndex = index
+      this.showPayModal = true
     },
   },
 }
