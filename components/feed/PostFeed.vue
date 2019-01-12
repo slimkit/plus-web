@@ -14,7 +14,7 @@
       <IButton
         type="text"
         class="button tool"
-        @click="$refs.uploader.select()"
+        @click="$refs.images.select()"
       >
         <svg class="icon"><use xlink:href="#icon-img" /></svg>
         图片
@@ -51,96 +51,38 @@
         class="button submit-button"
         :disabled="disabled"
         :loading="loading"
-        @click="onSubmit"
+        @click="beforeSubmit"
       >
         分享
       </IButton>
     </div>
 
-    <ul v-show="images.length" class="image-list">
-      <li
-        v-for="(image, index) in images"
-        :key="index"
-        class="upload-image"
-        :class="image.status"
-        :style="{backgroundImage: `url(${image.preview})`}"
-        :title="uploadStatusMap[image.status]"
-        @click="onImageView(image)"
-      >
-        <svg class="icon delete" @click.stop="onImageDelete(image, index)"><use xlink:href="#icon-close" /></svg>
-
-        <template v-if="image.status === 'uploading'">
-          <Loading type="circle" @click.stop="onImageReupload(image, index)" />
-        </template>
-
-        <template v-else-if="image.status === 'error'">
-          <svg class="icon" @click.stop="onImageReupload(image, index)">
-            <use xlink:href="#icon-warning" />
-          </svg>
-        </template>
-      </li>
-      <li
-        v-if="images.length < 9"
-        class="upload-placeholder"
-        @click="$refs.uploader.select()"
-      >
-        <svg class="icon lg"><use xlink:href="#icon-add" /></svg>
-      </li>
-    </ul>
-
-    <Uploader
-      ref="uploader"
-      v-model="images"
-      type="file"
-      accept="image/*"
-      :multiple="true"
-      :before-upload="beforeUpload"
-      :preview-size="{width: 640, height:480}"
-      @update="onUploadUpdate"
+    <PostFeedImages
+      v-show="images.length"
+      ref="images"
+      :list.sync="images"
     />
-
-    <!-- 图片预览 modal -->
-    <IModal
-      v-model="preview.show"
-      class="preview-wrap"
-      :title="`${preview.title} - 预览`"
-      :transfer="false"
-      :footer-hide="true"
-      :styles="{width: 'auto', maxWidth: '100%'}"
-    >
-      <img :src="preview.src" class="preivew-image">
-    </IModal>
   </div>
 </template>
 
 <script>
 import PostText from '@/components/common/PostText.vue'
-
-const uploadStatusMap = {
-  success: '上传成功',
-  error: '出错了，点击重新上传',
-  pending: '等待上传',
-  uploading: '上传中...',
-}
+import PostFeedImages from './PostFeedImages.vue'
 
 export default {
   name: 'PostFeed',
+  components: {
+    PostFeedImages,
+  },
   mixins: [ PostText ],
   data () {
     return {
-      posting: false,
+      loading: false,
       showPay: false,
       needPay: false,
       amount: undefined,
       images: [],
       mark: null, // 唯一标识
-
-      uploadStatusMap,
-      preview: {
-        show: false,
-        title: null,
-        src: null,
-      },
     }
   },
   computed: {
@@ -162,14 +104,26 @@ export default {
       if (this.content || this.images.length) return false
       return true
     },
-    loading () {
-      return this.posting
-    },
   },
   methods: {
+    async beforeSubmit () {
+      if (!this.needPay) return this.onSubmit()
+    },
     async onSubmit () {
-      this.checkAuth()
-      this.posting = true
+      const exceptionImage = this.images.find(item => item.status !== 'success')
+      if (exceptionImage) {
+        switch (exceptionImage.status) {
+          case 'uploading':
+          case 'pending':
+            this.$Message.error('图片正在上传中，请等待')
+            break
+          case 'error':
+            this.$Message.error('存在上传失败的图片，请检查')
+            break
+        }
+        return
+      }
+      this.loading = true
       this.mark = `${this.logged.id}${+new Date()}`
       this.$axios.$post('/feeds', this.form)
         .then(({ id }) => {
@@ -178,7 +132,7 @@ export default {
           this.clear()
         })
         .finally(() => {
-          this.posting = false
+          this.loading = false
         })
     },
     clear () {
@@ -188,30 +142,6 @@ export default {
       this.amount = null
       this.mark = null
       this.loading = false
-    },
-    beforeUpload (files) {
-      if (files.length > 9) {
-        this.$Message.error('最多上传9张图片')
-        return false
-      }
-      return true
-    },
-    onUploadSuccess (images) {
-      console.log(images)
-    },
-    onUploadUpdate (image, index) {
-      this.images[index] = image
-    },
-    onImageView (image) {
-      this.preview.title = image.filename
-      this.preview.src = image.preview
-      this.preview.show = true
-    },
-    onImageDelete (image, index) {
-      this.images.splice(index, 1)
-    },
-    onImageReupload (image, index) {
-
     },
   },
 }
@@ -293,95 +223,6 @@ export default {
     .submit-button {
       height: 100%;
       font-size: @font-size-base;
-    }
-  }
-
-  .image-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-top: 16px;
-
-    > li {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      flex:none;
-      width: 60px;
-      height: 60px;
-      background: transparent center / cover no-repeat;
-      margin-top: 8px;
-      margin-right: 8px;
-
-      &.upload-image {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: zoom-in;
-
-        > .c-loading,
-        > .icon {
-          z-index: 1;
-        }
-
-        .delete {
-          display: none;
-          position: absolute;
-          top: 0;
-          right: 0;
-          color: #fff;
-          background-color: @text-color;
-          cursor: pointer;
-          z-index: 2;
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          display: block;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-        }
-
-        &.uploading,
-        &.pending,
-        &.error {
-          &::after {
-            background-color: rgba(0, 0, 0, 0.4);
-
-          }
-        }
-
-        &.uploading {
-          cursor: progress;
-        }
-
-        &.error {
-          cursor: pointer;
-        }
-
-        &:hover {
-          .delete {
-            display: block;
-          }
-        }
-      }
-
-      &.upload-placeholder {
-        background-color: #fff;
-        border: 2px dashed @border-color-base;
-        color: @border-color-base;
-        cursor: copy;
-      }
-    }
-  }
-
-  .preview-wrap {
-    .preview-iamge {
-      width: 100%;
     }
   }
 

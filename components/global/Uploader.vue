@@ -12,20 +12,19 @@
 </template>
 
 <script>
-import { noop } from '@/utils'
-import { hashFile, getImageCover } from '@/utils/file'
-
 /**
  * 文件上传对象
  * @typedef {Object} UploadObject
  * @property {File} file
  * @property {string} filename
- * @property {Blob} src
+ * @property {Blob} preview
  * @property {string} hash
  * @property {string} status enum:{pending, uploading, success, error}
  * @property {Object|Object[]} value 如果是multiple，则为数组，否则为对象
  * @property {Error} error
  */
+
+import { hashFile, getImageCover } from '@/utils/file'
 
 const validatePreviewSize = obj => {
   if (obj.width && obj.width <= 0) return false

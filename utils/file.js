@@ -29,11 +29,8 @@ export const hashFile = file => {
  * @returns {Blob} Blob 对象
  */
 export const getImageCover = async (file, limit = {}) => {
-  const URL = window.URL || window.webkitURL
-  const image = new Image()
-  image.src = URL.createObjectURL(file)
-
   return new Promise(resolve => {
+    const image = new Image()
     image.onload = () => {
       let width = image.width
       let height = image.height
@@ -56,6 +53,7 @@ export const getImageCover = async (file, limit = {}) => {
       const blob = canvas.toDataURL('image/png')
       return resolve(blob)
     }
+    image.src = getObjectUrl(file)
   })
 }
 
