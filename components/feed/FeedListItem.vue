@@ -20,6 +20,7 @@
       v-if="images.length"
       class="feed-content"
       :images="images"
+      @click="onImageView"
     />
     <div
       v-else
@@ -94,6 +95,7 @@
 <script>
 import FeedListItemCommentList from './FeedListItemCommentList.vue'
 import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
+import { getFileUrl } from '@/utils/file'
 
 export default {
   name: 'FeedListItem',
@@ -125,6 +127,11 @@ export default {
   methods: {
     viewDetail () {
       this.$router.push(`/feed/${this.feed.id}`)
+    },
+    onImageView (image, index) {
+      // TODO: 点击展开幻灯片预览
+      const originalUrl = getFileUrl(image.file)
+      window.open(originalUrl)
     },
     async onLike () {
       if (!this.feed.has_like) {

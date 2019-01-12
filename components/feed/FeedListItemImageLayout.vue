@@ -6,9 +6,10 @@
       :class="`with-${images.length}`"
     >
       <li
-        v-for="image in images"
+        v-for="(image, index) in images"
         :key="image.id"
         class="item"
+        @click="onImageClick(image, index)"
       >
         <AsyncFile
           :file="image"
@@ -25,6 +26,11 @@ export default {
   name: 'FeedListItemImageLayout',
   props: {
     images: { type: Array, default: () => [] },
+  },
+  methods: {
+    onImageClick (image, index) {
+      this.$emit('click', image, index)
+    },
   },
 }
 </script>

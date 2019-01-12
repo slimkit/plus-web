@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { getFileUrl } from '@/utils/file'
+
 export default {
   name: 'AsyncFile',
   props: {
@@ -26,17 +28,13 @@ export default {
   },
   computed: {
     src () {
-      const id = this.file.file || this.file.id
-      let url = `${process.env.apiURL}/files/${id}`
-
-      // query
-      const paramsString = new URLSearchParams()
-      if (this.maxWidth) paramsString.append('w', this.maxWidth)
-      if (this.maxHeight) paramsString.append('h', this.maxHeight)
-      if (this.quility) paramsString.append('q', this.quility)
-      if (this.blur) paramsString.append('b', this.blur)
-      if (paramsString.toString()) url += `?${paramsString.toString()}`
-      return url
+      const fileId = this.file.file || this.file.id
+      return getFileUrl(fileId, {
+        w: this.maxWidth,
+        h: this.maxHeight,
+        blur: this.blur,
+        quility: this.quility,
+      })
     },
   },
 }

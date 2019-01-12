@@ -1,4 +1,5 @@
 import md5 from 'js-md5'
+import { cookie } from '@/utils/storage'
 
 /**
  * 获取文件的 md5 hashed string
@@ -75,5 +76,29 @@ export const getObjectUrl = blob => {
     // webkit or chrome
     url = window.webkitURL.createObjectURL(blob)
   }
+  return url
+}
+
+/**
+ * 获取图片的真实地址
+ * @param {number} fileId
+ * @param {Object} [params]
+ * @param {number|string} [params.w] 最大宽度
+ * @param {number|string} [params.h] 最大宽度
+ * @param {number|string} [params.quility] 压缩质量
+ * @param {number|string} [params.blur] 模糊
+ */
+export const getFileUrl = (fileId, params = {}) => {
+  let url = `${process.env.apiURL}/files/${fileId}`
+  const token = cookie.get('access_token')
+
+  // query
+  const paramsString = new URLSearchParams()
+  if (params.w) paramsString.append('w', params.w)
+  if (params.h) paramsString.append('h', params.h)
+  if (params.quility) paramsString.append('q', params.quility)
+  if (params.blur) paramsString.append('b', params.blur)
+  if (token) paramsString.append('token', token)
+  if (paramsString.toString()) url += `?${paramsString.toString()}`
   return url
 }
