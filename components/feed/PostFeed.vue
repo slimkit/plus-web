@@ -28,11 +28,11 @@
         某人
       </IButton>
       <IPoptip
-        v-model="showPay"
+        v-model="showPayOptions"
         class="need-pay"
         placement="bottom"
       >
-        <div class="label" :class="{active: showPay}">
+        <div class="label" :class="{active: showPayOptions}">
           {{ needPay ? '付费' : '免费' }}
           <i class="drop-icon" />
         </div>
@@ -40,7 +40,7 @@
         <ul
           slot="content"
           class="options"
-          @click="showPay = false"
+          @click="showPayOptions = false"
         >
           <li @click="needPay = false">免费</li>
           <li @click="needPay = true">付费</li>
@@ -62,6 +62,35 @@
       ref="images"
       :list.sync="images"
     />
+
+    <IModal
+      v-if="needPay"
+      v-model="showPayModal"
+      title="付费设置"
+      :transfer="false"
+      :loading="true"
+      @on-ok="onSubmit"
+    >
+      <p>设置文字收费金额</p>
+      <IRadioGroup
+        v-model="selectedAmount"
+        class="select-wrap"
+        type="button"
+      >
+        <IRadio
+          v-for="item in amountItems"
+          :key="item"
+          :label="item"
+        />
+      </IRadioGroup>
+      <IInputNumber
+        ref="custom"
+        v-model="customAmount"
+        class="custom-wrap"
+        :min="0"
+        placeholder="自定义金额，必须为整数"
+      />
+    </IModal>
   </div>
 </template>
 
@@ -78,11 +107,14 @@ export default {
   data () {
     return {
       loading: false,
-      showPay: false,
-      needPay: false,
-      amount: undefined,
       images: [],
       mark: null, // 唯一标识
+
+      needPay: false,
+      showPayOptions: false,
+      showPayModal: false,
+      selectedAmount: null,
+      customAmount: null,
     }
   },
   computed: {
@@ -100,14 +132,40 @@ export default {
         images,
       }
     },
+    amountItems () {
+      const { items = [] } = this.boot.feed
+      return items.map(item => Number(item))
+    },
+    amount () {
+      return this.customAmount || this.selectedAmount
+    },
     disabled () {
       if (this.content || this.images.length) return false
       return true
     },
   },
+  watch: {
+    customAmount () {
+      this.selectedAmount = null
+    },
+    selectedAmount () {
+      this.customAmount = null
+    },
+    showPayModal (val) {
+      if (val) this.selectedAmount = this.amountItems[0]
+    },
+  },
   methods: {
     async beforeSubmit () {
+      // 如果不需要付费
       if (!this.needPay) return this.onSubmit()
+
+      // 付费文字动态
+      const minLength = this.boot.feed.limit
+      if (this.content.length < minLength) {
+        return this.$Message.error(`付费动态内容长度为 ${minLength}-255 字`)
+      }
+      this.showPayModal = true
     },
     async onSubmit () {
       const exceptionImage = this.images.find(item => item.status !== 'success')
@@ -139,7 +197,6 @@ export default {
       this.content = ''
       this.needPay = false
       this.images = []
-      this.amount = null
       this.mark = null
       this.loading = false
     },
@@ -224,6 +281,17 @@ export default {
       height: 100%;
       font-size: @font-size-base;
     }
+  }
+
+  .select-wrap {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .custom-wrap {
+    display: block;
+    margin-top: 8px;
+    width: 15em;
   }
 
 }
