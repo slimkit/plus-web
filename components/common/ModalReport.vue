@@ -9,6 +9,7 @@
       @on-ok="onSubmit"
     >
       <textarea
+        ref="editor"
         v-model="content"
         class="editor"
         placeholder="请输入举报理由，不超过190字"
@@ -56,6 +57,9 @@ export default {
   methods: {
     open () {
       this.show = true
+      this.$nextTick(() => {
+        this.$refs.editor.focus()
+      })
     },
     close () {
       this.show = false
