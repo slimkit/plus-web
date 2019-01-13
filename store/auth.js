@@ -51,5 +51,7 @@ export const actions = {
     commit(TYPES.SAVE_TOKEN, null)
     // 清除登录用户信息
     commit('user/SAVE_CURRENT_USER', null, { root: true })
+    // 清除动态缓存
+    commit('feed/CLEAR_STORAGE', null, { root: true })
   },
 }
