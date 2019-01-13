@@ -32,8 +32,13 @@
       </Loadmore>
     </main>
     <div class="right-container">
+      <SideWidget v-if="logged && enableCheckin" key="checkin">
+        <CheckIn />
+      </SideWidget>
+
       <SideWidget
         v-if="recommendUsers.length"
+        key="recommend-user"
         :users="recommendUsers"
         type="user"
         title="推荐用户"
@@ -47,6 +52,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
+import CheckIn from '@/components/feed/CheckIn.vue'
 import PostFeed from '@/components/feed/PostFeed.vue'
 
 const defaultType = 'new'
@@ -67,6 +73,7 @@ export default {
     FeedLeftNavigation,
     FeedList,
     SideWidget,
+    CheckIn,
     PostFeed,
   },
   data () {
@@ -83,6 +90,10 @@ export default {
       hot: 'hot',
       follow: 'follow',
     }),
+    enableCheckin () {
+      const { checkin = {} } = this.boot
+      return checkin.switch
+    },
     type: {
       get () {
         const { type } = this.$route.query

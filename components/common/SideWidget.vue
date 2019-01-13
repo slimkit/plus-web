@@ -1,7 +1,7 @@
 <template>
   <div class="c-side-widget">
     <h3 v-if="title" class="title">{{ title }}</h3>
-    <div class="panel">
+    <div class="panel" :class="{'no-title': !title}">
       <!-- 用户列表挂件 -->
       <ul v-if="type === 'user'" class="user-list">
         <li
@@ -35,7 +35,7 @@ export default {
 
 <style lang="less" scoped>
 .c-side-widget {
-  background-color: #fff;
+  position: relative;
   margin-bottom: 30px;
 
   &:last-child {
@@ -48,11 +48,19 @@ export default {
     justify-content: center;
     height: 56px;
     .border(bottom);
+    border-radius: 3px 3px 0 0;
+    background-color: #fff;
   }
 
   .panel {
     padding: 12px;
     background-color: #fff;
+    border-radius: 0 0 3px 3px;
+
+    &.no-title {
+      padding: 0;
+      border-radius: 3px;
+    }
   }
 }
 

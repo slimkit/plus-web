@@ -13,6 +13,7 @@ import {
   Message,
   Modal,
   Notice,
+  Spin,
 } from 'iview'
 
 const components = {
@@ -25,6 +26,7 @@ const components = {
   RadioGroup,
   Poptip,
   Modal,
+  Spin,
 }
 
 const install = function (Vue, opts = {}) {
@@ -37,6 +39,7 @@ const install = function (Vue, opts = {}) {
   Vue.prototype.$Message = Message
   Vue.prototype.$Modal = Modal
   Vue.prototype.$Notice = Notice
+  Vue.prototype.$Spin = Spin
 
   Vue.prototype.$IVIEW = {
     size: opts.size || '',

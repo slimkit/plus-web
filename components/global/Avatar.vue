@@ -140,6 +140,16 @@ export default {
     }
   }
 
+  &.xl {
+    width: @avatar-size-lg * 1.3;
+    height: @avatar-size-lg * 1.3;
+    font-size: @avatar-font-size-lg * 1.3;
+    .verify {
+      width: @avatar-size-lg / 2.4;
+      height: @avatar-size-lg / 2.4;
+    }
+  }
+
   .user-avatar {
     display: block;
     width: 100%;
