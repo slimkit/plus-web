@@ -129,27 +129,31 @@ export default {
      * @param {UploadObject[]} files
      */
     async onUpload (files) {
-      // 顺序上传 (也可以改为 Promise.all 并发上传)
-      // FIXME: 不知道为啥变成了并发上传 待研究
-      files.forEach(async (file, index) => {
-        // 如果不是 pneding 状态
-        if (file.status !== 'pending') return
+      // 更新上传状态
+      this.update(files.map(file => {
         file.status = 'uploading'
-        this.$emit('update', file, index)
+        return file
+      }))
 
-        // 开始上传
-        try {
-          const result = await this.upload(file)
-          if (!result) return
+      // 并发上传
+      const promises = files.map((file, index) => new Promise(resolve => {
+        this.upload(file)
+          .then(result => {
+            if (!result) return resolve(file)
 
-          Object.assign(file, result)
-          this.$emit('update', file, index)
-        } catch (error) {
-          file.error = error
-          file.status = 'error'
-          this.$emit('update', file, index)
-        }
-      })
+            Object.assign(file, result)
+            this.$emit('update', file, index)
+          })
+          .catch(error => {
+            file.error = error
+            file.status = 'error'
+            this.$emit('update', file, index)
+          })
+          .finally(() => {
+            resolve(file)
+          })
+      }))
+      files = await Promise.all(promises)
 
       // 全部文件上传完毕
       this.update(files, 'success')
