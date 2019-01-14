@@ -2,7 +2,7 @@
   <div class="c-feed-list">
     <FeedListItem
       v-for="feed in feeds"
-      :key="`feed-${feed.id}`"
+      :key="`${feed.pinned ? 'pinned' : 'feed'}-${feed.id}`"
       :feed="feed"
       @delete="onDelete"
     />

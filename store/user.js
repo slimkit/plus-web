@@ -2,6 +2,7 @@ import { local } from '@/utils/storage'
 
 const LOCAL_KEY = {
   CURRENT_USER: 'user_logged',
+  RECOMMEND_USERS: 'user_recommend',
 }
 
 export const state = () => ({
@@ -19,6 +20,8 @@ export const mutations = {
   [TYPES.LOAD_FROM_STORAGE] (state) {
     const user = local.get(LOCAL_KEY.CURRENT_USER) || {}
     if (user.id) state.logged = user
+    const recommend = local.get(LOCAL_KEY.RECOMMEND_USERS)
+    if (recommend) state.recommend = recommend
   },
 
   [TYPES.SAVE_CURRENT_USER] (state, user) {
@@ -32,6 +35,7 @@ export const mutations = {
 
   [TYPES.SAVE_RECOMMEND_USERS] (state, users) {
     state.recommend = users
+    local.set(LOCAL_KEY.RECOMMEND_USERS, users)
   },
 }
 

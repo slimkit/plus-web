@@ -21,10 +21,14 @@
       </nav>
       <div class="extra">
         <IPoptip v-if="logged" trigger="hover">
-          <div class="user-wrap">
-            <Avatar :user="logged" size="sm" />
+          <nuxt-link class="user-wrap" to="/user">
+            <Avatar
+              :user="logged"
+              size="sm"
+              :link="false"
+            />
             <span class="username text-cut">{{ logged.name }}</span>
-          </div>
+          </nuxt-link>
 
           <template slot="content">
             <ul class="popup">
@@ -95,6 +99,9 @@ export default {
           this.$router.push('/')
         },
       })
+    },
+    viewUser () {
+      this.$router.push('/user')
     },
   },
 }

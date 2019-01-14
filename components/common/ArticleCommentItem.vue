@@ -2,7 +2,9 @@
   <li class="c-article-comment-item">
     <Avatar class="avatar" :user="comment.user" />
     <div class="detail">
-      <h6 class="username" @click="$router.push(`/user/${comment.user.id}`)">{{ comment.user.name }}</h6>
+      <nuxt-link :to="`/user/${comment.user.id}`">
+        <h6 class="username">{{ comment.user.name }}</h6>
+      </nuxt-link>
       <p class="time">{{ comment.created_at | fromNow }}</p>
       <p class="content">
         <template v-if="comment.reply_user">
