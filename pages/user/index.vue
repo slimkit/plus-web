@@ -1,7 +1,7 @@
 <template>
   <div class="p-user-index">
     <header class="header">
-      <figure class="cover" :style="{backgroundImage: `url(${user.bg.url})`}">
+      <figure class="cover" :style="{backgroundImage: `url(${userBackground})`}">
         <figcaption class="info-wrap">
           <Avatar
             class="avatar"
@@ -18,7 +18,7 @@
                 <svg class="icon"><use xlink:href="#icon-currency" /></svg> {{ user.currency.sum }} 积分
               </small>
             </h1>
-            <p>{{ user.bio }}</p>
+            <p>{{ bio }}</p>
             <ul class="tags">
               <li
                 v-for="tag in tags"
@@ -82,8 +82,18 @@ export default {
     user () {
       return this.logged
     },
+    bio () {
+      return this.user.bio || '这家伙很懒，什么都没留下'
+    },
+    userBackground () {
+      const bg = this.user.bg || {}
+      return bg.url || require('@/assets/images/default_cover.jpg')
+    },
   },
-  async asyncData ({ $axios }) {
+  async asyncData ({ route, redirect, $axios }) {
+    // 首页重定向
+    if (route.name === 'user-index') return redirect(301, '/user/feed')
+
     const tags = await $axios.$get('/user/tags')
     return {
       tags,
@@ -101,7 +111,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .p-user-index {
   .header {
     .cover {
