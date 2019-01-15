@@ -5,6 +5,7 @@
       <textarea
         ref="editor"
         v-model="content"
+        v-ctrl-enter="beforeSubmit"
         class="editor"
         :placeholder="placeholder"
       />

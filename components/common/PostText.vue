@@ -3,6 +3,7 @@
     <textarea
       ref="editor"
       v-model="content"
+      v-ctrl-enter="onSubmit"
       class="editor"
       :placeholder="placeholder"
     />

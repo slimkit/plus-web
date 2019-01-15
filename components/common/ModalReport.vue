@@ -11,9 +11,9 @@
       <textarea
         ref="editor"
         v-model="content"
+        v-ctrl-enter="onSubmit"
         class="editor"
         placeholder="请输入举报理由，不超过190字"
-        @keyup.meta.enter="onSumbit"
       />
     </IModal>
   </div>
