@@ -26,10 +26,27 @@
         </figcaption>
       </figure>
       <nav class="sub-navigation">
-        <nuxt-link :to="`/user/${user.id}/feed`">主页</nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/group`">圈子</nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/question`">问答</nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/news`">资讯</nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/feed`">TA 的主页</nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/group`">TA 的圈子</nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/news`">TA 的文章</nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/question`">TA 的问答</nuxt-link>
+
+        <div class="actions">
+          <button class="button" @click="onFollow">关注</button>
+          <button class="button"><svg class="icon"><use xlink:href="#icon-messaged" /></svg> 聊天</button>
+          <IPoptip v-model="showMore" placement="bottom">
+            <button class="button more"><svg class="icon lg"><use xlink:href="#icon-more" /></svg></button>
+
+            <ul
+              slot="content"
+              class="options"
+              @click="showMore = false"
+            >
+              <li @click="onReward"><svg class="icon"><use xlink:href="#icon-money" /></svg> 打赏</li>
+              <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+            </ul>
+          </IPoptip>
+        </div>
       </nav>
     </header>
 
@@ -58,9 +75,15 @@ export default {
   extends: UserHome,
   data () {
     return {
-      user: {},
+      visitUser: {},
       tags: [],
+      showMore: false,
     }
+  },
+  computed: {
+    user () {
+      return this.visitUser
+    },
   },
   async asyncData ({ route, params, store, redirect, $axios }) {
     // 如果user id 是已登录用户 重定向到个人主页
@@ -71,14 +94,50 @@ export default {
     // 首页重定向
     if (route.name === 'user-id') return redirect(301, `/user/${userId}/feed`)
 
-    const [user, tags] = await Promise.all([
+    const [visitUser, tags] = await Promise.all([
       $axios.$get(`/users/${userId}`),
       $axios.$get(`/users/${userId}/tags`),
     ])
     return {
-      user,
+      visitUser,
       tags,
     }
   },
+  methods: {
+    onFollow () {},
+    onReward () {},
+    onReport () {
+      this.$root.$emit('report', {
+        type: 'user',
+        id: this.user.id,
+      })
+    },
+  },
 }
 </script>
+
+<style lang="less" scoped>
+.p-user-index {
+  .actions {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+
+    .button {
+      background-color: #fff;
+      border: 1px solid @primary-color;
+      color: @primary-color;
+      border-radius: 40px;
+      padding: 0 16px;
+      font-size: @font-size-small;
+      margin-left: 8px;
+      height: 32px;
+
+      &.more {
+        width: 32px;
+        padding: 0;
+      }
+    }
+  }
+}
+</style>

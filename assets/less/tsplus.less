@@ -76,9 +76,16 @@ ul.options {
   padding: 8px;
 
   > li {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     padding: 8px;
     cursor: pointer;
     transition: color .4s;
+
+    .icon {
+      margin-right: 0.5em;
+    }
 
     &:hover {
       color: @primary-color;

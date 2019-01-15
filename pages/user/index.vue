@@ -215,6 +215,9 @@ export default {
     }
 
     .sub-navigation {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
       padding: 0 36px;
       background-color: #fff;
       font-size: @font-size-large;
