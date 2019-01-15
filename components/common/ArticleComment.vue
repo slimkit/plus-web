@@ -6,6 +6,7 @@
     <ul class="comments">
       <Loadmore
         ref="loader"
+        :show-bottom="!!count"
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
@@ -50,6 +51,9 @@ export default {
       this.$emit('fetch', last.id, noMore => {
         this.$refs.loader.afterLoadmore(noMore)
       })
+    },
+    refresh () {
+      this.$refs.loader.beforeRefresh()
     },
     onReply (user) {
       this.$refs.editor.reply(user)

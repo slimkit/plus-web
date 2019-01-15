@@ -19,6 +19,7 @@
       <IButton
         type="primary"
         class="button submit-button"
+        :disabled="disabled"
         @click="onSubmit"
       >
         评 论

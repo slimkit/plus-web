@@ -333,7 +333,6 @@ export default {
         height: 49px;
         justify-content: space-between;
         align-items: center;
-        margin: 0 -12px -12px;
         .border(top);
 
         .meta-item {
