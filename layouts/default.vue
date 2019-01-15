@@ -37,11 +37,6 @@ export default {
     ModalPinned,
     ModalPassword,
   },
-  mounted () {
-    if (this.$store.state.auth.token) {
-      this.$store.dispatch('user/getCurrentUser')
-    }
-  },
 }
 </script>
 
