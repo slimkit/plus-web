@@ -25,6 +25,7 @@
  */
 
 import { hashFile, getImageCover } from '@/utils/file'
+import uploadByStorage from '@/utils/upload'
 
 const validatePreviewSize = obj => {
   if (obj.width && obj.width <= 0) return false
@@ -41,7 +42,7 @@ export default {
      */
     type: { type: String, default: 'storage', validator: (type) => ['file', 'storage'].includes(type) },
     value: { type: [Object, Array], default: () => ({}) }, // UploadObject 或其数组，取决于 multiple
-    previewSize: { type: Object, default: () => ({}), validator: validatePreviewSize }, // 预览图宽高限制 {width: undefined, height: undfined}
+    previewSize: { type: Object, default: () => ({ width: 1080 }), validator: validatePreviewSize }, // 预览图宽高限制 {width: undefined, height: undfined}
     readonly: { type: Boolean, default: false },
     accept: { type: String, default: null },
     multiple: { type: Boolean, default: false }, // 多图上传
@@ -145,7 +146,7 @@ export default {
             this.$emit('update', file, index)
           })
           .catch(error => {
-            file.error = error
+            file.error = error.message
             file.status = 'error'
             this.$emit('update', file, index)
           })
@@ -156,7 +157,7 @@ export default {
       files = await Promise.all(promises)
 
       // 全部文件上传完毕
-      this.update(files, 'success')
+      this.update(files, 'finish')
     },
     /**
      * 旧文件上传
@@ -189,7 +190,10 @@ export default {
      * @param {UploadObject} file
      */
     async uploadByStorage (file) {
-      throw new Error('[upload] 尚未实现')
+      const node = await uploadByStorage(file.file)
+      file.value = node
+      file.status = 'success'
+      return file
     },
   },
 }

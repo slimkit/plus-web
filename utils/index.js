@@ -32,8 +32,17 @@ export function getLastField (list, field = 'id') {
 export const errorMessageHandler = content => {
   if (typeof content === 'string') return content
   if (content instanceof Object) {
-    if (content.message instanceof Array) return content.message[0]
-    return content.message
+    let message
+    const { errors } = content
+    if (errors && Object.keys(errors).length) {
+      // 处理 errors 消息
+      message = Object.values(errors)[0]
+    } else {
+      // 处理普通的 message 消息
+      message = content.message
+    }
+    if (message instanceof Array) return message[0]
+    return message
   }
   return content
 }

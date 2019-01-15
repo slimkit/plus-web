@@ -4,6 +4,9 @@ module.exports = {
     browser: true,
     node: true
   },
+  globals: {
+    $nuxt: false,
+  },
   parserOptions: {
     parser: 'babel-eslint'
   },

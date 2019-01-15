@@ -1,7 +1,10 @@
 <template>
   <div class="p-user-index">
     <header class="header">
-      <figure class="cover" :style="{backgroundImage: `url(${userBackground})`}">
+      <figure class="cover">
+        <div class="image" :style="{backgroundImage: `url(${userBackground})`}">
+          <ISpin v-if="loading" fix />
+        </div>
         <figcaption class="info-wrap">
           <Avatar
             class="avatar"
@@ -31,7 +34,19 @@
             <p v-if="user.verified">{{ user.verified.description }}</p>
           </div>
         </figcaption>
-        <button class="change-btn" @click="onChangeCover">更换封面</button>
+        <button
+          v-if="!loading"
+          class="change-btn"
+          @click="onUpload"
+        >
+          更换封面
+        </button>
+
+        <Uploader
+          ref="uploader"
+          v-model="uploadCover"
+          @finish="onUploadFinished"
+        />
       </figure>
       <nav class="sub-navigation">
         <nuxt-link to="/user/feed">主页</nuxt-link>
@@ -62,6 +77,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getObjectUrl } from '@/utils/file'
 import SideWidget from '@/components/common/SideWidget.vue'
 
 export default {
@@ -73,6 +89,9 @@ export default {
   data: function () {
     return {
       tags: [],
+
+      loading: false,
+      uploadCover: null,
     }
   },
   computed: {
@@ -92,7 +111,7 @@ export default {
   },
   async asyncData ({ route, redirect, $axios }) {
     // 首页重定向
-    if (route.name === 'user-index') return redirect(301, '/user/feed')
+    if (route.name === 'user') return redirect(301, '/user/feed')
 
     const tags = await $axios.$get('/user/tags')
     return {
@@ -104,8 +123,18 @@ export default {
     this.$store.dispatch('user/fetchRecommendUsers')
   },
   methods: {
-    onChangeCover () {
-      // TODO: 更换封面
+    onUpload () {
+      this.$refs.uploader.select()
+      this.loading = true
+    },
+    async onUploadFinished (image) {
+      if (!image.error) {
+        await this.$axios.$patch('/user', { bg: image.value })
+        this.user.bg.url = getObjectUrl(image.file)
+        this.$Message.success('更换封面成功！')
+      }
+
+      this.loading = false
     },
   },
 }
@@ -120,7 +149,14 @@ export default {
       flex-direction: column;
       justify-content: flex-end;
       height: 456px;
-      background: #fff center / cover no-repeat;
+
+      .image {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background: #fff center / cover no-repeat;
+        z-index: -1;
+      }
 
       .change-btn {
         position: absolute;
