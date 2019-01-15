@@ -1,7 +1,8 @@
 <template>
   <div class="p-user-index">
     <header class="header">
-      <figure class="cover" :style="{backgroundImage: `url(${userBackground})`}">
+      <figure class="cover">
+        <div class="image" :style="{backgroundImage: `url(${userBackground})`}" />
         <figcaption class="info-wrap">
           <Avatar
             class="avatar"
@@ -32,7 +33,7 @@
         <nuxt-link :to="`/user/${user.id}/question`">TA 的问答</nuxt-link>
 
         <div class="actions">
-          <button class="button" @click="onFollow">关注</button>
+          <button class="button" @click="onFollow">{{ followStatus }}</button>
           <button class="button"><svg class="icon"><use xlink:href="#icon-messaged" /></svg> 聊天</button>
           <IPoptip v-model="showMore" placement="bottom">
             <button class="button more"><svg class="icon lg"><use xlink:href="#icon-more" /></svg></button>
@@ -69,6 +70,7 @@
 </template>
 
 <script>
+import { getFollowStatus } from '@/utils'
 import UserHome from './index.vue'
 
 export default {
@@ -78,11 +80,15 @@ export default {
       visitUser: {},
       tags: [],
       showMore: false,
+      followLock: false,
     }
   },
   computed: {
     user () {
       return this.visitUser
+    },
+    followStatus () {
+      return getFollowStatus(this.user.follower, this.user.following).label
     },
   },
   async asyncData ({ route, params, store, redirect, $axios }) {
@@ -104,7 +110,23 @@ export default {
     }
   },
   methods: {
-    onFollow () {},
+    async onFollow () {
+      if (this.followLock) return
+      this.followLock = true
+      try {
+        if (this.user.follower) {
+          // 取消关注
+          await this.$axios.$delete(`/user/followings/${this.user.id}`)
+          this.$Message.success('取消关注')
+        } else {
+          // 关注
+          await this.$axios.$put(`/user/followings/${this.user.id}`)
+          this.$Message.success('关注成功！')
+        }
+        this.user.follower = !this.user.follower
+      } catch (error) {}
+      this.followLock = false
+    },
     onReward () {
       this.$root.$emit('reward', {
         type: 'user',

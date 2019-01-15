@@ -9,6 +9,21 @@ export const noop = () => {}
 export const limit = 15
 
 /**
+ * 获取关注状态
+ * @param {boolean} follower 被关注
+ * @param {boolean} following 关注
+ */
+export const getFollowStatus = (follower = false, following = false) => {
+  const followMap = {
+    follow: { label: '关注' },
+    followed: { label: '已关注' },
+    each: { label: '互相关注' },
+  }
+  if (follower && following) return followMap.each
+  return followMap[follower ? 'followed' : 'follow']
+}
+
+/**
  * 获取列表最后一条数据的字段 默认为 ID
  * 一般用于加载更多是入参
  *
