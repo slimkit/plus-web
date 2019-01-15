@@ -94,7 +94,7 @@ export default {
     onReward () {
       this.$root.$emit('reward', {
         type: this.type,
-        article: this.article,
+        id: this.article,
         callback: amount => {
           this.$emit('reward', amount)
         },

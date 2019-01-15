@@ -35,6 +35,7 @@
 import { noop } from '@/utils'
 
 const apiMap = {
+  user: id => `/user/${id}/new-rewards`,
   feed: id => `/feeds/${id}/new-rewards`,
 }
 
@@ -48,7 +49,7 @@ export default {
       loading: true,
 
       type: null,
-      article: null,
+      id: null,
       callback: noop,
     }
   },
@@ -76,7 +77,7 @@ export default {
   created () {
     this.$root.$on('reward', options => {
       this.type = options.type
-      this.article = options.article
+      this.id = options.id
       this.callback = options.callback || noop
       this.open()
     })
@@ -115,7 +116,7 @@ export default {
       })
     },
     onSubmit (password) {
-      const api = apiMap[this.type](this.article)
+      const api = apiMap[this.type](this.id)
       this.$axios.$post(api, { amount: this.amount, password })
         .then(() => {
           this.close()

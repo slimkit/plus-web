@@ -105,7 +105,12 @@ export default {
   },
   methods: {
     onFollow () {},
-    onReward () {},
+    onReward () {
+      this.$root.$emit('reward', {
+        type: 'user',
+        id: this.user.id,
+      })
+    },
     onReport () {
       this.$root.$emit('report', {
         type: 'user',
