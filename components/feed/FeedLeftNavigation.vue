@@ -17,8 +17,8 @@
 const menu = [
   { name: 'feed', label: '全部动态', icon: '#icon-dynamic', route: '/feed' },
   { name: 'user', label: '我的动态', icon: '#icon-mydynamic', route: '/user' },
-  { name: 'fans', label: '我的粉丝', icon: '#icon-myfans', route: '/fans' },
-  { name: 'follow', label: '关注的人', icon: '#icon-attention', route: '/follow' },
+  { name: 'fans', label: '我的粉丝', icon: '#icon-myfans', route: '/user/follow?type=fans' },
+  { name: 'follow', label: '关注的人', icon: '#icon-attention', route: '/user/follow?type=following' },
   { name: 'rank', label: '排行榜', icon: '#icon-rank', route: '/rank' },
   { name: 'collect', label: '收藏的', icon: '#icon-collection', route: '/user/collect' },
   { name: 'setting', label: '设置', icon: '#icon-sets', route: '/setting' },

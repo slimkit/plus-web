@@ -109,10 +109,12 @@ export default {
     overflow: hidden;
 
     &.refreshing {
+      margin-bottom: 24px;
       height: 24px;
       opacity: 1;
       transform: scaleY(1);
     }
+
   }
 
   .loadmore-foot {
@@ -120,6 +122,8 @@ export default {
     align-items: center;
     justify-content: center;
     height: 0;
+    margin-top: 24px;
+    color: @disabled-color;
     opacity: 0;
     transition-property: height, opacity, transform;
     transition-duration: 0.3s;
@@ -129,6 +133,7 @@ export default {
 
     &.loading {
       height: 24px;
+      margin-top: 24px;
       opacity: 1;
       transform: scaleY(1);
     }

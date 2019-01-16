@@ -92,3 +92,24 @@ ul.options {
     }
   }
 }
+
+
+.ts-btn {
+  background-color: #fff;
+  color: @primary-color;
+  border: 1px solid @primary-color;
+  border-radius: 100px;
+  transition-property: color, border;
+  transition-duration: .2s;
+
+  &.disabled,
+  &:disabled {
+    color: @disabled-color;
+    border: 1px solid @border-color-base;
+  }
+
+  &.sm {
+    font-size: @font-size-small;
+    padding: 1px 1em;
+  }
+}
