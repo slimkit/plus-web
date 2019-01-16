@@ -16,6 +16,9 @@
 <script>
 export default {
   name: 'RankHome',
+  fetch ({ route, redirect }) {
+    if (route.name === 'rank') return redirect(301, '/rank/user')
+  },
 }
 </script>
 
