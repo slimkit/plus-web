@@ -29,6 +29,7 @@
     >
       {{ feed.feed_content }}
     </div>
+
     <footer class="feed-meta">
       <div class="meta-wrap">
         <div class="left">
@@ -68,6 +69,7 @@
               class="options"
               @click="showMore = false"
             >
+              <li :class="{active: collected}" @click="onCollect"><svg class="icon"><use xlink:href="#icon-collect" /></svg> {{ collected ? '已收藏' : '收藏' }}</li>
               <template v-if="isMine">
                 <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
                 <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
@@ -123,6 +125,9 @@ export default {
     pinned () {
       return this.feed.pinned || false
     },
+    collected () {
+      return this.feed.has_collect || false
+    },
   },
   methods: {
     viewDetail () {
@@ -144,6 +149,16 @@ export default {
         this.feed.has_like = false
         this.feed.like_count -= 1
       }
+    },
+    async onCollect () {
+      if (!this.collected) {
+        await this.$axios.$post(`/feeds/${this.feed.id}/collections`)
+        this.$Message.success('收藏成功')
+      } else {
+        await this.$axios.$delete(`/feeds/${this.feed.id}/uncollect`)
+        this.$Message.success('取消收藏')
+      }
+      this.feed.has_collect = !this.feed.has_collect
     },
     onReport () {
       this.$root.$emit('report', {
