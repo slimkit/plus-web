@@ -83,12 +83,12 @@ export default {
   methods: {
     onRefresh () {
       this.$emit('fetch', null, noMore => {
-        this.$refs.loader.afterRefresh(noMore)
+        this.loader.afterRefresh(noMore)
       })
     },
     onLoadmore () {
       this.$emit('fetch', this.rewards.length, noMore => {
-        this.$refs.loader.afterRefresh(noMore)
+        this.loader.afterRefresh(noMore)
       })
     },
     onReward () {

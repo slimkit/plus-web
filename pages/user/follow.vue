@@ -68,7 +68,7 @@ export default {
   },
   watch: {
     type () {
-      this.$refs.loader.beforeRefresh()
+      this.loader.beforeRefresh()
     },
   },
   mounted () {
@@ -82,14 +82,14 @@ export default {
       const params = { limit }
       const users = await this.fetchData(params)
       this.$data[this.type] = users
-      this.$refs.loader.afterRefresh(users.length < limit)
+      this.loader.afterRefresh(users.length < limit)
     },
     async onLoadmore () {
       const offset = this.$data[this.type].length
       const params = { limit, offset }
       const users = await this.fetchData(params)
       this.$data[this.type].push(...users)
-      this.$refs.loader.afterLoadmore(users.length < limit)
+      this.loader.afterLoadmore(users.length < limit)
     },
     async fetchData (params) {
       if (this.type === 'fans') {

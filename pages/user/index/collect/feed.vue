@@ -27,13 +27,13 @@ export default {
     async onRefresh () {
       const feeds = await this.fetchFeeds()
       this.feeds = feeds
-      this.$refs.loader.afterRefresh(feeds.length < limit)
+      this.loader.afterRefresh(feeds.length < limit)
     },
     async onLoadmore () {
       const offset = this.feeds.length
       const feeds = await this.fetchFeeds(offset)
       this.feeds.push(...feeds)
-      this.$refs.loader.afterLoadmore(feeds.length < limit)
+      this.loader.afterLoadmore(feeds.length < limit)
     },
     async fetchFeeds (offset) {
       const params = {

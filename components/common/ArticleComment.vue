@@ -43,17 +43,17 @@ export default {
   methods: {
     onRefresh () {
       this.$emit('fetch', null, noMore => {
-        this.$refs.loader.afterRefresh(noMore)
+        this.loader.afterRefresh(noMore)
       })
     },
     onLoadmore () {
       const last = [...this.comments].pop() || {}
       this.$emit('fetch', last.id, noMore => {
-        this.$refs.loader.afterLoadmore(noMore)
+        this.loader.afterLoadmore(noMore)
       })
     },
     refresh () {
-      this.$refs.loader.beforeRefresh()
+      this.loader.beforeRefresh()
     },
     onReply (user) {
       this.$refs.editor.reply(user)

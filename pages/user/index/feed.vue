@@ -5,7 +5,7 @@
     </nav>
 
     <Loadmore
-      ref="loadmore"
+      ref="loader"
       @refresh="onRefresh"
       @loadmore="onLoadmore"
     >
@@ -32,13 +32,13 @@ export default {
     async onRefresh () {
       const { feeds } = await this.fetchFeeds()
       this.feeds = feeds
-      this.$refs.loadmore.afterRefresh(feeds.length < limit)
+      this.loader.afterRefresh(feeds.length < limit)
     },
     async onLoadmore () {
       const after = getLastField(this.feeds, 'id')
       const { feeds } = await this.fetchFeeds(after)
       this.feeds.push(...feeds)
-      this.$refs.loadmore.afterLoadmore(feeds.length < limit)
+      this.loader.afterLoadmore(feeds.length < limit)
     },
     async fetchFeeds (after) {
       const params = {

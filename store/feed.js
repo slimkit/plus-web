@@ -81,7 +81,7 @@ export const actions = {
     if (isRefresh) commit(TYPES.LOAD_FROM_STORAGE) // 先从 storage 中填充数据
     const { feeds, pinned } = await this.$axios.$get('/feeds', { params })
     if (isRefresh) {
-      commit(TYPES.SAVE_LIST, { type: 'pinned', list: pinned })
+      if (params.type !== 'follow') commit(TYPES.SAVE_LIST, { type: 'pinned', list: pinned })
       commit(TYPES.SAVE_LIST, { type: params.type, list: feeds })
     } else {
       commit(TYPES.SAVE_LIST, { type: params.type, list: feeds, append: true })

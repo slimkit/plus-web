@@ -113,8 +113,8 @@ export default {
   },
   watch: {
     type () {
-      this.$refs.loader.afterRefresh()
-      this.$refs.loader.beforeRefresh()
+      this.loader.afterRefresh()
+      this.loader.beforeRefresh()
     },
   },
   mounted () {
@@ -127,7 +127,7 @@ export default {
     async onRefresh () {
       let params = { type: this.type }
       const noMore = await this.getFeedList(params)
-      this.$refs.loader.afterRefresh(noMore)
+      this.loader.afterRefresh(noMore)
     },
     async onLoadmore () {
       let params = { type: this.type }
@@ -138,11 +138,11 @@ export default {
         params.after = last.id
       }
       const noMore = await this.getFeedList(params)
-      this.$refs.loader.afterLoadmore(noMore)
+      this.loader.afterLoadmore(noMore)
     },
     onPost (id) {
       this.type = 'new'
-      this.$refs.loader.beforeRefresh()
+      this.loader.beforeRefresh()
     },
     onDelete (feedId) {
       this.$store.commit('feed/DELETE_FEED', { feedId, type: this.type })
