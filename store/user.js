@@ -9,8 +9,9 @@ const LOCAL_KEY = {
 
 export const state = () => ({
   logged: null, // 已登录用户
-  recommend: [], // 推荐用户
-  hot: [], // 热门用户
+  recommend: [], // 推荐用户（已缓存）
+  hot: [], // 热门用户（已缓存）
+  new: [], // 最新用户
 })
 
 export const TYPES = {
@@ -18,6 +19,7 @@ export const TYPES = {
   SAVE_CURRENT_USER: 'SAVE_CURRENT_USER',
   SAVE_RECOMMEND_USERS: 'SAVE_RECOMMEND_USERS',
   SAVE_HOT_USERS: 'SAVE_HOT_USERS',
+  SAVE_NEW_USERS: 'SAVE_NEW_USERS',
 }
 
 export const mutations = {
@@ -40,9 +42,13 @@ export const mutations = {
     }
   },
 
-  [TYPES.SAVE_RECOMMEND_USERS] (state, users) {
-    state.recommend = users
-    local.set(LOCAL_KEY.RECOMMEND_USERS, users)
+  [TYPES.SAVE_RECOMMEND_USERS] (state, { users, offset = 0 }) {
+    if (offset) {
+      state.recommend.push(...users)
+    } else {
+      state.recommend = users
+      local.set(LOCAL_KEY.RECOMMEND_USERS, users)
+    }
   },
 
   [TYPES.SAVE_HOT_USERS] (state, { users, offset = 0 }) {
@@ -53,6 +59,14 @@ export const mutations = {
       local.set(LOCAL_KEY.HOT_USERS, users)
     }
   },
+
+  [TYPES.SAVE_NEW_USERS] (state, { users, offset = 0 }) {
+    if (offset) {
+      state.new.push(...users)
+    } else {
+      state.new = users
+    }
+  },
 }
 
 export const actions = {
@@ -61,9 +75,12 @@ export const actions = {
     commit(TYPES.SAVE_CURRENT_USER, user)
   },
 
-  async fetchRecommendUsers ({ commit }) {
-    const users = await this.$axios.$get('/user/recommends')
-    commit(TYPES.SAVE_RECOMMEND_USERS, users)
+  async fetchRecommendUsers ({ commit }, offset) {
+    const params = { offset, limit }
+    const users = await this.$axios.$get('/user/recommends', { params })
+    commit(TYPES.SAVE_RECOMMEND_USERS, { users, offset })
+    const noMore = users.length < limit
+    return noMore
   },
 
   async fetchHotUsers ({ commit }, offset) {
@@ -71,6 +88,14 @@ export const actions = {
     const params = { offset, limit }
     const users = await this.$axios.$get('/user/populars', { params })
     commit(TYPES.SAVE_HOT_USERS, { users, offset })
+    const noMore = users.length < limit
+    return noMore
+  },
+
+  async fetchNewUsers ({ commit }, offset) {
+    const params = { offset, limit }
+    const users = await this.$axios.$get('/user/latests', { params })
+    commit(TYPES.SAVE_NEW_USERS, { users, offset })
     const noMore = users.length < limit
     return noMore
   },

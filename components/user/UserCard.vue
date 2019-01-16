@@ -14,8 +14,8 @@
       </h3>
       <p class="text-cut-2">{{ user.bio | placeholder('bio') }}</p>
       <div class="follow-info">
-        <nuxt-link :to="`/user/${user.id}/fans`">粉丝 <span class="primary">{{ user.extra.followers_count }}</span></nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/following`">关注 <span class="primary">{{ user.extra.followings_count }}</span></nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/fans`">粉丝 <span class="primary">{{ followersCount }}</span></nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/following`">关注 <span class="primary">{{ followingsCount }}</span></nuxt-link>
       </div>
     </div>
   </div>
@@ -37,6 +37,14 @@ export default {
   computed: {
     followStatus () {
       return getFollowStatus(this.user.follower, this.user.following).label
+    },
+    followersCount () {
+      const extra = this.user.extra || {}
+      return extra.followers_count || 0
+    },
+    followingsCount () {
+      const extra = this.user.extra || {}
+      return extra.followings_count || 0
     },
   },
   methods: {
