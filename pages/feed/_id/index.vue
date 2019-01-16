@@ -306,7 +306,7 @@ export default {
 
   .widgets {
     flex: none;
-    width: 235px;
+    width: @sidebar-width;
 
     .author-widget {
       display: flex;

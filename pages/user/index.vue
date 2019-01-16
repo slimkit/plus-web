@@ -251,7 +251,7 @@ export default {
 
   .right-container {
     flex: none;
-    width: 235px;
+    width: @sidebar-width;
   }
 }
 </style>

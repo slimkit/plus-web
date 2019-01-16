@@ -109,6 +109,6 @@ export default {
     position: sticky;
     top: 0;
     flex: none;
-    width: 235px;
+    width: @sidebar-width;
   }
 </style>
