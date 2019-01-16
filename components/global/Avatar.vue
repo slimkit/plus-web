@@ -29,7 +29,7 @@ export default {
   name: 'Avatar',
   props: {
     user: { type: Object, default: () => {} },
-    size: { type: String, default: 'def', validator: val => ['def', 'sm', 'lg', 'xl'].includes(val) },
+    size: { type: String, default: 'def', validator: val => ['def', 'sm', 'lg', 'xl', 'xs'].includes(val) },
     anonymity: { type: Boolean, default: false },
     link: { type: Boolean, default: true },
   },
@@ -121,12 +121,12 @@ export default {
   }
 
   &.xs {
-    width: @avatar-size-base / 2;
-    height: @avatar-size-base / 2;
-    font-size: @avatar-font-size-base / 1.5;
+    width: @avatar-size-sm / 1.4;
+    height: @avatar-size-sm / 1.4;
+    font-size: @avatar-font-size-sm / 1.4;
     .verify {
-      width: @avatar-size-base / 5;
-      height: @avatar-size-base / 5;
+      width: @avatar-size-sm / 3;
+      height: @avatar-size-sm / 3;
     }
   }
 
