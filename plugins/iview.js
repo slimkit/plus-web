@@ -14,6 +14,7 @@ import {
   Modal,
   Notice,
   Spin,
+  AutoComplete,
 } from 'iview'
 
 const components = {
@@ -27,6 +28,7 @@ const components = {
   Poptip,
   Modal,
   Spin,
+  AutoComplete,
 }
 
 const install = function (Vue, opts = {}) {
