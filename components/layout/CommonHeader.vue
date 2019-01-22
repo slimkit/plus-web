@@ -34,15 +34,15 @@
             <ul class="popup">
               <nuxt-link class="popup-item" :to="`/user/${logged.id}`">个人主页</nuxt-link>
               <hr>
-              <nuxt-link class="popup-item" to="/setting">
+              <nuxt-link class="popup-item" to="/setting/wallet">
                 <svg class="icon"><use xlink:href="#icon-wallet" /></svg>
                 我的钱包
               </nuxt-link>
-              <nuxt-link class="popup-item" to="/setting">
+              <nuxt-link class="popup-item" to="/setting/certificate">
                 <svg class="icon"><use xlink:href="#icon-auth" /></svg>
                 我的认证
               </nuxt-link>
-              <nuxt-link class="popup-item" to="/setting">
+              <nuxt-link class="popup-item" to="/setting/collect">
                 <svg class="icon"><use xlink:href="#icon-collect" /></svg>
                 我的收藏
               </nuxt-link>
