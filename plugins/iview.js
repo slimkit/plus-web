@@ -14,6 +14,7 @@ import {
   Modal,
   Notice,
   Spin,
+  Tag,
   AutoComplete,
 } from 'iview'
 
@@ -28,6 +29,7 @@ const components = {
   Poptip,
   Modal,
   Spin,
+  Tag,
   AutoComplete,
 }
 
