@@ -97,6 +97,11 @@ export default {
       return this.isOrg ? orgLabels : userLabels
     },
   },
+  fetch ({ store, redirect }) {
+    const { logged } = store.state.user
+    const cert = logged.certification
+    if (!cert) return redirect('/setting/certificate/apply')
+  },
 }
 </script>
 
@@ -113,6 +118,10 @@ export default {
       width: 5em;
       text-align: right;
       vertical-align: top;
+    }
+
+    .primary-color {
+      margin-left: 1em;
     }
 
     .image {

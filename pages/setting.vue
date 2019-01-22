@@ -19,6 +19,7 @@
 <script>
 export default {
   name: 'SettingHome',
+  middleware: ['requireAuth'],
 }
 </script>
 
@@ -49,7 +50,7 @@ export default {
         margin-right: 4px;
       }
 
-      &.exact-active,
+      &.active,
       &:hover {
         background-color: @primary-color;
         color: #fff;
