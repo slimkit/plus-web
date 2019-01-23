@@ -21,7 +21,7 @@ module.exports = {
     'prefer-promise-reject-errors': ['off'],
     'vue/max-attributes-per-line': ['error', { singleline: 2 }],
     'vue/singleline-html-element-content-newline': ['off'],
-    'vue/no-use-v-if-with-v-for': ['off'],
+    'vue/no-use-v-if-with-v-for': ['error', { allowUsingIterationVar: true }],
     'vue/no-v-html': ['off'],
     'vue/component-name-in-template-casing': ['off'],
   }
