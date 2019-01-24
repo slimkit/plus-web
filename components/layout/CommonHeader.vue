@@ -73,7 +73,7 @@
 const menu = [
   { name: 'feed', label: '动态', to: '/feed' },
   { name: 'news', label: '资讯', to: '/news' },
-  // { name: 'group', label: '圈子', to: '#' },
+  { name: 'group', label: '圈子', to: '/group' },
   // { name: 'qa', label: '问答', to: '#' },
   { name: 'people', label: '找伙伴', to: '/people' },
   // { name: 'about', label: '关于我们', to: '#' },
