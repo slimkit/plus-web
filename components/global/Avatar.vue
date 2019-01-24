@@ -1,5 +1,5 @@
 <template>
-  <div class="c-avatar" :class="size">
+  <div class="c-avatar" :class="[size, {square}]">
     <div v-if="anonymity" class="anonymity">匿</div>
     <template v-else>
       <nuxt-link
@@ -32,6 +32,7 @@ export default {
     size: { type: String, default: 'def', validator: val => ['def', 'sm', 'lg', 'xl', 'xs'].includes(val) },
     anonymity: { type: Boolean, default: false },
     link: { type: Boolean, default: true },
+    square: { type: Boolean, default: false },
   },
   computed: {
     src: {
@@ -83,6 +84,12 @@ export default {
     overflow: hidden;
     border-radius: 50%;
     background: @avatar-bg center / cover no-repeat;
+  }
+
+  &.square {
+    .user-avatar {
+      border-radius: 0;
+    }
   }
 
   .verify {

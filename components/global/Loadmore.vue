@@ -7,7 +7,7 @@
       <slot />
     </div>
     <div
-      v-if="showBottom"
+      v-if="showBottom && !refreshing"
       v-loadmore.lazy="onTrigger"
       class="loadmore-foot"
       :class="{loading: loading || inBottom}"

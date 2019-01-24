@@ -2,17 +2,35 @@
   <div class="p-group-index">
     <main class="group-container">
       <nav class="nav-wrap">
-        <nuxt-link :class="{active: type === 'all'}" :to="{query: {type: 'all'}}">全部圈子</nuxt-link>
-        <nuxt-link :class="{active: type === 'nearby'}" :to="{query: {type: 'nearby'}}">附近圈子</nuxt-link>
         <nuxt-link
-          v-if="logged"
-          :class="{active: type === 'joined'}"
-          :to="{query: {type: 'joined'}}"
+          v-for="item in typeMap"
+          :key="item.name"
+          replace
+          :class="{'exact-active': type === item.name}"
+          :to="item.to"
         >
-          我加入的
+          {{ item.label }}
         </nuxt-link>
       </nav>
 
+      <nav v-if="type === 'all'" class="category-wrap">
+        <nuxt-link
+          v-for="cate in categories"
+          :key="cate.id"
+          replace
+          :to="{query: {type: cate.id}}"
+        >
+          {{ cate.name }}
+        </nuxt-link>
+      </nav>
+      <Loadmore
+        ref="loader"
+        class="loader"
+        @refresh="onRefresh"
+        @loadmore="onLoadmore"
+      >
+        <GroupList :groups="groups" />
+      </Loadmore>
     </main>
 
     <aside class="side-wrap">
@@ -56,17 +74,27 @@
 </template>
 
 <script>
-import SideWidget from '@/components/common/SideWidget.vue'
 import { mapActions, mapState, mapMutations } from 'vuex'
+import { limit } from '@/utils'
+import GroupList from '@/components/group/GroupList.vue'
+import SideWidget from '@/components/common/SideWidget.vue'
+
+const typeMap = [
+  { name: 'all', label: '全部圈子', to: { query: { type: 'all' } } },
+  { name: 'nearby', label: '附近圈子', to: { query: { type: 'nearby' } } },
+  { name: 'joined', label: '我加入的', to: { query: { type: 'joined' } } },
+]
 
 export default {
   name: 'GroupIndex',
   components: {
+    GroupList,
     SideWidget,
   },
   data () {
     return {
-      groups: [],
+      typeMap,
+      cateGroups: [],
     }
   },
   computed: {
@@ -74,12 +102,34 @@ export default {
       groupCount: 'count',
       categories: 'category',
       recommend: 'recommend',
+      all: 'all',
+      nearby: 'nearby',
+      joined: 'joined',
     }),
     type () {
-      return this.$route.query.type || 'all'
+      const { type = 'all' } = this.$route.query
+      return String(type).match(/^\d+$/) ? 'all' : type
+    },
+    cateId () {
+      const { type } = this.$route.query
+      return Number(type)
+    },
+    groups () {
+      if (this.type !== 'all') return this[this.type]
+      return this.cateGroups
     },
   },
-  beforeMount () {
+  watch: {
+    type (val) {
+      this.cateGroups = []
+      this.loader.beforeRefresh()
+    },
+    cateId (val) {
+      this.cateGroups = []
+      this.loader.beforeRefresh()
+    },
+  },
+  created () {
     this.loadFromStorage()
     this.getGroupCount()
     this.getGroupCategories()
@@ -93,7 +143,48 @@ export default {
       getGroupCount: 'getGroupCount',
       getGroupCategories: 'getGroupCategories',
       getRecommendGroups: 'getRecommendGroups',
+      getAllGroups: 'getAllGroups',
     }),
+    async onRefresh () {
+      let noMore = true
+      if (this.type === 'all') {
+        if (this.cateId) {
+          noMore = await this.getGroupByCate()
+        } else {
+          noMore = await this.getAllGroups()
+        }
+      } else if (this.type === 'nearby') {
+        // TODO: 获取附近圈子
+      } else if (this.type === 'joined') {
+        // TODO: 获取我加入的圈子
+      }
+      this.loader.afterRefresh(noMore)
+    },
+    async onLoadmore () {
+      let noMore = true
+      const params = { offset: this.groups.length }
+      if (this.type === 'all') {
+        if (this.cateId) {
+          noMore = await this.getGroupByCate(params)
+        } else {
+          noMore = await this.getAllGroups(params)
+        }
+      } else if (this.type === 'nearby') {
+        // TODO: 获取附近圈子
+      } else if (this.type === 'joined') {
+        // TODO: 获取我加入的圈子
+      }
+      this.loader.afterLoadmore(noMore)
+    },
+    async getGroupByCate (params = {}) {
+      const groups = await this.$axios.$get(`/plus-group/categories/${this.cateId}/groups`, { params })
+      if (!params.offset) {
+        this.cateGroups = groups
+      } else {
+        this.cateGroups.push(...groups)
+      }
+      return groups.length < limit
+    },
   },
 }
 </script>
@@ -106,6 +197,43 @@ export default {
     flex: auto;
     margin-right: 30px;
     background-color: #fff;
+    padding: 30px;
+
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      color: @disabled-color;
+      .border(bottom);
+
+      > a {
+        margin-right: 2em;
+
+        &.exact-active {
+          color: @text-color;
+        }
+      }
+
+    }
+
+    .category-wrap {
+      display: flex;
+      margin: 16px 0 32px;
+
+      > a {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-right: 8px;
+        border-radius: 50px;
+        background-color: @background-color-base;
+
+        &.exact-active {
+          background-color: @primary-color;
+          color: #fff;
+        }
+      }
+    }
+
   }
 
   .side-wrap {

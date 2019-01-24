@@ -1,4 +1,5 @@
 import { local } from '@/utils/storage'
+import { limit } from '@/utils'
 
 const LOCAL_KEY = {
   CATEGORY: 'group_category',
@@ -60,6 +61,7 @@ export const actions = {
     const { count } = await this.$axios.$get('/plus-group/groups/count')
     commit(TYPES.SAVE_COUNT, count)
   },
+
   async getGroupCategories ({ commit }) {
     const cates = await this.$axios.$get('/plus-group/categories')
     commit(TYPES.SAVE_CATEGORY, cates)
@@ -71,25 +73,29 @@ export const actions = {
       type: 'recommend',
       list: groups,
     })
+    const noMore = groups.length < limit
+    return noMore
   },
 
-  /**
-   * 获取动态列表
-   *
-   * @author mutoe <mutoe@foxmail.com>
-   * @param {*} params
-   * @returns {boolean} noMore
-   */
-  async getGroupList ({ commit }, params) {
-    const isRefresh = !params.after && !params.hot
-    if (isRefresh) commit(TYPES.LOAD_FROM_STORAGE) // 先从 storage 中填充数据
-    const { feeds, pinned } = await this.$axios.$get('/feeds', { params })
-    if (isRefresh) {
-      if (params.type !== 'follow') commit(TYPES.SAVE_LIST, { type: 'pinned', list: pinned })
-      commit(TYPES.SAVE_LIST, { type: params.type, list: feeds })
-    } else {
-      commit(TYPES.SAVE_LIST, { type: params.type, list: feeds, append: true })
-    }
-    return feeds.length < 15
+  async getAllGroups ({ commit }, params = {}) {
+    const groups = await this.$axios.$get('/plus-group/groups', { params })
+    commit(TYPES.SAVE_LIST, {
+      type: 'all',
+      list: groups,
+      append: params.offset,
+    })
+    const noMore = groups.length < limit
+    return noMore
+  },
+
+  async getNearbyGroups ({ commit }, params) {
+    const groups = await this.$axios.$get('/plus-group/round/groups')
+    commit(TYPES.SAVE_LIST, {
+      type: 'nearby',
+      list: groups,
+      append: params.offset,
+    })
+    const noMore = groups.length < limit
+    return noMore
   },
 }
