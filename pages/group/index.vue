@@ -47,28 +47,16 @@
         </div>
       </SideWidget>
 
-      <SideWidget key="group-count">
+      <SideWidget key="group-count" :loading="!groupCount">
         <div class="group-recommend">
           <p>共有 <big>{{ groupCount }}</big> 个兴趣圈子，等待你的加入</p>
         </div>
-
-        <ISpin v-if="!groupCount" fix />
       </SideWidget>
 
-      <SideWidget key="hot-groups" title="热门圈子">
-        <ul class="hot-list">
-          <li
-            v-for="(group, index) in recommend"
-            :key="group.id"
-            :class="{top3: index < 3}"
-          >
-            <h2>{{ group.name }}</h2>
-            <p>帖子 {{ group.posts_count || 0 }} 成员 {{ group.users_count || 0 }}</p>
-          </li>
-        </ul>
-
-        <ISpin v-if="!recommend.length" fix />
-      </SideWidget>
+      <SideWidgetGroupRecommend
+        key="hot-groups"
+        :groups="recommend"
+      />
     </aside>
   </div>
 </template>
@@ -78,6 +66,7 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 import { limit } from '@/utils'
 import GroupList from '@/components/group/GroupList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
+import SideWidgetGroupRecommend from '@/components/group/SideWidgetGroupRecommend.vue'
 
 const typeMap = [
   { name: 'all', label: '全部圈子', to: { query: { type: 'all' } } },
@@ -90,6 +79,7 @@ export default {
   components: {
     GroupList,
     SideWidget,
+    SideWidgetGroupRecommend,
   },
   data () {
     return {
@@ -275,49 +265,6 @@ export default {
         big {
           color: @warning-color;
           font-weight: bold;
-        }
-      }
-    }
-
-    .hot-list {
-      counter-reset: hot;
-
-      li {
-        position: relative;
-        margin: 16px 0;
-        margin-left: 32px;
-
-        &::before {
-          counter-increment: hot;
-          content: counter(hot);
-          position: absolute;
-          top: 50%;
-          left: -26px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 16px;
-          height: 16px;
-          margin-top: -8px;
-          border-radius: @border-radius-small;
-          background-color: @text-info-color;
-          font-size: 80%;
-          color: #fff;
-        }
-
-        &.top3::before {
-          background-color: @primary-color;
-        }
-
-        h2 {
-          bottom: 12px;
-          font-size: @font-size-base;
-          font-weight: normal;
-        }
-
-        p {
-          color: @text-info-color;
-          font-size: @font-size-small;
         }
       }
     }

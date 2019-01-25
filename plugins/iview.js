@@ -3,6 +3,8 @@ import '@/assets/less/index.less'
 
 import {
   Button,
+  Breadcrumb,
+  BreadcrumbItem,
   Form,
   FormItem,
   Input,
@@ -20,6 +22,8 @@ import {
 
 const components = {
   Button,
+  Breadcrumb,
+  BreadcrumbItem,
   Form,
   FormItem,
   Input,

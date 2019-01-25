@@ -4,9 +4,10 @@
       v-for="tag in tags"
       :key="tag.id"
       :tag="tag"
-      :selected="isSelected(tag.id)"
+      :selected="selected || isSelected(tag.id)"
       :closeable="closeable"
       :text="tag.name"
+      :size="size"
       @click.native="onClick(tag)"
     />
   </ul>
@@ -22,8 +23,10 @@ export default {
   },
   props: {
     tags: { type: Array, default: () => [] },
+    selected: { type: Boolean, default: false },
     selectedTags: { type: Array, default: () => [] },
     closeable: { type: Boolean, default: false },
+    size: { type: String, default: 'def' },
   },
   methods: {
     isSelected (tagId) {
