@@ -1,5 +1,4 @@
 require('dotenv').config()
-const pkg = require('./package')
 let debug = eval(process.env.DEBUG) // eslint-disable-line no-eval
 const IS_DEV = process.env.NODE_ENV === 'development'
 debug = debug !== undefined ? debug : IS_DEV
@@ -12,11 +11,13 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: process.env.NUXT_ENV_APP_TITLE,
+    titleTemplate: `%s - ${process.env.NUXT_ENV_APP_TITLE}`,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description },
+      { hid: 'description', name: 'description', content: process.env.NUXT_ENV_APP_DESCRIPTION },
+      { hid: 'keywords', name: 'keywords', content: process.env.NUXT_ENV_APP_KEYWORDS },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
