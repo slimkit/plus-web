@@ -23,7 +23,7 @@ module.exports = {
     ],
     script: [
       // fonticon
-      { src: '//at.alicdn.com/t/font_800619_fcyf4r10qv9.js' },
+      { src: '//at.alicdn.com/t/font_800619_840msqxbzxx.js' },
     ],
   },
 
