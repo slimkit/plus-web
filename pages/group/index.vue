@@ -16,7 +16,7 @@
       <nav v-if="type === 'all'" class="category-wrap">
         <nuxt-link
           v-for="cate in categories"
-          :key="cate.id"
+          :key="`cate-${cate.id}`"
           replace
           :to="{query: {type: cate.id}}"
         >
@@ -34,7 +34,7 @@
     </main>
 
     <aside class="side-wrap">
-      <SideWidget>
+      <SideWidget key="craete">
         <div class="create-wrap">
           <nuxt-link class="btn-primary" to="/group/create">
             <svg class="icon"><use xlink:href="#icon-label" /></svg>
@@ -47,7 +47,7 @@
         </div>
       </SideWidget>
 
-      <SideWidget>
+      <SideWidget key="group-count">
         <div class="group-recommend">
           <p>共有 <big>{{ groupCount }}</big> 个兴趣圈子，等待你的加入</p>
         </div>
@@ -55,7 +55,7 @@
         <ISpin v-if="!groupCount" fix />
       </SideWidget>
 
-      <SideWidget title="热门圈子">
+      <SideWidget key="hot-groups" title="热门圈子">
         <ul class="hot-list">
           <li
             v-for="(group, index) in recommend"
@@ -63,7 +63,7 @@
             :class="{top3: index < 3}"
           >
             <h2>{{ group.name }}</h2>
-            <p>帖子 5 成员 3</p>
+            <p>帖子 {{ group.posts_count || 0 }} 成员 {{ group.users_count || 0 }}</p>
           </li>
         </ul>
 
@@ -116,11 +116,12 @@ export default {
     },
     groups () {
       if (this.type !== 'all') return this[this.type]
-      return this.cateGroups
+      return this.cateId ? this.cateGroups : this.all
     },
   },
   watch: {
     type (val) {
+      if (val === 'joined' && !this.checkAuth()) return
       this.cateGroups = []
       this.loader.beforeRefresh()
     },
@@ -129,7 +130,7 @@ export default {
       this.loader.beforeRefresh()
     },
   },
-  created () {
+  mounted () {
     this.loadFromStorage()
     this.getGroupCount()
     this.getGroupCategories()
@@ -144,6 +145,8 @@ export default {
       getGroupCategories: 'getGroupCategories',
       getRecommendGroups: 'getRecommendGroups',
       getAllGroups: 'getAllGroups',
+      getNearbyGroups: 'getNearbyGroups',
+      getJoinedGroups: 'getJoinedGroups',
     }),
     async onRefresh () {
       let noMore = true
@@ -154,9 +157,9 @@ export default {
           noMore = await this.getAllGroups()
         }
       } else if (this.type === 'nearby') {
-        // TODO: 获取附近圈子
+        noMore = await this.getNearbyGroups()
       } else if (this.type === 'joined') {
-        // TODO: 获取我加入的圈子
+        noMore = await this.getJoinedGroups()
       }
       this.loader.afterRefresh(noMore)
     },
@@ -170,9 +173,9 @@ export default {
           noMore = await this.getAllGroups(params)
         }
       } else if (this.type === 'nearby') {
-        // TODO: 获取附近圈子
+        noMore = await this.getNearbyGroups(params)
       } else if (this.type === 'joined') {
-        // TODO: 获取我加入的圈子
+        noMore = await this.getJoinedGroups(params)
       }
       this.loader.afterLoadmore(noMore)
     },
@@ -232,6 +235,10 @@ export default {
           color: #fff;
         }
       }
+    }
+
+    .loader {
+      margin-top: 30px;
     }
 
   }

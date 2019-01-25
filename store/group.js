@@ -7,6 +7,7 @@ const LOCAL_KEY = {
   COUNT: 'group_count',
   ALL: 'group_all',
   JOINED: 'group_joined',
+  NEARBY: 'group_nearby',
 }
 
 export const state = () => ({
@@ -15,6 +16,7 @@ export const state = () => ({
   count: 0,
   recommend: [],
   joined: [],
+  nearby: [],
 })
 
 export const TYPES = {
@@ -67,7 +69,8 @@ export const actions = {
     commit(TYPES.SAVE_CATEGORY, cates)
   },
 
-  async getRecommendGroups ({ commit }, params) {
+  async getRecommendGroups ({ commit }, params = {}) {
+    Object.assign({ limit }, params)
     const groups = await this.$axios.$get('/plus-group/recommend/groups', { params })
     commit(TYPES.SAVE_LIST, {
       type: 'recommend',
@@ -78,6 +81,7 @@ export const actions = {
   },
 
   async getAllGroups ({ commit }, params = {}) {
+    Object.assign({ limit }, params)
     const groups = await this.$axios.$get('/plus-group/groups', { params })
     commit(TYPES.SAVE_LIST, {
       type: 'all',
@@ -88,10 +92,23 @@ export const actions = {
     return noMore
   },
 
-  async getNearbyGroups ({ commit }, params) {
-    const groups = await this.$axios.$get('/plus-group/round/groups')
+  async getNearbyGroups ({ commit }, params = {}) {
+    Object.assign({ limit }, params)
+    const groups = await this.$axios.$get('/plus-group/round/groups', { params })
     commit(TYPES.SAVE_LIST, {
       type: 'nearby',
+      list: groups,
+      append: params.offset,
+    })
+    const noMore = groups.length < limit
+    return noMore
+  },
+
+  async getJoinedGroups ({ commit }, params = {}) {
+    Object.assign({ limit }, params)
+    const groups = await this.$axios.$get('/plus-group/user-groups', { params })
+    commit(TYPES.SAVE_LIST, {
+      type: 'joined',
       list: groups,
       append: params.offset,
     })

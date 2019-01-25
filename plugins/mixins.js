@@ -25,7 +25,12 @@ const mixins = {
   },
   methods: {
     checkAuth () {
-      if (!this.logged) this.$router.push('/auth/login')
+      if (!this.logged) {
+        this.$Message.error('请先登录')
+        this.$router.push('/auth/login')
+        return false
+      }
+      return true
     },
   },
 }
