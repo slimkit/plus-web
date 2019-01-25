@@ -37,6 +37,8 @@
 
   "togglequotes.chars": [ "\"", "'", "`" ],
 
+  "path-intellisense.autoSlashAfterDirectory": true,
+  "path-intellisense.extensionOnImport": true,
   "path-intellisense.mappings": {
     "@/": "${workspaceRoot}"
   }
