@@ -26,6 +26,7 @@
       class="feed-content"
       :images="images"
       @click="onImageView"
+      @more="viewDetail"
     />
 
     <footer class="feed-meta">
@@ -104,6 +105,9 @@ export default {
     },
   },
   methods: {
+    viewDetail () {
+      this.$router.push(`/group/${this.feed.group_id}/post/${this.feed.id}`)
+    },
     onReport () {
       this.$root.$emit('report', {
         type: 'post',

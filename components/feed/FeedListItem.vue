@@ -21,6 +21,7 @@
       class="feed-content"
       :images="images"
       @click="onImageView"
+      @more="viewDetail"
     />
     <div
       v-else

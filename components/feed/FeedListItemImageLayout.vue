@@ -3,10 +3,10 @@
     <ul
       v-if="images.length"
       class="grid-wrap"
-      :class="`with-${images.length}`"
+      :class="`with-${Math.min(images.length, 9)}`"
     >
       <li
-        v-for="(image, index) in images"
+        v-for="(image, index) in images.slice(0, 9)"
         :key="image.id"
         class="item"
         @click="onImageClick(image, index)"
@@ -16,6 +16,8 @@
           type="image-wrap"
           :max-height="400"
         />
+
+        <div v-if="isGreatThen9 && index === 8" class="cover">+{{ images.length - 9 }}</div>
       </li>
     </ul>
   </div>
@@ -27,8 +29,16 @@ export default {
   props: {
     images: { type: Array, default: () => [] },
   },
+  computed: {
+    isGreatThen9 () {
+      return this.images.length > 9
+    },
+  },
   methods: {
     onImageClick (image, index) {
+      if (index === 8 && this.isGreatThen9) {
+        return this.$emit('more')
+      }
       this.$emit('click', image, index)
     },
   },
@@ -56,6 +66,18 @@ export default {
         top: 0;
         width: 100%;
         height: 100%;
+      }
+
+      .cover {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .2);
+        color: #fff;
+        font-size: 400%;
       }
 
     }
