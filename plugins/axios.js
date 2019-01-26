@@ -11,6 +11,9 @@ export default function ({ $axios, env, store, redirect }) {
   $axios.setHeader('Accept', 'application/json')
 
   $axios.onRequest(config => {
+    if (process.client && config.loading) {
+      $nuxt.$loading.start()
+    }
     if (env.debug) {
       console.log(`[axios] request to ${config.url}`) // eslint-disable-line no-console
     }
@@ -22,7 +25,19 @@ export default function ({ $axios, env, store, redirect }) {
     }
   })
 
+  $axios.onResponse(res => {
+    const { config = {} } = res
+    if (process.client && config.loading) {
+      $nuxt.$loading.finish()
+    }
+  })
+
   $axios.onError(error => {
+    const { config = {} } = error
+    if (process.client && config.loading) {
+      $nuxt.$loading.fail()
+    }
+
     const code = parseInt(error.response && error.response.status)
     if (error && error.response) {
       switch (code) {
