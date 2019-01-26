@@ -22,6 +22,14 @@
             class="options"
             @click="showMore = false"
           >
+            <template v-if="isManager">
+              <li v-if="!post.excellent_at" @click="onExcellent(true)"><svg class="icon"><use xlink:href="#icon-text" /></svg> 设为精华</li>
+              <li v-else @click="onExcellent(false)"><svg class="icon"><use xlink:href="#icon-text" /></svg> 取消精华</li>
+
+              <li v-if="!post.pinned" @click="onPinned(true)"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 置顶帖子</li>
+              <li v-else @click="onPinned(false)"><svg class="icon"><use xlink:href="#icon-pinned1" /></svg> 撤销置顶</li>
+            </template>
+
             <li @click="onRepostable"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
             <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
           </ul>
@@ -45,20 +53,20 @@
         <div class="markdown-body" v-html="renderedBody" />
       </main>
 
-      <!-- <footer class="article-footer">
+      <footer class="article-footer">
         <ArticleLike
-          :like-count="feed.like_count"
-          :liked="feed.has_like"
-          :collected="feed.has_collect"
+          :like-count="post.likes_count"
+          :liked="post.liked"
+          :collected="post.collected"
           @like="onLike"
           @collect="onCollect"
         />
 
         <ArticleReward
-          type="feed"
-          :article="feed.id"
-          :count="rewardCount"
-          :amount="rewardAmount"
+          type="post"
+          :article="post.id"
+          :count="post.reward_number"
+          :amount="post.reward_amount"
           :rewards="rewards"
           @fetch="fetchRewards"
           @reward="onReward"
@@ -68,14 +76,14 @@
 
         <ArticleComment
           ref="comment"
-          type="feed"
-          :count="feed.feed_comment_count"
+          type="post"
+          :count="post.comments_count"
           :comments="comments"
           @fetch="fetchComments"
           @comment="onComment"
           @comment:delete="onCommentDelete"
         />
-      </footer> -->
+      </footer>
     </div>
 
     <aside class="widgets">
@@ -104,31 +112,53 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapActions, mapState } from 'vuex'
+import { noop, limit } from '@/utils'
 import markdown from '@/utils/markdown'
 import SideWidget from '@/components/common/SideWidget.vue'
+import ArticleLike from '@/components/common/ArticleLike.vue'
+import ArticleReward from '@/components/common/ArticleReward.vue'
+import ArticleComment from '@/components/common/ArticleComment.vue'
 
 export default {
   name: 'GroupPostDetail',
   components: {
     SideWidget,
+    ArticleLike,
+    ArticleReward,
+    ArticleComment,
   },
   data () {
     return {
       post: {},
+      rewards: [],
+      comments: [],
+      pinnedComments: [],
 
       showMore: false,
+      excellentLock: false,
     }
   },
   computed: {
     ...mapState('user', {
       recommendUsers: 'recommend',
     }),
+    postId () {
+      return Number(this.$route.params.postId)
+    },
     user () {
       return this.post.user
     },
     group () {
       return this.post.group
+    },
+    isMine () {
+      return this.logged && this.logged.id === this.post.user_id
+    },
+    isManager () {
+      const { joined } = this.group
+      return ['founder', 'administrator'].includes(joined && joined.role)
     },
     images () {
       return this.post.images || []
@@ -142,6 +172,10 @@ export default {
     const post = await $axios.$get(`/plus-group/groups/${groupId}/posts/${postId}`)
     return { post }
   },
+  created () {
+    this.rewards = this.post.rewards || []
+    this.comments = this.post.comments || []
+  },
   mounted () {
     this.fetchRecommendUsers()
   },
@@ -149,8 +183,81 @@ export default {
     ...mapActions('user', {
       fetchRecommendUsers: 'fetchRecommendUsers',
     }),
+    async fetchRewards (offset = 0, callback = noop) {
+      const params = { offset, limit }
+      const list = await this.$axios.$get(`/plus-group/group-posts/${this.postId}/rewards`, { params })
+      if (!offset) {
+        this.rewards = list
+      } else {
+        this.rewards.push(...list)
+      }
+      const noMore = list.length < limit
+      callback(noMore)
+    },
+    async fetchComments (after = 0, callback = noop) {
+      const params = { after, limit }
+      const { comments, pinneds } = await this.$axios.$get(`/plus-group/group-posts/${this.postId}/comments`, { params })
+      if (!after) {
+        pinneds.forEach(comment => (comment.pinned = true))
+        const merged = _.unionBy(pinneds, comments, 'id') // 合并去重
+        this.comments = merged
+      } else {
+        this.comments.push(...comments)
+      }
+      const noMore = comments.length < limit
+      callback(noMore)
+    },
+    async onExcellent (status) {
+      if (this.excellentLock) return
+      this.excellentLock = true
+      await this.$axios.$put(`/group/posts/${this.postId}/toggle-excellent`, {}, { loading: true })
+        .finally(() => {
+          this.excellentLock = false
+        })
+      this.post.excellent_at = !this.post.excellent_at
+      this.$Message.success('操作成功！')
+    },
+    async onPinned (status) {
+      // TODO: 管理员置顶帖子
+    },
+    async onPinnedApply () {
+      // TODO: 申请置顶帖子
+    },
     onRepostable () {},
     onReport () {},
+    async onCollect (callback) {
+      if (!this.post.collected) {
+        // 收藏
+        await this.$axios.$post(`/plus-group/group-posts/${this.postId}/collections`)
+        this.post.collected = true
+      } else {
+        // 取消收藏
+        this.$axios.$delete(`/plus-group/group-posts/${this.postId}/uncollect`)
+        this.post.collected = false
+      }
+      callback()
+    },
+    async onLike (callback) {
+      if (!this.post.liked) {
+        // 喜欢
+        await this.$axios.$post(`/plus-group/group-posts/${this.postId}/likes`)
+        this.post.likes_count += 1
+        this.post.liked = true
+      } else {
+        // 取消喜欢
+        this.$axios.$delete(`/plus-group/group-posts/${this.postId}/likes`)
+        this.post.likes_count -= 1
+        this.post.liked = false
+      }
+      callback()
+    },
+    onReward (amount) {
+      this.post.reward_number += 1
+      this.post.reward_amount += amount
+      this.fetchRewards()
+    },
+    onComment () {},
+    onCommentDelete () {},
   },
 }
 </script>

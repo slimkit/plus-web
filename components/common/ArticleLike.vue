@@ -5,7 +5,7 @@
         size="large"
         class="meta-button"
         :class="{active: collected}"
-        @click="$emit('collect')"
+        @click="onCollect"
       >
         <svg class="icon"><use xlink:href="#icon-collect" /></svg>
         {{ collected ? '取消收藏' : '收藏' }}
@@ -14,7 +14,7 @@
         size="large"
         class="meta-button"
         :class="{active: liked}"
-        @click="$emit('like')"
+        @click="onLike"
       >
         <svg class="icon"><use xlink:href="#icon-like" /></svg>
         {{ likeCount }} 人喜欢
@@ -47,6 +47,28 @@ export default {
      * @property {string} share.image 图片链接
      */
     share: { type: Object, default: () => {} },
+  },
+  data () {
+    return {
+      collectLock: false,
+      likeLock: false,
+    }
+  },
+  methods: {
+    onCollect () {
+      if (this.collectLock) return
+      this.collectLock = true
+      this.$emit('collect', () => {
+        this.collectLock = false
+      })
+    },
+    onLike () {
+      if (this.likeLock) return
+      this.likeLock = true
+      this.$emit('like', () => {
+        this.likeLock = false
+      })
+    },
   },
 }
 </script>

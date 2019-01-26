@@ -192,7 +192,7 @@ export default {
       const noMore = comments.length < limit
       callback(noMore)
     },
-    async onLike () {
+    async onLike (callback) {
       if (!this.feed.has_like) {
         // 喜欢
         await this.$axios.$post(`/feeds/${this.feed.id}/like`)
@@ -204,8 +204,9 @@ export default {
         this.feed.like_count -= 1
         this.feed.has_like = false
       }
+      callback()
     },
-    async onCollect () {
+    async onCollect (callback) {
       if (!this.feed.has_collect) {
         // 收藏
         await this.$axios.$post(`/feeds/${this.feed.id}/collections`)
@@ -217,6 +218,7 @@ export default {
         // this.feed.collect_count -= 1
         this.feed.has_collect = false
       }
+      callback()
     },
     onReward (amount) {
       this.rewardCount += 1

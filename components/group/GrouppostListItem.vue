@@ -1,11 +1,12 @@
 <template>
-  <section class="c-feed-list-item">
+  <section class="c-feed-list-item post">
     <div class="author-info">
       <div class="user-info">
         <Avatar :user="feed.user" />
         <span class="username">{{ feed.user.name }}</span>
       </div>
       <span v-if="pinned" class="pinned">置顶</span>
+      <span v-if="feed.excellent_at" class="excellent">精华</span>
       <div
         class="post-info"
         @click="viewDetail"
@@ -127,3 +128,17 @@ export default {
   },
 }
 </script>
+
+<style lang="less" scoped>
+.c-feed-list-item.post {
+  .excellent {
+    margin-right: 1em;
+    padding: 0px 3px;
+    border-radius: 2px;
+    background-color: @error-color;
+    color: #fff;
+    font-size: @font-size-small;
+    font-weight: bold;
+  }
+}
+</style>

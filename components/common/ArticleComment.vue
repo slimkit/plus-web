@@ -7,6 +7,7 @@
       <Loadmore
         ref="loader"
         :show-bottom="!!count"
+        :auto-load="false"
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
@@ -38,7 +39,8 @@ export default {
     count: { type: Number, default: 0 },
     comments: { type: Array, default: () => [] },
   },
-  computed: {
+  mounted () {
+    if (!this.comments.length) this.loader.beforeRefresh()
   },
   methods: {
     onRefresh () {
