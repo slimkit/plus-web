@@ -37,7 +37,13 @@
                 <span class="primary-color">{{ group.location }}</span>
               </address>
 
-              <IButton class="report-btn" type="text">举报圈子</IButton>
+              <IButton
+                class="report-btn"
+                type="text"
+                @click="onReport"
+              >
+                举报圈子
+              </IButton>
               <IButton shape="circle" :disabled="true">已加入</IButton>
             </div>
           </div>
@@ -185,6 +191,12 @@ export default {
     viewNotice () {},
     contactFounder () {
       // TODO: 发起单聊
+    },
+    onReport () {
+      this.$root.$emit('report', {
+        type: 'group',
+        id: this.group.id,
+      })
     },
   },
 }
