@@ -34,7 +34,7 @@
 
               <address>
                 <svg class="icon"><use xlink:href="#icon-position" /></svg>
-                <span class="primary-color">{{ group.location }}</span>
+                <span class="primary-color text-cut">{{ group.location }}</span>
               </address>
 
               <IButton
@@ -63,9 +63,9 @@
 
       <main class="post-container">
         <nav class="nav-wrap">
-          <nuxt-link :to="{query: {type: 'new'}}">最新帖子</nuxt-link>
-          <nuxt-link :to="{query: {type: 'reply'}}">最新回复</nuxt-link>
-          <nuxt-link :to="{query: {type: 'excellent'}}">精华帖子</nuxt-link>
+          <nuxt-link :class="{'exact-active': type === 'new'}" :to="{query: {type: 'new'}}">最新帖子</nuxt-link>
+          <nuxt-link :class="{'exact-active': type === 'reply'}" :to="{query: {type: 'reply'}}">最新回复</nuxt-link>
+          <nuxt-link :class="{'exact-active': type === 'excellent'}" :to="{query: {type: 'excellent'}}">精华帖子</nuxt-link>
         </nav>
 
         <Loadmore
@@ -95,15 +95,25 @@
         class="notice"
         title="圈子公告"
       >
-        {{ group.summary }}
+        <div class="notice-content text-cut-4">
+          {{ group.notice }}
+        </div>
 
         <footer
           slot="footer"
           class="side-widget-footer"
-          @click="viewNotice"
+          @click="onViewNotice"
         >
           查看详细公告
         </footer>
+
+        <IModal
+          v-model="showNotice"
+          :footer-hide="true"
+          title="圈子公告"
+        >
+          <article class="text-pre">{{ group.notice }}</article>
+        </IModal>
       </SideWidget>
 
       <SideWidget>
@@ -118,7 +128,7 @@
         class="members"
         title="圈子成员"
         type="user"
-        :users="members.map(member => member.user)"
+        :users="membersPreview.map(member => member.user)"
         :loading="!members.length"
       >
         <div class="founder-wrap">
@@ -126,6 +136,7 @@
           <div class="founder-info">
             <p>圈主：{{ group.founder.user.name }}</p>
             <IButton
+              v-if="!isMine"
               size="small"
               type="primary"
               @click="contactFounder"
@@ -179,6 +190,8 @@ export default {
       members: [],
       pinned: [],
       posts: [],
+
+      showNotice: false,
     }
   },
   computed: {
@@ -190,6 +203,9 @@ export default {
     },
     type () {
       return this.$route.query.type || 'new'
+    },
+    isMine () {
+      return this.logged && this.group.founder.id
     },
     fetchParams () {
       const params = { limit }
@@ -206,6 +222,19 @@ export default {
         return item
       })
       return _.unionBy(pinneds, this.posts, 'id')
+    },
+    membersGrouped () {
+      const members = _.filter(this.members, m => m.audit === 1 && !m.disabled)
+      return _.groupBy(members, 'role')
+    },
+    membersPreview () {
+      const { member = [], administrtor = [] } = this.membersGrouped
+      return [...administrtor, ...member]
+    },
+  },
+  watch: {
+    type () {
+      this.loader.beforeRefresh()
     },
   },
   async asyncData ({ params, $axios }) {
@@ -228,7 +257,12 @@ export default {
       this.pinned = pinneds
       this.loader.afterRefresh(posts.length < limit)
     },
-    async onLoadmore () {},
+    async onLoadmore () {
+      const params = { ...this.fetchParams, offset: this.posts.length }
+      const { posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
+      this.posts.push(...posts)
+      this.loader.afterLoadmore(posts.length < limit)
+    },
     /**
      * 这里加载的成员只用于右边显示，加载更多成员放在组件里
      */
@@ -237,7 +271,9 @@ export default {
       const members = await this.$axios.$get(`/plus-group/groups/${this.groupId}/members`, params)
       this.members = members
     },
-    viewNotice () {},
+    onViewNotice () {
+      this.showNotice = true
+    },
     contactFounder () {
       // TODO: 发起单聊
     },
@@ -304,7 +340,7 @@ export default {
         }
 
         h1 {
-          font-size: @font-size-large;
+          font-size: @font-size-large * 1.4;
           margin-bottom: 16px;
         }
 
@@ -312,6 +348,7 @@ export default {
           color: @disabled-color;
           font-size: @font-size-small;
           margin-bottom: 16px;
+          min-height: 36px;
         }
 
         .meta-wrap {
@@ -320,7 +357,14 @@ export default {
           font-size: @font-size-small;
 
           > span {
+            flex: none;
             margin-right: 8px;
+          }
+
+          address {
+            display: flex;
+            flex: auto;
+            min-width: 0;
           }
 
           .report-btn {
@@ -349,6 +393,11 @@ export default {
 
         > a {
           margin-right: 16px;
+          color: @disabled-color;
+
+          &.exact-active {
+            color: @text-color;
+          }
         }
       }
     }

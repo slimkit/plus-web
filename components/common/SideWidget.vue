@@ -74,16 +74,14 @@ export default {
 }
 
 .user-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 8px;
 
   .user-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30%;
-    margin: 8px 0;
 
     .username {
       margin-top: 8px;
