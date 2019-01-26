@@ -199,7 +199,7 @@ export default {
       recommendGroups: 'recommend',
     }),
     groupId () {
-      return Number(this.$route.params.id)
+      return Number(this.$route.params.groupId)
     },
     type () {
       return this.$route.query.type || 'new'
@@ -238,7 +238,7 @@ export default {
     },
   },
   async asyncData ({ params, $axios }) {
-    const groupId = params.id
+    const { groupId } = params
     const group = await $axios.$get(`/plus-group/groups/${groupId}`)
     return { group }
   },

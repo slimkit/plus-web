@@ -30,6 +30,7 @@ module.exports = {
 
   env: {
     debug: debug !== undefined ? debug : IS_DEV,
+    baseURL,
     apiURL: baseURL + '/api/v2',
   },
 
@@ -42,6 +43,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'github-markdown-css',
   ],
 
   router: {
