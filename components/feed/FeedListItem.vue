@@ -189,7 +189,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .c-feed-list-item {
   display: flex;
   flex-direction: column;
@@ -231,8 +231,15 @@ export default {
   }
 
   .feed-content {
-    margin: 16px 0;
     cursor: pointer;
+    margin-bottom: 16px;
+
+    /* for group post layout */
+    .title {
+      margin-bottom: 16px;
+      color: @primary-color;
+      font-size: @font-size-large;
+    }
 
     .image {
       max-width: 100%;

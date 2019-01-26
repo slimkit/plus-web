@@ -60,6 +60,22 @@
           </TagList>
         </div>
       </header>
+
+      <main class="post-container">
+        <nav class="nav-wrap">
+          <nuxt-link :to="{query: {type: 'new'}}">最新帖子</nuxt-link>
+          <nuxt-link :to="{query: {type: 'reply'}}">最新回复</nuxt-link>
+          <nuxt-link :to="{query: {type: 'excellent'}}">精华帖子</nuxt-link>
+        </nav>
+
+        <Loadmore
+          ref="loader"
+          @refresh="onRefresh"
+          @loadmore="onLoadmore"
+        >
+          <GrouppostList :posts="mixedPosts" />
+        </Loadmore>
+      </main>
     </div>
 
     <aside class="side-wrap">
@@ -136,8 +152,11 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
+import { limit } from '@/utils'
 import TagList from '@/components/tag/TagList.vue'
+import GrouppostList from '@/components/group/GrouppostList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetGroupRecommend from '@/components/group/SideWidgetGroupRecommend.vue'
 
@@ -150,6 +169,7 @@ export default {
   },
   components: {
     TagList,
+    GrouppostList,
     SideWidget,
     SideWidgetGroupRecommend,
   },
@@ -157,6 +177,8 @@ export default {
     return {
       group: {},
       members: [],
+      pinned: [],
+      posts: [],
     }
   },
   computed: {
@@ -165,6 +187,25 @@ export default {
     }),
     groupId () {
       return Number(this.$route.params.id)
+    },
+    type () {
+      return this.$route.query.type || 'new'
+    },
+    fetchParams () {
+      const params = { limit }
+      switch (this.type) {
+        case 'new': params.type = 'latest_post'; break
+        case 'reply': params.type = 'latest_reply'; break
+        case 'excellent': params.excellent = 1; break
+      }
+      return params
+    },
+    mixedPosts () {
+      const pinneds = this.pinned.map(item => {
+        item.pinned = true
+        return item
+      })
+      return _.unionBy(pinneds, this.posts, 'id')
     },
   },
   async asyncData ({ params, $axios }) {
@@ -180,6 +221,14 @@ export default {
     ...mapActions('group', {
       getRecommendGroups: 'getRecommendGroups',
     }),
+    async onRefresh () {
+      const params = this.fetchParams
+      const { pinneds, posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
+      this.posts = posts
+      this.pinned = pinneds
+      this.loader.afterRefresh(posts.length < limit)
+    },
+    async onLoadmore () {},
     /**
      * 这里加载的成员只用于右边显示，加载更多成员放在组件里
      */
@@ -286,6 +335,20 @@ export default {
 
         > span {
           margin-right: 8px;
+        }
+      }
+    }
+
+    .post-container {
+      margin-top: 30px;
+      padding: 22px 40px;
+      background-color: #fff;
+
+      .nav-wrap {
+        margin-bottom: 16px;
+
+        > a {
+          margin-right: 16px;
         }
       }
     }
