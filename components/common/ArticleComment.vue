@@ -18,6 +18,7 @@
           :comment="comment"
           @reply="onReply"
           @delete="onDelete"
+          @pinned="onPinned"
         />
       </Loadmore>
     </ul>
@@ -65,6 +66,9 @@ export default {
     },
     onDelete (...args) {
       this.$emit('comment:delete', ...args)
+    },
+    onPinned (...args) {
+      this.$emit('comment:pinned', ...args)
     },
     clean () {
       this.$refs.editor.clean()

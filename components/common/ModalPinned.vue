@@ -43,8 +43,10 @@
 import { noop } from '@/utils'
 
 const apiMap = {
-  feed: ({ feedId }) => `/feeds/${feedId}//currency-pinneds`,
+  feed: ({ feedId }) => `/feeds/${feedId}/currency-pinneds`,
   feedComment: ({ feedId, commentId }) => `/feeds/${feedId}/comments/${commentId}/currency-pinneds`,
+  post: ({ postId }) => `/plus-group/currency-pinned/posts/${postId}`,
+  postComment: ({ commentId }) => `/plus-group/currency-pinned/comments/${commentId}`,
 }
 
 export default {

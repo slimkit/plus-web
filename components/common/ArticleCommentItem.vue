@@ -65,12 +65,13 @@ export default {
       this.$emit('reply', user)
     },
     onPinned () {
+      const commentId = this.comment.id
       this.$root.$emit('pinned', {
         type: `${this.type}Comment`,
-        params: { feedId: this.comment.commentable_id, commentId: this.comment.id },
+        params: { feedId: this.comment.commentable_id, commentId },
         isOwner: this.isOwner,
         callback: () => {
-          this.$emit('pinned')
+          this.$emit('pinned', commentId)
         },
       })
     },

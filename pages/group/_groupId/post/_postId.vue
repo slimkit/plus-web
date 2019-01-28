@@ -82,6 +82,7 @@
           @fetch="fetchComments"
           @comment="onComment"
           @comment:delete="onCommentDelete"
+          @comment:pinned="onCommentPinned"
         />
       </footer>
     </div>
@@ -218,10 +219,16 @@ export default {
       this.$Message.success('操作成功！')
     },
     async onPinned (status) {
-      // TODO: 管理员置顶帖子
-    },
-    async onPinnedApply () {
-      // TODO: 申请置顶帖子
+      if (status) {
+        await this.$axios.$patch(`/plus-group/posts/${this.postId}/cancel`)
+        this.$Message.success('撤销置顶成功')
+      } else {
+        this.$root.$emit('pinned', {
+          type: 'post',
+          params: { postId: this.postId },
+          isOwner: this.isManager,
+        })
+      }
     },
     onRepostable () {},
     onReport () {},
@@ -256,8 +263,34 @@ export default {
       this.post.reward_amount += amount
       this.fetchRewards()
     },
-    onComment () {},
-    onCommentDelete () {},
+    async onComment (content, replyUser = {}) {
+      const ret = await this.$axios.$post(`/plus-group/group-posts/${this.postId}/comments`, {
+        body: content,
+        reply_user: replyUser.id,
+      })
+      this.$Message.success('评论成功')
+
+      // 更新评论列表
+      if (replyUser.id) ret.comment.reply = replyUser
+      this.comments.unshift(ret.comment)
+      this.post.comments_count += 1
+
+      // 清空评论框
+      this.$refs.comment.clean()
+    },
+    async onCommentDelete (comment, callback) {
+      await this.$axios.$delete(`/plus-group/group-posts/${comment.commentable_id}/comments/${comment.id}`)
+      this.$Message.success('删除成功')
+      // 更新评论列表
+      this.comments = this.comments.filter(item => item.id !== comment.id)
+      this.post.comments_count -= 1
+
+      // 删除成功会调(关闭对话框)
+      callback()
+    },
+    onCommentPinned (commentId) {
+      this.fetchComments()
+    },
   },
 }
 </script>
