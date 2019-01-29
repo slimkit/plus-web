@@ -79,16 +79,18 @@
     </div>
 
     <aside class="side-wrap">
-      <IButton
-        class="post-btn"
-        type="primary"
-        shape="circle"
-        size="large"
-        long
-      >
-        <svg class="icon"><use xlink:href="#icon-writing" /></svg>
-        发帖
-      </IButton>
+      <nuxt-link to="post/create" append>
+        <IButton
+          class="post-btn"
+          type="primary"
+          shape="circle"
+          size="large"
+          long
+        >
+          <svg class="icon"><use xlink:href="#icon-writing" /></svg>
+          发帖
+        </IButton>
+      </nuxt-link>
 
       <SideWidget
         key="notice"
