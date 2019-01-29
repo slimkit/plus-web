@@ -1,5 +1,6 @@
 <template>
   <SideWidget title="热门圈子" :loading="!groups.length">
+    <ISpin v-if="loading" fix />
     <ul class="hot-list">
       <li
         v-for="(group, index) in groups"
@@ -15,6 +16,7 @@
 
 <script>
 import SideWidget from '@/components/common/SideWidget.vue'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'SideWidgetGroupRecommend',
@@ -23,6 +25,25 @@ export default {
   },
   props: {
     groups: { type: Array, default: () => [] },
+  },
+  data () {
+    return {
+      loading: true,
+    }
+  },
+  computed: {
+    ...mapState('group', {
+      groups: 'recommend',
+    }),
+  },
+  async mounted () {
+    await this.getRecommendGroups({ limit: 5 })
+    this.loading = false
+  },
+  methods: {
+    ...mapActions('group', {
+      getRecommendGroups: 'getRecommendGroups',
+    }),
   },
 }
 </script>

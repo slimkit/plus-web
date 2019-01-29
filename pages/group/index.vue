@@ -53,10 +53,7 @@
         </div>
       </SideWidget>
 
-      <SideWidgetGroupRecommend
-        key="hot-groups"
-        :groups="recommend"
-      />
+      <SideWidgetGroupRecommend key="hot-groups" />
     </aside>
   </div>
 </template>
@@ -91,7 +88,6 @@ export default {
     ...mapState('group', {
       groupCount: 'count',
       categories: 'category',
-      recommend: 'recommend',
       all: 'all',
       nearby: 'nearby',
       joined: 'joined',
@@ -124,7 +120,6 @@ export default {
     this.loadFromStorage()
     this.getGroupCount()
     this.getGroupCategories()
-    this.getRecommendGroups({ limit: 5 })
   },
   methods: {
     ...mapMutations('group', {
@@ -133,7 +128,6 @@ export default {
     ...mapActions('group', {
       getGroupCount: 'getGroupCount',
       getGroupCategories: 'getGroupCategories',
-      getRecommendGroups: 'getRecommendGroups',
       getAllGroups: 'getAllGroups',
       getNearbyGroups: 'getNearbyGroups',
       getJoinedGroups: 'getJoinedGroups',

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 /**
  * 空函数
  */
@@ -34,8 +36,7 @@ export const getFollowStatus = (follower = false, following = false) => {
  * @returns
  */
 export function getLastField (list, field = 'id') {
-  if (!list.length) return undefined
-  const last = [...list].pop() || {}
+  const last = _.last(list) || {}
   if (typeof last === 'object') return last[field]
   else return last
 }

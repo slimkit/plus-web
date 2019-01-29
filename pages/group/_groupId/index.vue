@@ -171,14 +171,13 @@
         </IModal>
       </SideWidget>
 
-      <SideWidgetGroupRecommend :groups="recommendGroups" />
+      <SideWidgetGroupRecommend key="recommend-group" />
     </aside>
   </div>
 </template>
 
 <script>
 import _ from 'lodash'
-import { mapState, mapActions } from 'vuex'
 import { limit } from '@/utils'
 import TagList from '@/components/tag/TagList.vue'
 import GrouppostList from '@/components/group/GrouppostList.vue'
@@ -212,9 +211,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('group', {
-      recommendGroups: 'recommend',
-    }),
     groupId () {
       return Number(this.$route.params.groupId)
     },
@@ -261,12 +257,8 @@ export default {
   },
   mounted () {
     this.fetchGroupMembers()
-    this.getRecommendGroups({ limit: 5 })
   },
   methods: {
-    ...mapActions('group', {
-      getRecommendGroups: 'getRecommendGroups',
-    }),
     async onRefresh () {
       const params = this.fetchParams
       const { pinneds, posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
