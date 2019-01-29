@@ -25,6 +25,16 @@
 </template>
 
 <script>
+
+// 暂时统一设置为 150 以高效利用缓存
+const sizeMap = {
+  xs: 150,
+  sm: 150,
+  def: 150,
+  lg: 150,
+  xl: 150,
+}
+
 export default {
   name: 'Avatar',
   props: {
@@ -45,9 +55,12 @@ export default {
       },
     },
     avatarStyle () {
-      const src = this.src
+      let src = this.src
+      if (!src) return null
+      const size = sizeMap[this.size]
+      src += `?role=w_${size},h_${size}`
       return {
-        backgroundImage: src ? `url(${src})` : null,
+        backgroundImage: `url(${src})`,
       }
     },
     verify () {

@@ -128,7 +128,7 @@
         class="members"
         title="圈子成员"
         type="user"
-        :users="membersPreview.map(member => member.user)"
+        :users="membersPreview.slice(0, 9).map(member => member.user)"
         :loading="!members.length"
       >
         <div class="founder-wrap">
@@ -152,9 +152,23 @@
           v-if="members.length > 9"
           slot="footer"
           class="side-widget-footer"
+          @click="showMembers = true"
         >
           查看更多成员
         </footer>
+
+        <IModal
+          v-model="showMembers"
+          title="圈子成员"
+          :footer-hide="true"
+          :width="1050"
+        >
+          <GroupMembers
+            v-if="showMembers"
+            :group-id="groupId"
+            :members="membersGrouped"
+          />
+        </IModal>
       </SideWidget>
 
       <SideWidgetGroupRecommend :groups="recommendGroups" />
@@ -168,6 +182,7 @@ import { mapState, mapActions } from 'vuex'
 import { limit } from '@/utils'
 import TagList from '@/components/tag/TagList.vue'
 import GrouppostList from '@/components/group/GrouppostList.vue'
+import GroupMembers from '@/components/group/GroupMembers.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetGroupRecommend from '@/components/group/SideWidgetGroupRecommend.vue'
 
@@ -181,6 +196,7 @@ export default {
   components: {
     TagList,
     GrouppostList,
+    GroupMembers,
     SideWidget,
     SideWidgetGroupRecommend,
   },
@@ -192,6 +208,7 @@ export default {
       posts: [],
 
       showNotice: false,
+      showMembers: false,
     }
   },
   computed: {
@@ -228,8 +245,8 @@ export default {
       return _.groupBy(members, 'role')
     },
     membersPreview () {
-      const { member = [], administrtor = [] } = this.membersGrouped
-      return [...administrtor, ...member]
+      const { member = [], administrator = [] } = this.membersGrouped
+      return [...administrator, ...member]
     },
   },
   watch: {
