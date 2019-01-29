@@ -1,7 +1,7 @@
 <template>
   <div class="p-group-post-edit">
     <main class="main-container">
-      <form @submit.prevent="onSubmit">
+      <form @submit.prevent>
         <input
           v-model="title"
           class="title-input"
@@ -9,10 +9,11 @@
           maxlength="20"
           placeholder="请在此输入20字以内的标题"
         >
-        <textarea
+        <MarkdownEditor
           v-model="content"
-          class="content-input"
-          placeholder="TODO: 此处替换为富文本编辑器"
+          class="markdown-editor"
+          init-content="123"
+          placeholder="请输入帖子内容， 支持 Markdown 语法"
         />
         <ICheckbox
           v-model="syncToFeed"
@@ -28,6 +29,7 @@
           type="primary"
           size="large"
           html-type="submit"
+          @click="onSubmit"
         >
           确定
         </IButton>
@@ -41,6 +43,7 @@
 </template>
 
 <script>
+import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
 import SideWidgetGroupRecommend from '@/components/group/SideWidgetGroupRecommend.vue'
 
 export default {
@@ -51,6 +54,7 @@ export default {
     }
   },
   components: {
+    MarkdownEditor,
     SideWidgetGroupRecommend,
   },
   data () {
@@ -128,11 +132,8 @@ export default {
         .placeholder-color(@text-info-color);
       }
 
-      .content-input {
+      .markdown-editor {
         width: 100%;
-        border: 1px solid @border-color-base;
-        padding: 8px;
-        min-height: 100px;
       }
 
       .sync-feed {

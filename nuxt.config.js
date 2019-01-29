@@ -24,7 +24,7 @@ module.exports = {
     ],
     script: [
       // fonticon
-      { src: '//at.alicdn.com/t/font_800619_840msqxbzxx.js' },
+      { src: '//at.alicdn.com/t/font_800619_qfgjd3y7yma.js' },
     ],
   },
 
