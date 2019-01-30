@@ -28,15 +28,23 @@
         >
           <svg class="icon sm"><use xlink:href="#icon-strike" /></svg>
         </button>
-
         <button
+          class="menubar-button"
+          :class="{ 'is-active': isActive.link() }"
+          title="删除线"
+          @click="commands.link"
+        >
+          <svg class="icon sm"><use xlink:href="#icon-link" /></svg>
+        </button>
+
+        <!-- <button
           class="menubar-button"
           :class="{ 'is-active': isActive.underline() }"
           title="下划线"
           @click="commands.underline"
         >
           <svg class="icon sm"><use xlink:href="#icon-underline" /></svg>
-        </button>
+        </button> -->
 
         <button
           class="menubar-button"
@@ -168,13 +176,13 @@
           >
             <svg class="icon sm"><use xlink:href="#icon-delete_row" /></svg>
           </button>
-          <button
+          <!-- <button
             class="menubar-button"
             title="合并选中的单元格"
             @click="commands.toggleCellMerge"
           >
             <svg class="icon sm"><use xlink:href="#icon-combine_cells" /></svg>
-          </button>
+          </button> -->
         </template>
 
         <button
@@ -238,7 +246,7 @@ import {
   Italic,
   Link,
   Strike,
-  Underline,
+  // Underline,
   History,
   Placeholder,
   Table,
@@ -246,6 +254,20 @@ import {
   TableCell,
   TableRow,
 } from 'tiptap-extensions'
+import Upndown from 'upndown'
+if (process.client) {
+  const und = new Upndown()
+
+  window.h2m = html => {
+    let result = ''
+    und.convert(html, (err, markdown) => {
+      if (err) console.error(err)
+      console.log(markdown)
+      result = markdown
+    })
+    return result
+  }
+}
 
 export default {
   name: 'MarkdownEditor',
@@ -291,7 +313,7 @@ export default {
         new Italic(),
         new Link(),
         new Strike(),
-        new Underline(),
+        // new Underline(),
         new History(),
         new Table(),
         new TableHeader(),
@@ -302,13 +324,14 @@ export default {
           emptyNodeText: this.placeholder,
         }),
       ],
-      onUpdate: (ctx) => {
-        console.log(ctx)
+      onUpdate: ({ getHTML, getJSON }) => {
+        console.log(getHTML())
+        console.log(getJSON())
       },
     })
   },
   beforeDestroy () {
-    this.editor.destory()
+    this.editor.destroy()
   },
 }
 </script>
