@@ -1,13 +1,14 @@
 <template>
   <div class="p-setting-index">
     <aside class="nav-wrap">
-      <nuxt-link to="/setting/profile"><svg class="icon"><use xlink:href="#icon-userinfo" /></svg> 基本资料</nuxt-link>
-      <nuxt-link to="/setting/tag"><svg class="icon"><use xlink:href="#icon-tag" /></svg> 标签管理</nuxt-link>
-      <nuxt-link to="/setting/certificate"><svg class="icon"><use xlink:href="#icon-auth" /></svg> 认证管理</nuxt-link>
-      <nuxt-link to="/setting/security"><svg class="icon"><use xlink:href="#icon-password" /></svg> 安全设置</nuxt-link>
-      <nuxt-link to="/setting/wallet"><svg class="icon"><use xlink:href="#icon-wallet" /></svg> 我的钱包</nuxt-link>
-      <nuxt-link to="/setting/currency"><svg class="icon"><use xlink:href="#icon-currency" /></svg> 我的积分</nuxt-link>
-      <nuxt-link to="/setting/account"><svg class="icon"><use xlink:href="#icon-account" /></svg> 账号管理</nuxt-link>
+      <nuxt-link
+        v-for="item in navMap"
+        :key="item.label"
+        :to="item.to"
+      >
+        <svg v-if="item.icon" class="icon"><use :xlink:href="item.icon" /></svg>
+        {{ item.label }}
+      </nuxt-link>
     </aside>
 
     <main class="container-wrap">
@@ -17,11 +18,26 @@
 </template>
 
 <script>
+const navMap = [
+  { label: '基本资料', icon: '#icon-userinfo', to: '/setting/profile' },
+  { label: '标签管理', icon: '#icon-tag', to: '/setting/tag' },
+  { label: '认证管理', icon: '#icon-auth', to: '/setting/certificate' },
+  { label: '安全设置', icon: '#icon-password', to: '/setting/security' },
+  { label: '我的钱包', icon: '#icon-wallet', to: '/setting/wallet' },
+  { label: '我的积分', icon: '#icon-currency', to: '/setting/currency' },
+  { label: '账号管理', icon: '#icon-account', to: '/setting/account' },
+]
+
 export default {
   name: 'SettingHome',
   middleware: ['requireAuth'],
   fetch ({ route, redirect }) {
     if (route.fullPath === '/setting') return redirect('/setting/profile')
+  },
+  data () {
+    return {
+      navMap,
+    }
   },
 }
 </script>

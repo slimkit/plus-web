@@ -119,10 +119,14 @@
       </SideWidget>
 
       <SideWidget>
-        <div class="manage">
+        <nuxt-link
+          to="manage"
+          append
+          class="manage"
+        >
           <svg class="icon"><use xlink:href="#icon-setting" /></svg>
           圈子管理
-        </div>
+        </nuxt-link>
       </SideWidget>
 
       <SideWidget
@@ -440,9 +444,9 @@ export default {
     }
 
     .manage {
+      display: block;
       padding: 16px;
       font-size: @font-size-large;
-      cursor: pointer;
 
       .icon {
         margin-right: 8px;
