@@ -118,7 +118,7 @@ export default {
   },
   mounted () {
     this.loadFromStorage()
-    this.getGroupCount()
+    this.getGroupsCount()
     this.getGroupCategories()
   },
   methods: {
@@ -126,7 +126,7 @@ export default {
       loadFromStorage: 'LOAD_FROM_STORAGE',
     }),
     ...mapActions('group', {
-      getGroupCount: 'getGroupCount',
+      getGroupsCount: 'getGroupsCount',
       getGroupCategories: 'getGroupCategories',
       getAllGroups: 'getAllGroups',
       getNearbyGroups: 'getNearbyGroups',

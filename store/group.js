@@ -1,6 +1,7 @@
 import { local } from '@/utils/storage'
 import { limit } from '@/utils'
 
+// 要写入 localStrorage 缓存的字段以及 key
 const LOCAL_KEY = {
   CATEGORY: 'group_category',
   RECOMMEND: 'group_recommend',
@@ -11,12 +12,14 @@ const LOCAL_KEY = {
 }
 
 export const state = () => ({
-  category: [],
-  all: [],
-  count: 0,
-  recommend: [],
-  joined: [],
-  nearby: [],
+  current: {}, // 当前访问的圈子
+  category: [], // 圈子分类
+  all: [], // 所有圈子
+  count: 0, // 所有圈子数量
+  recommend: [], // 推荐（热门）圈子
+  joined: [], // 我加入的圈子
+  nearby: [], // 附近的圈子
+  protocol: '', // 圈子协议
 })
 
 export const TYPES = {
@@ -26,6 +29,8 @@ export const TYPES = {
   SAVE_CATEGORY: 'SAVE_CATEGORY',
   SAVE_LIST: 'SAVE_LIST',
   DELETE_FEED: 'DELETE_FEED',
+  SAVE_CURRENT_GROUP: 'SAVE_CURRENT_GROUP',
+  SAVE_GROUP_PROTOCOL: 'SAVE_GROUP_PROTOCOL',
 }
 
 export const mutations = {
@@ -56,10 +61,18 @@ export const mutations = {
     state.count = count
     local.set(LOCAL_KEY.COUNT, count)
   },
+
+  [TYPES.SAVE_CURRENT_GROUP] (state, group) {
+    state.current = group
+  },
+
+  [TYPES.SAVE_GROUP_PROTOCOL] (state, protocol) {
+    state.protocol = protocol
+  },
 }
 
 export const actions = {
-  async getGroupCount ({ commit }) {
+  async getGroupsCount ({ commit }) {
     const { count } = await this.$axios.$get('/plus-group/groups/count')
     commit(TYPES.SAVE_COUNT, count)
   },
@@ -114,5 +127,16 @@ export const actions = {
     })
     const noMore = groups.length < limit
     return noMore
+  },
+
+  async getGroupDetail ({ commit }, groupId) {
+    const group = await this.$axios.$get(`/plus-group/groups/${groupId}`)
+    commit(TYPES.SAVE_CURRENT_GROUP, group)
+    return group
+  },
+
+  async getGroupProtocol ({ commit }) {
+    const { protocol } = await this.$axios.$get('/plus-group/groups/protocol')
+    commit(TYPES.SAVE_GROUP_PROTOCOL, protocol)
   },
 }

@@ -23,9 +23,6 @@ export default {
   components: {
     SideWidget,
   },
-  props: {
-    groups: { type: Array, default: () => [] },
-  },
   data () {
     return {
       loading: true,

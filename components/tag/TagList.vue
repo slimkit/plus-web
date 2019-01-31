@@ -35,7 +35,7 @@ export default {
     },
     onClick (tag) {
       this.$emit('click', tag)
-      this.isSelected(tag.id)
+      this.isSelected(tag.id) || this.closeable
         ? this.onRemove(tag)
         : this.onAppend(tag)
     },

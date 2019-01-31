@@ -40,7 +40,7 @@ export default {
      * 文件类型
      * @property {string} type enum{file: 旧文件系统 file id, storage: 新文件系统的 storage file node}
      */
-    type: { type: String, default: 'storage', validator: (type) => ['file', 'storage'].includes(type) },
+    type: { type: String, default: 'storage', validator: (type) => ['file', 'storage', 'blob'].includes(type) },
     value: { type: [Object, Array], default: () => ({}) }, // UploadObject 或其数组，取决于 multiple
     previewSize: { type: Object, default: () => ({ width: 1080 }), validator: validatePreviewSize }, // 预览图宽高限制 {width: undefined, height: undfined}
     readonly: { type: Boolean, default: false },
@@ -73,6 +73,8 @@ export default {
           return this.uploadByFile(file)
         case 'storage':
           return this.uploadByStorage(file)
+        case 'blob':
+          return this.getBlob(file)
       }
     },
     /**
@@ -158,6 +160,11 @@ export default {
 
       // 全部文件上传完毕
       this.update(files, 'finish')
+    },
+    async getBlob (file) {
+      file.value = file.file
+      file.status = 'success'
+      return file
     },
     /**
      * 旧文件上传
