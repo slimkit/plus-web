@@ -43,6 +43,38 @@ $ yarn test
 - vue 语法高亮, less 语法高亮，es6 语法支持
 - eslint (最好开启保存时自动修复 auto-fix on save)
 
+## 缓存策略
+
+### Vuex 数据管理
+
+## UI 组件
+
+组件方面使用 `iView` 作为原型组件库，使用时请添加前缀 `I`。
+
+``` html
+<IButton type="primary">确定</IButton>
+
+<IForm>
+  <IFormItem>
+    <IInput v-model="name" placeholder="默认有前缀 I" />
+    
+    <Select>
+      <Option>这两个组件没有前缀 `I`</Option>
+    </Select>
+  </IFormItem>
+</IForm>
+```
+
+> **注意**: `Select` `Option` 这两个组件**不能**添加前缀 `I`，否则会不能选中选择项
+
+### 按需加载
+
+iView 使用按需加载，如果要使用某组件，在 `plugins/iview` 中加载即可
+
+> 若导入后缺失样式，在 `assets/less/iview/components/index.less` 中将相应组件的注释打开即可
+
+iView 样式表使用 less 重新导入在 `assets/less/iview/` 下
+
 ## API
 
 ### 全局组件
@@ -93,10 +125,6 @@ export default {
 [API](https://zh.nuxtjs.org/api)
 
 ## iView
-
-iView 使用按需加载，如果要使用某组件，在 `plugins/iview` 中加载即可
-
-iView 样式表使用 less 重新导入在 `assets/less/iview/` 下
 
 [组件手册](https://www.iviewui.com/docs/guide/start)
 

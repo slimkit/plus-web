@@ -5,6 +5,7 @@ import {
   Button,
   Breadcrumb,
   BreadcrumbItem,
+  Checkbox,
   Form,
   FormItem,
   Input,
@@ -18,12 +19,15 @@ import {
   Spin,
   Tag,
   AutoComplete,
+  Select,
+  Option,
 } from 'iview'
 
 const components = {
   Button,
   Breadcrumb,
   BreadcrumbItem,
+  Checkbox,
   Form,
   FormItem,
   Input,
@@ -43,6 +47,10 @@ const install = function (Vue, opts = {}) {
   Object.keys(components).forEach(key => {
     Vue.component(`I${key}`, components[key])
   })
+
+  // 这两个需要特殊处理，不使用前缀`I`, 因为如果加了前缀使用会异常
+  Vue.component('Select', Select)
+  Vue.component('Option', Option)
 
   Vue.prototype.$Message = Message
   Vue.prototype.$Modal = Modal
