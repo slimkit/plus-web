@@ -254,20 +254,6 @@ import {
   TableCell,
   TableRow,
 } from 'tiptap-extensions'
-import Upndown from 'upndown'
-if (process.client) {
-  const und = new Upndown()
-
-  window.h2m = html => {
-    let result = ''
-    und.convert(html, (err, markdown) => {
-      if (err) console.error(err)
-      console.log(markdown)
-      result = markdown
-    })
-    return result
-  }
-}
 
 export default {
   name: 'MarkdownEditor',
