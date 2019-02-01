@@ -3,13 +3,20 @@
     <div class="main-wrap">
       <header class="group-header">
         <nav class="bread-wrap">
-          <IBreadcrumb separator=">">
+          <IBreadcrumb separator="&gt;">
             <IBreadcrumbItem to="/group">圈子</IBreadcrumbItem>
             <IBreadcrumbItem :to="`/group?type=${group.category_id}`">{{ group.category.name }}</IBreadcrumbItem>
             <IBreadcrumbItem>{{ group.name }}</IBreadcrumbItem>
           </IBreadcrumb>
 
-          <IInput search placeholder="输入关键字搜索" />
+          <IInput
+            v-model="searchKeyword"
+            search
+            :readonly="isPreview"
+            placeholder="输入关键字搜索"
+            @on-focus="capturePreview"
+            @on-search="onSearchPosts"
+          />
         </nav>
         <hr>
 
@@ -34,7 +41,7 @@
 
               <address>
                 <svg class="icon"><use xlink:href="#icon-position" /></svg>
-                <span class="primary-color text-cut">{{ group.location }}</span>
+                <span class="primary-color text-cut">{{ location }}</span>
               </address>
 
               <IButton
@@ -47,7 +54,6 @@
               <IButton
                 class="join-btn"
                 type="primary"
-                size="small"
                 shape="circle"
                 :disabled="!!joined.role || joinLock"
                 @click="onJoinGroup"
@@ -126,25 +132,36 @@
           @refresh="onRefresh"
           @loadmore="onLoadmore"
         >
-          <div v-if="!mixedPosts.length" v-empty:content />
+          <div
+            v-if="type !== 'search' && !mixedPosts.length"
+            key="no-content"
+            v-empty:content
+          />
+          <div
+            v-if="type === 'search' && !searchPosts.length"
+            key="no-search"
+            v-empty:search
+          />
           <GrouppostList :posts="mixedPosts" />
         </Loadmore>
       </main>
     </div>
 
     <aside class="side-wrap">
-      <nuxt-link to="post/create" append>
-        <IButton
-          class="post-btn"
-          type="primary"
-          shape="circle"
-          size="large"
-          long
-        >
-          <svg class="icon"><use xlink:href="#icon-writing" /></svg>
-          发帖
-        </IButton>
-      </nuxt-link>
+      <div :class="{preview: isPreview}" @click.capture="capturePreview">
+        <nuxt-link to="post/create" append>
+          <IButton
+            class="post-btn"
+            type="primary"
+            shape="circle"
+            size="large"
+            long
+          >
+            <svg class="icon"><use xlink:href="#icon-writing" /></svg>
+            发帖
+          </IButton>
+        </nuxt-link>
+      </div>
 
       <SideWidget
         key="notice"
@@ -265,6 +282,8 @@ export default {
       members: [],
       pinned: [],
       posts: [],
+      searchPosts: [],
+      searchKeyword: '',
 
       showNotice: false,
       showMembers: false,
@@ -287,8 +306,13 @@ export default {
       return false
     },
     type () {
+      const { type, keyword } = this.$route.query
       if (this.isPreview) return 'preview'
-      return this.$route.query.type || 'new'
+      if (keyword) return 'search'
+      return type || 'new'
+    },
+    keyword () {
+      return this.$route.query.keyword || ''
     },
     isMine () {
       return this.joined.role === 'founder'
@@ -306,6 +330,7 @@ export default {
       return params
     },
     mixedPosts () {
+      if (this.type === 'search') return this.searchPosts
       const pinneds = this.pinned.map(item => {
         item.pinned = true
         return item
@@ -320,9 +345,21 @@ export default {
       const { member = [], administrator = [] } = this.membersGrouped
       return [...administrator, ...member]
     },
+    location () {
+      let { location } = this.group
+      if (!location) {
+        const locationMap = ['水星', '金星', '火星', '土星', '地球']
+        location = locationMap[Math.floor(Math.random() * locationMap.length)]
+      }
+      return location
+    },
   },
   watch: {
-    type () {
+    type (val) {
+      if (val !== 'search') this.searchKeyword = ''
+      this.loader.beforeRefresh()
+    },
+    keyword () {
       this.loader.beforeRefresh()
     },
   },
@@ -338,18 +375,34 @@ export default {
   methods: {
     async onRefresh () {
       if (this.isPreview) return this.fetchPreviewPosts()
-
-      const params = this.fetchParams
-      const { pinneds, posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
-      this.posts = posts
-      this.pinned = pinneds
-      this.loader.afterRefresh(posts.length < limit)
+      let noMore = true
+      if (this.type === 'search') {
+        const params = { limit, group_id: this.groupId, keyword: this.keyword }
+        this.searchPosts = await this.$axios.$get('/plus-group/group-posts', { params })
+        noMore = this.searchPosts.length < limit
+      } else {
+        const params = this.fetchParams
+        const { pinneds, posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
+        this.posts = posts
+        this.pinned = pinneds
+        noMore = posts.length < limit
+      }
+      this.loader.afterRefresh(noMore)
     },
     async onLoadmore () {
-      const params = { ...this.fetchParams, offset: this.posts.length }
-      const { posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
-      this.posts.push(...posts)
-      this.loader.afterLoadmore(posts.length < limit)
+      let noMore = true
+      if (this.type === 'search') {
+        const params = { limit, group_id: this.groupId, keyword: this.keyword, offset: this.searchPosts.length }
+        const posts = await this.$axios.$get('/plus-group/group-posts', { params })
+        this.searchPosts.push(...posts)
+        noMore = posts.length < limit
+      } else {
+        const params = { ...this.fetchParams, offset: this.posts.length }
+        const { posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
+        this.posts.push(...posts)
+        noMore = posts.length < limit
+      }
+      this.loader.afterLoadmore(noMore)
     },
     async fetchPreviewPosts () {
       this.posts = await this.$axios.$get(`/group/groups/${this.groupId}/preview-posts`)
@@ -366,6 +419,9 @@ export default {
           this.$set(this.posts[index], 'user', usersMap[post.user_id])
         })
       })
+    },
+    async onSearchPosts (keyword) {
+      this.$router.replace({ query: { keyword } })
     },
     /**
      * 这里加载的成员只用于右边显示，加载更多成员放在组件里
@@ -410,6 +466,10 @@ export default {
 .p-group-detail {
   display: flex;
 
+  .preview > * {
+    cursor:not-allowed;
+  }
+
   .main-wrap {
     flex: auto;
     margin-right: 30px;
@@ -450,12 +510,29 @@ export default {
             background-color: @primary-color;
             color: #fff;
             font-weight: bold;
+
+            &::before {
+              content: '';
+              position: absolute;
+              top: 100%;
+              left: 0;
+              display: block;
+              width: 0;
+              height: 0;
+              border: 8px solid transparent;
+              border-top-color: darken(@primary-color, 20%);
+              border-right-color: darken(@primary-color, 20%);
+            }
           }
 
           .c-avatar.xl {
             width: 120px;
             height: 120px;
           }
+        }
+
+        .group-info {
+          flex: auto;
         }
 
         h1 {
@@ -513,7 +590,7 @@ export default {
       background-color: #fff;
 
       &.preview {
-        cursor:not-allowed;
+        cursor: not-allowed;
       }
 
       .nav-wrap {

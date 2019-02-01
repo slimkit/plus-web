@@ -7,7 +7,7 @@
 const supportType = ['content', 'search']
 const textMap = {
   content: '暂无相关内容',
-  search: '暂无相关内容',
+  search: '无搜索结果，换个词试试 ？',
 }
 
 function onBind (el, binding) {
