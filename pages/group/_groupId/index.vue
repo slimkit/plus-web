@@ -44,7 +44,27 @@
               >
                 举报圈子
               </IButton>
-              <IButton shape="circle" :disabled="true">已加入</IButton>
+              <IButton
+                class="join-btn"
+                type="primary"
+                size="small"
+                shape="circle"
+                :disabled="!!joined.role"
+                :loading="joinLock"
+                @click="onJoinGroup"
+              >
+                <template v-if="joined.role">
+                  已加入
+                </template>
+                <!-- TODO: 申请加入待审核, 接口无返回此数据 2019-01-25
+                <template v-else-if="">
+                </template>
+                -->
+                <template v-else>
+                  <svg class="icon sm"><use xlink:href="#icon-add" /></svg>
+                  加入
+                </template>
+              </IButton>
             </div>
           </div>
         </div>
@@ -184,6 +204,7 @@
 
 <script>
 import _ from 'lodash'
+import { mapState } from 'vuex'
 import { limit } from '@/utils'
 import TagList from '@/components/tag/TagList.vue'
 import GrouppostList from '@/components/group/GrouppostList.vue'
@@ -207,16 +228,19 @@ export default {
   },
   data () {
     return {
-      group: {},
       members: [],
       pinned: [],
       posts: [],
 
       showNotice: false,
       showMembers: false,
+      joinLock: false,
     }
   },
   computed: {
+    ...mapState('group', {
+      group: 'current',
+    }),
     groupId () {
       return Number(this.$route.params.groupId)
     },
@@ -225,6 +249,10 @@ export default {
     },
     isMine () {
       return this.logged && this.group.founder.id
+    },
+    joined () {
+      const { joined } = this.group
+      return joined || {}
     },
     fetchParams () {
       const params = { limit }
@@ -256,10 +284,11 @@ export default {
       this.loader.beforeRefresh()
     },
   },
-  async asyncData ({ params, $axios }) {
+  async asyncData ({ params, store, $axios }) {
     const { groupId } = params
-    const group = await $axios.$get(`/plus-group/groups/${groupId}`)
-    return { group }
+    if (store.state.group.current.id !== Number(groupId)) {
+      await store.dispatch('group/getGroupDetail', groupId)
+    }
   },
   mounted () {
     this.fetchGroupMembers()
@@ -297,6 +326,15 @@ export default {
         type: 'group',
         id: this.group.id,
       })
+    },
+    async onJoinGroup () {
+      this.joinLock = true
+      const { message } = await this.$axios.$put(`/plus-group/groups/${this.group.id}`)
+        .finally(() => {
+          this.joinLock = false
+        })
+      this.$Message.success(message)
+      await this.$store.dispatch('group/getGroupDetail', this.group.id)
     },
   },
 }

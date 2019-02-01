@@ -29,7 +29,7 @@
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
-        <GroupList :groups="groups" />
+        <GroupList :groups.sync="groups" />
       </Loadmore>
     </main>
 

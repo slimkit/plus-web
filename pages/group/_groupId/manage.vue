@@ -1,8 +1,13 @@
 <script>
+import { mapState } from 'vuex'
 import SettingTemplate from '@/pages/setting.vue'
 
 export default {
   name: 'GroupManage',
+  validate ({ params }) {
+    if (!params.groupId.match(/^\d+$/)) return false
+    return true
+  },
   extends: SettingTemplate,
   data () {
     const { groupId } = this.$route.params
@@ -15,9 +20,20 @@ export default {
       ],
     }
   },
+  computed: {
+    ...mapState('group', {
+      group: 'current',
+    }),
+  },
   fetch ({ route, redirect, params }) {
     const { groupId } = params
     if (route.name === 'group-groupId-manage') return redirect(`/group/${groupId}/manage/profile`)
+  },
+  async asyncData ({ params, store, $axios }) {
+    const groupId = Number(params.groupId)
+    if (store.state.group.current.id !== groupId) {
+      await store.dispatch('group/getGroupDetail', groupId)
+    }
   },
 }
 </script>

@@ -27,6 +27,8 @@
           type="primary"
           size="small"
           :disabled="!!joined.role"
+          :loading="joinLock"
+          @click="onJoinGroup"
         >
           <template v-if="joined.role">
             已加入
@@ -60,6 +62,7 @@ export default {
   data () {
     return {
       roleMap,
+      joinLock: false,
     }
   },
   computed: {
@@ -69,6 +72,17 @@ export default {
     },
     isManager () {
       return Object.keys(roleMap).includes(this.joined.role)
+    },
+  },
+  methods: {
+    async onJoinGroup () {
+      this.joinLock = true
+      const { message } = await this.$axios.$put(`/plus-group/groups/${this.group.id}`)
+        .finally(() => {
+          this.joinLock = false
+        })
+      this.$Message.success(this.$Message.success(message))
+      this.$emit('update', this.group.id)
     },
   },
 }
