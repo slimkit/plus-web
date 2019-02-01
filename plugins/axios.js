@@ -11,7 +11,7 @@ export default function ({ $axios, env, store, redirect }) {
   $axios.setHeader('Accept', 'application/json')
 
   $axios.onRequest(config => {
-    if (process.client && config.loading) {
+    if (process.client && config.progress) {
       $nuxt.$loading.start()
     }
     if (env.debug) {
@@ -27,14 +27,14 @@ export default function ({ $axios, env, store, redirect }) {
 
   $axios.onResponse(res => {
     const { config = {} } = res
-    if (process.client && config.loading) {
+    if (process.client && config.progress) {
       $nuxt.$loading.finish()
     }
   })
 
   $axios.onError(error => {
     const { config = {} } = error
-    if (process.client && config.loading) {
+    if (process.client && config.progress) {
       $nuxt.$loading.fail()
     }
 
