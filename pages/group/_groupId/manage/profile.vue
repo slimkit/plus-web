@@ -1,7 +1,7 @@
 <template>
   <div class="p-setting-profile">
     <nav class="nav-wrap">
-      <span>基本资料</span>
+      <span>圈子资料</span>
     </nav>
 
     <div class="container-wrap">
@@ -14,9 +14,10 @@
       >
         <div class="avatar-wrap">
           <Avatar
-            :user="user"
+            :user="group"
             size="xl"
             :link="false"
+            :square="true"
           />
           <IButton :loading="avatarUploadingLock" @click="$refs.uploader.select()">更换圈子头像</IButton>
           <Uploader
@@ -71,6 +72,7 @@
 
 <script>
 import _ from 'lodash'
+import { mapState } from 'vuex'
 import { parseSearchTree } from '@/utils/location'
 
 export default {
@@ -96,11 +98,9 @@ export default {
     }
   },
   computed: {
-    user () {
-      const user = _.cloneDeep(this.logged)
-      if (this.avatarPreview) user.avatar = { url: this.avatarPreview }
-      return user
-    },
+    ...mapState('group', {
+      group: 'current',
+    }),
     originForm () {
       return {
         ..._.pick(this.logged, ['name', 'bio', 'location', 'sex']),

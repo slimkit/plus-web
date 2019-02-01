@@ -53,6 +53,7 @@ export default {
       title: `发布帖子 - ${this.group.name}`,
     }
   },
+  middleware: ['reuqireAuth'],
   components: {
     MarkdownEditor,
     SideWidgetGroupRecommend,
@@ -94,6 +95,10 @@ export default {
   methods: {
     async fetchGroupInfo () {
       this.group = await this.$axios.$get(`/plus-group/groups/${this.groupId}`)
+      if (!this.group.joined) {
+        this.$Message.error('请先加入圈子')
+        this.$router.back()
+      }
     },
     async onSubmit () {
       if (!this.title) return this.$Message.error('帖子标题必填')

@@ -35,7 +35,11 @@
           <div class="group-info">
             <h1>
               {{ group.name }}
-              <IPoptip v-model="showShareMenu" class="more">
+              <IPoptip
+                v-model="showShareMenu"
+                class="more"
+                placement="bottom"
+              >
                 <svg class="icon pointer"><use xlink:href="#icon-more" /></svg>
 
                 <ul

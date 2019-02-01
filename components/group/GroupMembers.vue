@@ -7,36 +7,15 @@
     >
       <section v-if="founder" class="group">
         <h3>圈主</h3>
-        <ul class="member-list">
-          <li :key="`founder-${founder.id}`">
-            <nuxt-link class="user" :to="`/user/${founder.user_id}`">
-              <Avatar :user="founder.user" />
-              <span class="text-cut">{{ founder.user.name }}</span>
-            </nuxt-link>
-          </li>
-        </ul>
+        <GroupMemberList key="founder" :members="[founder]" />
       </section>
       <section v-if="administrators.length" class="group">
         <h3>管理员</h3>
-        <ul class="member-list">
-          <li v-for="member in administrators" :key="`admin-${member.id}`">
-            <nuxt-link class="user" :to="`/user/${member.user_id}`">
-              <Avatar :user="member.user" />
-              <span class="text-cut">{{ member.user.name }}</span>
-            </nuxt-link>
-          </li>
-        </ul>
+        <GroupMemberList key="administrators" :members="administrators" />
       </section>
       <section v-if="normals.length" class="group">
         <h3>一般成员</h3>
-        <ul class="member-list">
-          <li v-for="member in normals" :key="`member-${member.id}`">
-            <nuxt-link class="user" :to="`/user/${member.user_id}`">
-              <Avatar :user="member.user" />
-              <span class="text-cut">{{ member.user.name }}</span>
-            </nuxt-link>
-          </li>
-        </ul>
+        <GroupMemberList key="normals" :members="normals" />
       </section>
     </Loadmore>
   </div>
@@ -44,9 +23,13 @@
 
 <script>
 import { limit, getLastField } from '@/utils'
+import GroupMemberList from './GroupMemberList.vue'
 
 export default {
   name: 'GroupMembers',
+  components: {
+    GroupMemberList,
+  },
   props: {
     groupId: { type: Number, required: true },
     members: { type: Object, default: () => ({}) },
@@ -88,28 +71,5 @@ export default {
 
 <style lang="less" scoped>
 .c-group-members {
-  .member-list {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 16px;
-    margin: 16px 0;
-
-    .user {
-      display: flex;
-      align-items: center;
-
-      .c-avatar {
-        margin-right: 8px;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1080px) {
-  .c-group-members {
-    .member-list {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
 }
 </style>

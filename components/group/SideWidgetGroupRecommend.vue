@@ -1,6 +1,9 @@
 <template>
-  <SideWidget title="热门圈子" :loading="!groups.length">
-    <ISpin v-if="loading" fix />
+  <SideWidget
+    v-if="groups.length"
+    title="热门圈子"
+    :loading="loading"
+  >
     <ul class="hot-list">
       <li
         v-for="(group, index) in groups"
