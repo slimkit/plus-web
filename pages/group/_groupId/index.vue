@@ -33,7 +33,22 @@
           </figure>
 
           <div class="group-info">
-            <h1>{{ group.name }}</h1>
+            <h1>
+              {{ group.name }}
+              <IPoptip v-model="showShareMenu" class="more">
+                <svg class="icon pointer"><use xlink:href="#icon-more" /></svg>
+
+                <ul
+                  slot="content"
+                  class="options"
+                  @click="showShareMenu = false"
+                >
+                  <li><svg class="icon"><use xlink:href="#icon-weibo" /></svg>微博</li>
+                  <li><svg class="icon"><use xlink:href="#icon-qq" /></svg>QQ</li>
+                  <li><svg class="icon"><use xlink:href="#icon-weixin" /></svg>微信</li>
+                </ul>
+              </IPoptip>
+            </h1>
             <p class="description text-cut-2">{{ group.summary }}</p>
             <div class="meta-wrap">
               <span>帖子 <span class="primary-color">{{ group.posts_count || 0 }}</span></span>
@@ -287,6 +302,7 @@ export default {
 
       showNotice: false,
       showMembers: false,
+      showShareMenu: false,
       joinLock: false,
     }
   },
@@ -536,8 +552,14 @@ export default {
         }
 
         h1 {
+          display: flex;
           font-size: @font-size-large * 1.4;
           margin-bottom: 16px;
+
+          .more {
+            margin-left: auto;
+            font-weight: normal;
+          }
         }
 
         .description {
