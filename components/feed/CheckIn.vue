@@ -57,7 +57,7 @@ export default {
       this.loading = false
     },
     async onCheckIn () {
-      await this.$axios.$put('/user/checkin/currency')
+      await this.$axios.$put('/user/checkin/currency', {}, { progress: true })
       this.checkinCount += 1
       this.isChecked = true
       this.$Message.success(`签到成功，获得${this.info.attach_balance}积分！`)
