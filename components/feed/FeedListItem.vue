@@ -2,8 +2,8 @@
   <section class="c-feed-list-item">
     <div class="author-info">
       <div class="user-info">
-        <Avatar :user="feed.user" />
-        <span class="username">{{ feed.user.name }}</span>
+        <Avatar :user="postUser" />
+        <span class="username">{{ postUser.name }}</span>
       </div>
       <span v-if="pinned" class="pinned">置顶</span>
       <div
@@ -83,11 +83,12 @@
         </div>
       </div>
       <Collapse>
-        <FeedListItemCommentList
+        <ArticleListCommentList
           v-if="showComments"
-          :feed-id="feed.id"
-          :count.sync="feed.feed_comment_count"
-          :comments.sync="feed.comments"
+          :type="type"
+          :article="articleId"
+          :count.sync="commentCount"
+          :comments.sync="comments"
           :is-owner="isMine"
         />
       </Collapse>
@@ -96,29 +97,36 @@
 </template>
 
 <script>
-import FeedListItemCommentList from './FeedListItemCommentList.vue'
-import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
 import { getFileUrl } from '@/utils/file'
+import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
+import ArticleListCommentList from '@/components/common/ArticleListCommentList.vue'
 
 export default {
   name: 'FeedListItem',
   components: {
-    FeedListItemCommentList,
     FeedListItemImageLayout,
+    ArticleListCommentList,
   },
   props: {
     feed: { type: Object, required: true },
   },
   data () {
     return {
+      type: 'feed',
       hoverTime: false,
       showMore: false,
       showComments: false,
     }
   },
   computed: {
+    articleId () {
+      return this.feed.id
+    },
+    postUser () {
+      return this.feed.user || {}
+    },
     isMine () {
-      return this.logged && this.feed.user.id === this.logged.id
+      return this.logged && this.postUser.id === this.logged.id
     },
     images () {
       return this.feed.images || []
@@ -128,6 +136,22 @@ export default {
     },
     collected () {
       return this.feed.has_collect || false
+    },
+    comments: {
+      get () {
+        return this.feed.comments || []
+      },
+      set (val) {
+        this.feed.comments = val
+      },
+    },
+    commentCount: {
+      get () {
+        return this.feed.feed_comment_count || 0
+      },
+      set (val) {
+        this.feed.feed_comment_count = val
+      },
     },
   },
   methods: {

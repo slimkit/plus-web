@@ -2,8 +2,8 @@
   <section class="c-feed-list-item post">
     <div class="author-info">
       <div class="user-info">
-        <Avatar :user="feed.user" />
-        <span class="username">{{ feed.user.name }}</span>
+        <Avatar :user="postUser" />
+        <span class="username">{{ postUser.name }}</span>
       </div>
       <span v-if="pinned" class="pinned">置顶</span>
       <span v-if="feed.excellent_at" class="excellent">精华</span>

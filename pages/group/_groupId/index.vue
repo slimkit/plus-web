@@ -49,8 +49,7 @@
                 type="primary"
                 size="small"
                 shape="circle"
-                :disabled="!!joined.role"
-                :loading="joinLock"
+                :disabled="!!joined.role || joinLock"
                 @click="onJoinGroup"
               >
                 <template v-if="joined.role">
@@ -81,18 +80,53 @@
         </div>
       </header>
 
-      <main class="post-container">
+      <main
+        class="post-container"
+        :class="{preview: isPreview}"
+        @click.capture="capturePreview"
+      >
         <nav class="nav-wrap">
-          <nuxt-link :class="{'exact-active': type === 'new'}" :to="{query: {type: 'new'}}">最新帖子</nuxt-link>
-          <nuxt-link :class="{'exact-active': type === 'reply'}" :to="{query: {type: 'reply'}}">最新回复</nuxt-link>
-          <nuxt-link :class="{'exact-active': type === 'excellent'}" :to="{query: {type: 'excellent'}}">精华帖子</nuxt-link>
+          <template v-if="joined.role">
+            <nuxt-link
+              replace
+              :class="{'exact-active': type === 'new'}"
+              :to="{query: {type: 'new'}}"
+            >
+              最新帖子
+            </nuxt-link>
+            <nuxt-link
+              replace
+              :class="{'exact-active': type === 'reply'}"
+              :to="{query: {type: 'reply'}}"
+            >
+              最新回复
+            </nuxt-link>
+            <nuxt-link
+              replace
+              :class="{'exact-active': type === 'excellent'}"
+              :to="{query: {type: 'excellent'}}"
+            >
+              精华帖子
+            </nuxt-link>
+          </template>
+          <template v-else>
+            <nuxt-link
+              replace
+              :class="{'exact-active': type === 'preview'}"
+              :to="{query: {type: 'preview'}}"
+            >
+              帖子预览
+            </nuxt-link>
+          </template>
         </nav>
 
         <Loadmore
           ref="loader"
+          :show-bottom="mixedPosts.length > 0"
           @refresh="onRefresh"
           @loadmore="onLoadmore"
         >
+          <div v-if="!mixedPosts.length" v-empty:content />
           <GrouppostList :posts="mixedPosts" />
         </Loadmore>
       </main>
@@ -138,7 +172,7 @@
         </IModal>
       </SideWidget>
 
-      <SideWidget>
+      <SideWidget v-if="isManager">
         <nuxt-link
           to="manage"
           append
@@ -244,15 +278,23 @@ export default {
     groupId () {
       return Number(this.$route.params.groupId)
     },
-    type () {
-      return this.$route.query.type || 'new'
-    },
-    isMine () {
-      return this.logged && this.group.founder.id
-    },
     joined () {
       const { joined } = this.group
       return joined || {}
+    },
+    isPreview () {
+      if (!this.joined.role) return true
+      return false
+    },
+    type () {
+      if (this.isPreview) return 'preview'
+      return this.$route.query.type || 'new'
+    },
+    isMine () {
+      return this.joined.role === 'founder'
+    },
+    isManager () {
+      return ['founder', 'administrator'].includes(this.joined.role)
     },
     fetchParams () {
       const params = { limit }
@@ -295,6 +337,8 @@ export default {
   },
   methods: {
     async onRefresh () {
+      if (this.isPreview) return this.fetchPreviewPosts()
+
       const params = this.fetchParams
       const { pinneds, posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
       this.posts = posts
@@ -306,6 +350,22 @@ export default {
       const { posts } = await this.$axios.$get(`/plus-group/groups/${this.groupId}/posts`, { params })
       this.posts.push(...posts)
       this.loader.afterLoadmore(posts.length < limit)
+    },
+    async fetchPreviewPosts () {
+      this.posts = await this.$axios.$get(`/group/groups/${this.groupId}/preview-posts`)
+      this.loader.afterRefresh(true)
+
+      // 拼接 user 字段 （预览接口返回的数据不含 user 字段）
+      this.$nextTick(async () => {
+        const usersId = this.posts.map(post => post.user_id)
+        if (!usersId.length) return
+        const params = { fetch_by: 'id', id: usersId.join(',') }
+        const users = await this.$axios.$get('/users', { params })
+        const usersMap = _.keyBy(users, 'id')
+        this.posts.forEach((post, index) => {
+          this.$set(this.posts[index], 'user', usersMap[post.user_id])
+        })
+      })
     },
     /**
      * 这里加载的成员只用于右边显示，加载更多成员放在组件里
@@ -335,6 +395,12 @@ export default {
         })
       this.$Message.success(message)
       await this.$store.dispatch('group/getGroupDetail', this.group.id)
+    },
+    capturePreview (event) {
+      if (!this.isPreview) return
+      event.preventDefault()
+      event.stopPropagation()
+      this.$Message.error('请先加入圈子')
     },
   },
 }
@@ -421,7 +487,12 @@ export default {
           }
 
           .report-btn {
+            flex: none;
             margin-left: auto;
+          }
+
+          .join-btn {
+            flex: none;
           }
         }
       }
@@ -440,6 +511,10 @@ export default {
       margin-top: 30px;
       padding: 22px 40px;
       background-color: #fff;
+
+      &.preview {
+        cursor:not-allowed;
+      }
 
       .nav-wrap {
         margin-bottom: 16px;
