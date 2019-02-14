@@ -99,6 +99,6 @@ export default function ({ $axios, env, store, redirect }) {
     }
     console.error(error) // eslint-disable-line no-console
     const message = errorMessageHandler(error.tips)
-    Message.error(message)
+    if (process.client) Message.error(message)
   })
 }

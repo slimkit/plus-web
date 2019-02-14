@@ -2,8 +2,20 @@
   <div class="p-user-follow">
     <main class="follow-container">
       <nav class="nav-wrap">
-        <nuxt-link :to="{query: {type: 'fans'}}" :class="{'exact-active': type === 'fans'}">粉丝</nuxt-link>
-        <nuxt-link :to="{query: {type: 'following'}}" :class="{'exact-active': type === 'following'}">关注</nuxt-link>
+        <nuxt-link
+          replace
+          :to="{query: {type: 'fans'}}"
+          :class="{'exact-active': type === 'fans'}"
+        >
+          粉丝
+        </nuxt-link>
+        <nuxt-link
+          replace
+          :to="{query: {type: 'following'}}"
+          :class="{'exact-active': type === 'following'}"
+        >
+          关注
+        </nuxt-link>
       </nav>
 
       <Loadmore

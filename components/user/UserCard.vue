@@ -5,6 +5,7 @@
       <h3 class="username">
         <nuxt-link :to="`/user/${user.id}`">{{ user.name }}</nuxt-link>
         <button
+          v-if="!isMine"
           class="ts-btn sm"
           :class="{disabled: user.follower}"
           @click="onFollow"
@@ -35,6 +36,9 @@ export default {
     }
   },
   computed: {
+    isMine () {
+      return this.logged && this.logged.id === this.user.id
+    },
     followStatus () {
       return getFollowStatus(this.user.follower, this.user.following).label
     },
