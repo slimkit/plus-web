@@ -6,6 +6,14 @@
 @import "./iview/index";
 @import "./theme";
 
+.ivu-btn {
+  &-primary {
+    &[disabled] {
+      color: @btn-disable-color;
+    }
+  }
+}
+
 .ivu-poptip {
   &-body {
     padding: 0;
