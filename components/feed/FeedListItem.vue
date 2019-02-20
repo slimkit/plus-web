@@ -16,20 +16,22 @@
       </div>
     </div>
 
+    <div class="feed-content" @click="viewDetail">
+      {{ feed.feed_content }}
+    </div>
+    <AsyncFile
+      v-if="feed.video"
+      class="feed-video"
+      type="video"
+      :file="feed.video"
+    />
     <FeedListItemImageLayout
-      v-if="images.length"
+      v-else-if="images.length"
       class="feed-content"
       :images="images"
       @click="onImageView"
       @more="viewDetail"
     />
-    <div
-      v-else
-      class="feed-content"
-      @click="viewDetail"
-    >
-      {{ feed.feed_content }}
-    </div>
 
     <footer class="feed-meta">
       <div class="meta-wrap">
@@ -253,6 +255,10 @@ export default {
       font-weight: bold;
       cursor: pointer;
     }
+  }
+
+  .feed-video {
+    margin: 12px 0;
   }
 
   .feed-content {

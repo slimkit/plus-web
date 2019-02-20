@@ -28,6 +28,9 @@
       <hr>
 
       <main class="article-content">
+        <div v-if="video" class="video-wrap">
+          <AsyncFile type="video" :file="video" />
+        </div>
         <div v-if="images.length" class="image-wrap">
           <template v-for="(image, index) in images">
             <AsyncFile
@@ -138,6 +141,9 @@ export default {
     }),
     user () {
       return this.feed.user || {}
+    },
+    video () {
+      return this.feed.video || null
     },
     images () {
       return this.feed.images || []
@@ -302,6 +308,10 @@ export default {
       display: flex;
       justify-content: center;
       background-color: @background-color-base;
+      margin-bottom: 24px;
+    }
+
+    .video-wrap {
       margin-bottom: 24px;
     }
   }
