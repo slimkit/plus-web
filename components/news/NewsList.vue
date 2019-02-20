@@ -1,11 +1,11 @@
 <template>
-  <div class="c-news-list">
+  <ul class="c-news-list">
     <NewsListItem
-      v-for="news in news"
-      :key="`news-${news.id}`"
-      :news="news"
+      v-for="newsItem in news"
+      :key="newsItem.id"
+      :news="newsItem"
     />
-  </div>
+  </ul>
 </template>
 
 <script>
@@ -21,8 +21,18 @@ export default {
   },
 }
 </script>
-<style lang="less">
-.c-news-list{
+
+<style lang="less" scoped>
+.c-news-list {
   background: #fff;
+
+  .c-news-list-item {
+    padding: 24px 0;
+    .border(bottom);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
 }
 </style>

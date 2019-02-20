@@ -3,34 +3,35 @@
     <!-- <NewsListTop /> -->
     <main class="news-container">
       <nav class="news-cates-items">
-        <a
-          class="news-cates-item"
-          :class="{active: cateId === 0}"
-          @click="cateId = 0"
+        <nuxt-link :to="{query: {cate: 0}}" :class="{'exact-active': cateId === 0}">推荐</nuxt-link>
+        <nuxt-link
+          v-for="cate in categories"
+          :key="cate.id"
+          :to="{query: {cate: cate.id}}"
+          :class="{'exact-active': cateId === cate.id}"
         >
-          推荐
-        </a>
-        <a
-          v-for="item in cates"
-          :key="item.id"
-          class="news-cates-item"
-          :class="{active: cateId === item.id}"
-          @click="cateId = item.id"
-        >
-          {{ item.name }}
-        </a>
+          {{ cate.name }}
+        </nuxt-link>
       </nav>
-      <NewsList
-        class="news-list"
-        :news="news"
-      />
+
+      <Loadmore
+        ref="loader"
+        @refresh="onRefresh"
+        @loadmore="onLoadmore"
+      >
+        <NewsList class="news-list" :news="news" />
+      </Loadmore>
     </main>
-    <div class="news-right-container" />
+
+    <aside class="news-right-container" />
   </div>
 </template>
+
 <script>
-// import NewsListTop from '@/components/news/NewsListTop.vue'
+import { mapGetters, mapActions } from 'vuex'
+import { limit, getLastField } from '@/utils'
 import NewsList from '@/components/news/NewsList.vue'
+// import NewsListTop from '@/components/news/NewsListTop.vue'
 
 export default {
   name: 'NewsHome',
@@ -41,68 +42,70 @@ export default {
   data () {
     return {
       news: [],
-      cates: [],
     }
   },
   computed: {
-    cateId: {
-      get () {
-        return this.$route.query.cateId
-      },
-      set (val) {
-        this.$router.push({ ...this.$route, query: { cateId: val } })
-      },
+    ...mapGetters('news', {
+      categories: 'categories',
+    }),
+    cateId () {
+      return Number(this.$route.query.cate) || 0
+    },
+    params () {
+      return this.cateId ? { cate_id: this.cateId } : { recommend: 1 }
     },
   },
   watch: {
     cateId () {
-      this.fetchNews()
-    },
-    recommend () {
-      this.fetchNews()
+      this.loader.beforeRefresh()
     },
   },
-  async asyncData ({ $axios, query }) {
-    const { cateId } = query
-    const params = cateId ? { cate_id: cateId } : { recommend: 1 }
-    const news = await $axios.$get('/news', { params })
-    const cates = await $axios.$get('/news/cates')
-    return {
-      news: news,
-      cates: [...cates['my_cates'], ...cates['more_cates']],
-    }
+  mounted () {
+    this.getNewsCategories()
   },
   methods: {
-    async fetchNews () {
-      const params = this.cateId ? { cate_id: this.cateId } : { recommend: 1 }
+    ...mapActions('news', {
+      getNewsCategories: 'getNewsCategories',
+    }),
+    async onRefresh () {
+      this.news = await this.$axios.$get('/news', { params: this.params })
+      this.loader.afterRefresh(this.news.length < limit)
+    },
+    async onLoadmore () {
+      const params = { ...this.params, after: getLastField(this.news) }
       const news = await this.$axios.$get('/news', { params })
-      this.$data.news = news
+      this.news.push(...news)
+      this.loader.afterLoadmore(news.length < limit)
     },
   },
 }
 </script>
+
 <style lang="less" scoped>
 .p-news-index {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-}
 
   .news-cates-items {
     display: flex;
     background-color: #fff;
-    margin-bottom: 20px
-  }
-    .news-cates-item {
-      padding: 20px 20px;
+
+    > a {
+      padding: 8px 1em;
       color: @disabled-color;
-      &.active {
+
+      &.exact-active,
+      &:hover {
         color: @primary-color;
       }
     }
+  }
 
   .news-container {
-    width: 750px;
+    flex: auto;
+    background-color: #fff;
+    padding: 30px;
   }
 
   .news-right-container {
@@ -110,5 +113,8 @@ export default {
     top: 0;
     flex: none;
     width: @sidebar-width;
+    background-color: #fff;
   }
+}
+
 </style>

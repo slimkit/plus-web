@@ -1,24 +1,23 @@
 <template>
-  <section class="c-news-list-item">
+  <li class="c-news-list-item">
     <div class="news-image">
       <AsyncFile
-        class="news-"
-        type="image"
+        type="image-wrap"
+        :max-width="260"
+        :max-height="160"
         :file="news.image"
       />
     </div>
     <div class="news-body">
       <div class="news-content">
-        <a class="news-title">{{ news.title }}</a>
-        <div class="news-subject">
-          {{ news.subject }}
-        </div>
+        <h2 class="news-title text-cut-2">{{ news.title }}</h2>
+        <div class="news-subject text-cut-3"> {{ news.subject }} </div>
       </div>
       <div class="news-bottom">
-        {{ news.author }}·{{ news.created_at }}
+        {{ news.author }} · {{ news.created_at }}
       </div>
     </div>
-  </section>
+  </li>
 </template>
 
 <script>
@@ -33,44 +32,34 @@ export default {
 <style lang="less" scoped>
 .c-news-list-item {
   display: flex;
-  padding: 10px;
   height: 200px;
   justify-content: space-between;
-}
-  &:last-child {
-    border-bottom: none;
-  }
 
-  .news-image img{
-      width: 260px;
-      height: 180px;
+  .news-image {
+    flex: none;
+    width: 240px;
   }
 
   .news-body {
-      width: 450px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-  }
-    .news-content {
-      height: 160px;
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    margin-left: 24px;
+
+    .news-title {
+      margin-bottom: 12px;
     }
 
-      .news-title {
-        overflow:hidden;
-        text-overflow:ellipsis;
-        display:-webkit-box;
-        -webkit-box-orient:vertical;
-        -webkit-line-clamp:2;
-        font-size: @font-size-large;
-      }
+    .new-subject {
+      font-size: @font-size-base;
+      color: @text-color;
+    }
 
-      .new-subject {
-        font-size: @font-size-base;
-        color: @text-color;
-      }
     .news-bottom {
+      margin-top: auto;
       font-size: @font-size-small;
       color: @text-info-color;
     }
+  }
+}
 </style>
