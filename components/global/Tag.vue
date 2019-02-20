@@ -29,6 +29,7 @@ export default {
   border: none;
   background-color: @normal-color;
   cursor: pointer;
+  transition: color .3s,  background-color .3s;
 
   &.def {
     padding: 4px 12px;
@@ -45,7 +46,8 @@ export default {
     font-size: @font-size-large;
   }
 
-  &.selected {
+  &.selected,
+  &:hover {
     color: @primary-color;
     background-color: tint(@primary-color, 90%);
 

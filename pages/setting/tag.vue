@@ -4,17 +4,6 @@
       <span>选择标签</span>
     </nav>
 
-    <section v-for="tagGroup in tags" :key="tagGroup.id">
-      <p>{{ tagGroup.name }}</p>
-
-      <TagList
-        :tags="tagGroup.tags"
-        :selected-tags="userTags"
-        @append="onAppend"
-        @remove="onRemove"
-      />
-    </section>
-
     <div class="selected-tags">
       <p>最多可选 {{ maxCount }} 个标签，已选 <span class="primary-color">{{ selected.length }}</span> 个</p>
       <TagList
@@ -25,6 +14,18 @@
         @remove="onRemove"
       />
     </div>
+
+    <section v-for="tagGroup in tags" :key="tagGroup.id">
+      <p>{{ tagGroup.name }}</p>
+
+      <TagList
+        :tags="tagGroup.tags"
+        :selected-tags="userTags"
+        size="lg"
+        @append="onAppend"
+        @remove="onRemove"
+      />
+    </section>
   </div>
 </template>
 
@@ -92,6 +93,13 @@ export default {
   .user-tags {
     padding: 8px 8px 0;
     .border();
+  }
+
+  section {
+    /deep/ .c-tag.lg {
+      margin-bottom: 20px;
+      margin-right: 20px;
+    }
   }
 
 }
