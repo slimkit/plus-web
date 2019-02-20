@@ -1,12 +1,12 @@
 <template>
   <div class="p-user-collect">
     <nav class="cate-wrap">
-      <nuxt-link :to="{params: {type: 'feed'}}" replace>动态</nuxt-link>
+      <nuxt-link to="/user/collect/feed" replace> 动态 </nuxt-link>
       <!--
       <nuxt-link :to="{params: {type: 'news'}}" replace>文章</nuxt-link>
       <nuxt-link :to="{params: {type: 'answer'}}" replace>回答</nuxt-link>
-      <nuxt-link :to="{params: {type: 'post'}}" replace>帖子</nuxt-link>
       -->
+      <nuxt-link to="/user/collect/post" replace> 帖子 </nuxt-link>
     </nav>
 
     <main class="collect-wrap">
@@ -23,6 +23,7 @@ export default {
   fetch ({ route, redirect }) {
     if (route.name === 'user-index-collect') return redirect(301, '/user/collect/feed')
   },
+
 }
 </script>
 
@@ -31,8 +32,13 @@ export default {
   .cate-wrap {
     margin-bottom: 16px;
 
-    .active {
-      color: @primary-color;
+    > a {
+      margin-right: 1em;
+      color: @disabled-color;
+
+      &.exact-active {
+        color: @text-color;
+      }
     }
   }
 }

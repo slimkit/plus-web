@@ -35,11 +35,11 @@
         <div class="left">
           <span
             class="meta"
-            :class="{liked: feed.has_like}"
+            :class="{ liked }"
             @click="onLike"
           >
             <svg class="icon lg">
-              <use :xlink:href="feed.has_like ? '#icon-likered' : '#icon-like'" />
+              <use :xlink:href="liked ? '#icon-likered' : '#icon-like'" />
             </svg>
             <span>{{ feed.like_count }}</span>
           </span>
@@ -103,6 +103,9 @@ export default {
   computed: {
     collected () {
       return this.feed.collected || false
+    },
+    liked () {
+      return this.feed.has_like
     },
   },
   methods: {
