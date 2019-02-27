@@ -2,13 +2,19 @@ import { local } from '@/utils/storage'
 
 const LOCAL_KEY = {
   CATEGORIES: 'news_categories',
+  HOT: 'news_hot',
 }
 
 export const state = () => ({
-  categories: {
+  categories: { // 分类
     my: [],
     more: [],
-  }, // 分类
+  },
+  hot: { // 热门资讯
+    day: [],
+    week: [],
+    month: [],
+  },
 })
 
 export const getters = {
@@ -20,13 +26,18 @@ export const getters = {
 export const TYPES = {
   LOAD_FROM_STORAGE: 'LOAD_FROM_STORAGE',
   SAVE_CATEGORIES: 'SAVE_CATEGORIES',
+  SAVE_HOT: 'SAVE_HOT',
 }
 
 export const mutations = {
-  [TYPES.LOAD_FROM_STORAGE] (state) {
+  [TYPES.LOAD_FROM_STORAGE] (state, key) {
     // 加载分类
     const categories = local.get(LOCAL_KEY.CATEGORIES)
     if (categories) state.categories = categories
+
+    // 加载热门资讯
+    const hot = local.get(LOCAL_KEY.HOT)
+    if (hot) state.hot = hot
   },
 
   [TYPES.SAVE_CATEGORIES] (state, categories) {
@@ -35,12 +46,24 @@ export const mutations = {
     local.set(LOCAL_KEY.CATEGORIES, state.categories)
   },
 
+  [TYPES.SAVE_HOT] (state, { type, list = [] }) {
+    state.hot[type] = list
+    local.set(LOCAL_KEY.HOT, state.hot)
+  },
+
 }
 
 export const actions = {
-  async getNewsCategories ({ commit }) {
-    commit(TYPES.LOAD_FROM_STORAGE)
+  async getNewsCategories ({ store, commit }) {
+    if (!store.categories.my.length) commit(TYPES.LOAD_FROM_STORAGE)
     const { my_cates: my, more_cates: more } = await this.$axios.$get('/news/cates')
     commit(TYPES.SAVE_CATEGORIES, { my, more })
+  },
+
+  async getHotNews ({ store, commit }, type) {
+    if (!store.hot.week.length) commit(TYPES.LOAD_FROM_STORAGE)
+    const params = { type, limit: 10 }
+    const list = await this.$axios.$get('/news/ranks', { params })
+    commit(TYPES.SAVE_HOT, { type, list })
   },
 }

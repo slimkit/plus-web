@@ -23,28 +23,42 @@
       </Loadmore>
     </main>
 
-    <aside class="news-right-container" />
+    <aside class="news-right-container">
+      <SideWidget :title="热门资讯">
+        <ul>
+          <li v-for="item in hot" :key="item.id">
+            {{ item.name }}
+          </li>
+        </ul>
+      </SideWidget>
+    </aside>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import { limit, getLastField } from '@/utils'
-import NewsList from '@/components/news/NewsList.vue'
 // import NewsListTop from '@/components/news/NewsListTop.vue'
+import NewsList from '@/components/news/NewsList.vue'
+import SideWidget from '@/components/common/SideWidget.vue'
 
 export default {
   name: 'NewsHome',
   components: {
     // NewsListTop,
     NewsList,
+    SideWidget,
   },
   data () {
     return {
       news: [],
+      hotType: 'month',
     }
   },
   computed: {
+    ...mapState('news', {
+      hotNews: 'hot',
+    }),
     ...mapGetters('news', {
       categories: 'categories',
     }),
@@ -53,6 +67,9 @@ export default {
     },
     params () {
       return this.cateId ? { cate_id: this.cateId } : { recommend: 1 }
+    },
+    hot () {
+      return this.hotNews[this.hotType] || []
     },
   },
   watch: {
@@ -111,6 +128,7 @@ export default {
   .news-right-container {
     position: sticky;
     top: 0;
+    display: flex;
     flex: none;
     width: @sidebar-width;
     background-color: #fff;
