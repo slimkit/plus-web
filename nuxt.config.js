@@ -103,6 +103,11 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    loaders: {
+      less: {
+        javascriptEnabled: true,
+      },
+    },
     extractCSS: true,
     vendor: [
       'iview',
@@ -127,9 +132,6 @@ module.exports = {
           exclude: /(node_modules)/,
         })
       }
-
-      // less loader
-      ctx.loaders.less.javascriptEnabled = true
     },
   },
 }
