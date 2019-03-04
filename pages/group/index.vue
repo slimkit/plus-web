@@ -122,7 +122,7 @@ export default {
     this.getGroupCategories()
 
     // 预加载我加入的圈子，用于进入圈外发帖页面和我加入圈子列表
-    if (!this.joined.length) {
+    if (this.logged && !this.joined.length) {
       setTimeout(() => {
         this.getJoinedGroups()
       }, 1000)
