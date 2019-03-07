@@ -1,11 +1,14 @@
 <template>
   <header class="c-common-header">
     <div class="container">
+      <!-- LOGO -->
       <nuxt-link
         :to="{name: 'index'}"
         class="logo"
         :style="{backgroundImage: `url(${require('@/assets/images/logo.png')})`}"
       />
+
+      <!-- 导航栏 -->
       <nav v-once class="main-navigation">
         <ul class="menu">
           <nuxt-link
@@ -19,6 +22,8 @@
           </nuxt-link>
         </ul>
       </nav>
+
+      <!-- 右侧 搜索 + 登录状态 -->
       <div class="extra">
         <IPoptip v-if="logged" trigger="hover">
           <nuxt-link class="user-wrap" to="/user">
@@ -72,6 +77,7 @@
 <script>
 const menu = [
   { name: 'feed', label: '动态', to: '/feed' },
+  { name: 'topic', label: '话题', to: '/topic' },
   { name: 'news', label: '资讯', to: '/news' },
   { name: 'group', label: '圈子', to: '/group' },
   // { name: 'qa', label: '问答', to: '#' },
