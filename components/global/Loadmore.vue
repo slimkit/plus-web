@@ -17,7 +17,14 @@
     >
       <Loading v-if="loading" />
       <span v-else-if="noMore">没有更多</span>
-      <span v-else>加载更多</span>
+      <span v-else-if="loadCount < limit">加载更多</span>
+      <IButton
+        v-else
+        type="primary"
+        @click="beforeLoadmore"
+      >
+        点击加载更多
+      </IButton>
     </div>
   </div>
 </template>
@@ -62,6 +69,7 @@ export default {
       refreshing: false,
       loading: false,
       inBottom: false,
+      loadCount: 0,
     }
   },
   mounted () {
@@ -70,10 +78,12 @@ export default {
   methods: {
     beforeRefresh () {
       if (this.refreshing) return
+      this.loadCount = 0
       this.refreshing = true
       this.$emit('refresh')
     },
     afterRefresh (noMore = true) {
+      this.loadCount = 1
       this.refreshing = false
       this.noMore = noMore
     },
@@ -85,11 +95,13 @@ export default {
     afterLoadmore (noMore = true) {
       this.loading = false
       this.noMore = noMore
+      this.loadCount++
     },
     onTrigger (inView) {
       if (this.showBottom && inView) {
         this.inBottom = true
-        this.beforeLoadmore()
+
+        if (this.loadCount <= this.limit) this.beforeLoadmore()
       } else {
         this.inBottom = false
       }
@@ -139,7 +151,7 @@ export default {
     overflow: hidden;
 
     &.loading {
-      height: 24px;
+      height: 36px;
       margin-top: 24px;
       opacity: 1;
       transform: scaleY(1);
