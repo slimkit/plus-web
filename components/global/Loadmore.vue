@@ -6,9 +6,12 @@
     <div class="loadmore-main">
       <slot />
     </div>
+
+    <!-- 加载触发器 -->
+    <div v-loadmore.lazy="onTrigger" />
+
     <div
       v-if="showBottom && !refreshing"
-      v-loadmore.lazy="onTrigger"
       class="loadmore-foot"
       :class="{loading: loading || inBottom}"
     >
@@ -21,11 +24,15 @@
 
 <script>
 import _ from 'lodash'
+import { noop } from '@/utils'
 
-function onScroll (callback, event) {
+// 预触发高度
+const triggerHeight = 600
+
+function onScroll (callback = noop, event) {
   const offsetY = this.getBoundingClientRect().top
   const innerHeight = window.innerHeight
-  const trigger = offsetY - innerHeight - 600 < 0
+  const trigger = offsetY - innerHeight - triggerHeight < 0
   if (trigger) callback(trigger)
 }
 
