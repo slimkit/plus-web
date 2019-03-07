@@ -1,7 +1,7 @@
 <template>
   <aside v-once class="c-float-widget">
     <ul class="float-items">
-      <li v-return-top="300" class="float-item return-top">
+      <li v-return-top="{offset: 300, duration: 0}" class="float-item return-top">
         <svg class="icon">
           <use xlink:href="#icon-uptop" />
         </svg>
@@ -18,29 +18,32 @@
 <script>
 import _ from 'lodash'
 
+let timer = null
+
 export default {
   name: 'FloatWidget',
   directives: {
     returnTop (el, binding) {
+      const { duration, offset } = binding.value
       // 点击返回顶部
       el.addEventListener('click', function (event) {
-        const scroll = function () {
-          let top = document.documentElement.scrollTop || document.body.scrollTop
-          const speed = Math.floor(-top / 3)
-          if (top > 40) {
-            requestAnimationFrame(scroll)
-          } else {
-            top = 0
+        cancelAnimationFrame(timer)
+        const startTime = +new Date()
+        const top = document.documentElement.scrollTop || document.body.scrollTop
+        timer = requestAnimationFrame(function func () {
+          const time = duration - Math.max(0, startTime - +new Date() + duration)
+          document.documentElement.scrollTop = document.body.scrollTop = time * -top / duration + top
+          timer = requestAnimationFrame(func)
+          if (time === duration) {
+            cancelAnimationFrame(timer)
           }
-          document.documentElement.scrollTop = document.body.scrollTop = top + speed
-        }
-        requestAnimationFrame(scroll)
+        })
       })
 
-      // 滑动距离超过 binding.value 后才显示 (with throttle)
+      // 滑动距离超过 offset 后才显示 (with throttle)
       window.addEventListener('scroll', _.throttle(function (event) {
         const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-        if (scrollTop > binding.value) {
+        if (scrollTop > offset) {
           el.classList.add('active')
         } else {
           el.classList.remove('active')
