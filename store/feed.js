@@ -69,13 +69,7 @@ export const mutations = {
 }
 
 export const actions = {
-  /**
-   * 获取动态列表
-   *
-   * @author mutoe <mutoe@foxmail.com>
-   * @param {*} params
-   * @returns {boolean} noMore
-   */
+
   async getFeedList ({ commit }, params) {
     const isRefresh = !params.after && !params.hot
     if (isRefresh) commit(TYPES.LOAD_FROM_STORAGE) // 先从 storage 中填充数据
@@ -86,6 +80,7 @@ export const actions = {
     } else {
       commit(TYPES.SAVE_LIST, { type: params.type, list: feeds, append: true })
     }
-    return feeds.length < 15
+    const noMore = feeds.length < 15
+    return noMore
   },
 }

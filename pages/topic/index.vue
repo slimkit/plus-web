@@ -6,6 +6,7 @@
           v-for="(item, name) in typeMap"
           :key="name"
           :to="{query: {type: name}}"
+          replace
           class="sort-item"
           :class="{active: type === name}"
         >

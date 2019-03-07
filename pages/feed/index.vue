@@ -8,15 +8,16 @@
 
       <nav class="sort-items">
         <template v-for="(item, name) in typeMap">
-          <a
+          <nuxt-link
             v-if="!item.requireAuth || logged"
             :key="name"
+            :to="{query: {type:name}}"
+            replace
             class="sort-item"
             :class="{active: type === name}"
-            @click="type = name"
           >
             {{ item.label }}
-          </a>
+          </nuxt-link>
         </template>
       </nav>
       <Loadmore
@@ -94,18 +95,13 @@ export default {
       const { checkin = {} } = this.boot
       return checkin.switch
     },
-    type: {
-      get () {
-        const { type } = this.$route.query
-        if (
-          !Object.keys(typeMap).includes(type) ||
+    type () {
+      const { type } = this.$route.query
+      if (
+        !Object.keys(typeMap).includes(type) ||
           (typeMap[type].requireAuth && !this.logged)
-        ) return defaultType
-        return type
-      },
-      set (val) {
-        this.$router.push({ query: { type: val } })
-      },
+      ) return defaultType
+      return type
     },
     feeds () {
       return this[this.type]
@@ -141,7 +137,7 @@ export default {
       this.loader.afterLoadmore(noMore)
     },
     onPost (id) {
-      this.type = 'new'
+      this.$router.replace({ query: { type: 'new' } })
       this.loader.beforeRefresh()
     },
     onDelete (feedId) {
