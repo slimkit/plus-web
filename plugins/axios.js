@@ -48,7 +48,7 @@ export default function ({ $axios, env, store, redirect }) {
           error.tips = cookie.get('access_token')
             ? '登陆失效，请重新登录'
             : '请先登录'
-          cookie.remove('access_token')
+          store.dispatch('auth/logout')
           redirect('/auth/login')
           break
         case 403:
