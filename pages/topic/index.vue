@@ -93,7 +93,7 @@ export default {
   methods: {
     ...mapActions('topic', {
       getHotTopicList: 'getHotTopicList',
-      getTopicList: 'getTopicList',
+      getNewTopicList: 'getTopicList',
     }),
     async onRefresh () {
       const noMore = await this.getTopics()
@@ -127,7 +127,9 @@ export default {
     padding: 30px;
 
     .sort-items {
-      padding-bottom: 0;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      .border(bottom);
 
       .sort-item {
         margin-right: 20px;

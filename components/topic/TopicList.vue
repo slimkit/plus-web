@@ -4,6 +4,7 @@
       v-for="topic in topics"
       :key="topic.id"
       :topic="topic"
+      :height="180"
     />
   </ul>
 </template>
@@ -24,6 +25,12 @@ export default {
 
 <style lang="less" scoped>
 .c-topic-list{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 30px;
 
+  .c-topic-list-item {
+    height: 180px;
+  }
 }
 </style>
