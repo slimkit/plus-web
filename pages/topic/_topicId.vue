@@ -1,9 +1,11 @@
 <template>
   <div class="p-topic-detail">
     <main class="main-container">
-      <header class="topic-cover" :style="{backgroundImage: `url(${topic.logo.url})`}">
+      <header class="topic-cover" :style="{backgroundImage: cover.url && `url(${cover.url})`}">
+        <ISpin v-if="!topic.name" fix />
+
         <h1 class="name">{{ topic.name }}</h1>
-        <p class="creator">{{ topic.creator_user_id }}</p>
+        <p class="creator" :class="{show: creator.name}">创建者：{{ creator.name }}</p>
         <p class="description">{{ topic.desc }}</p>
 
         <IButton
@@ -28,7 +30,7 @@
     </main>
 
     <aside class="side-container">
-      <SideWidget class="topic-widget">
+      <SideWidget class="topic-widget" :loading="!topic.name">
         <IButton
           shape="circle"
           size="large"
@@ -56,7 +58,11 @@
         </IButton>
       </SideWidget>
 
-      <SideWidget key="topic-info" class="info-widget">
+      <SideWidget
+        key="topic-info"
+        class="info-widget"
+        :loading="!topic.name"
+      >
         <template #default>
           <ul class="topic-info">
             <li>动态 <strong>{{ topic.feeds_count || 0 }}</strong></li>
@@ -106,11 +112,15 @@ export default {
       topic: {},
       participants: [], // 参与话题的人
       feeds: [],
+      creator: {}, // 话题创建者
     }
   },
   computed: {
     topicId () {
       return +this.$route.params.topicId
+    },
+    cover () {
+      return this.topic.logo || {}
     },
     isFollow: {
       get () {
@@ -121,15 +131,15 @@ export default {
       },
     },
   },
-  async asyncData ({ $axios, params }) {
-    const { topicId } = params
-    const topic = await $axios.$get(`/feed/topics/${topicId}`)
-    return { topic }
-  },
   mounted () {
+    this.fetchTopic()
     this.fetchParticipants()
   },
   methods: {
+    async fetchTopic () {
+      this.topic = await this.$axios.$get(`/feed/topics/${this.topicId}`)
+      this.creator = await this.$axios.$get(`/users/${this.topic.creator_user_id}`)
+    },
     async onRefresh () {
       const params = { limit }
       const list = await this.$axios.$get(`/feed/topics/${this.topicId}/feeds`, { params })
@@ -206,6 +216,12 @@ export default {
       .creator {
         margin: 24px 0 16px;
         font-size: @font-size-large;
+        opacity: 0;
+        transition: opacity .6s;
+
+        &.show {
+          opacity: 1;
+        }
       }
 
       .report-btn {
