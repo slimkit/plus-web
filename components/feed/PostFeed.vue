@@ -107,10 +107,15 @@ export default {
     PostFeedImages,
   },
   mixins: [ PostText ],
+  props: {
+    // 默认添加的话题
+    topic: { type: Number, default: null },
+  },
   data () {
     return {
       loading: false,
       images: [],
+      topics: [],
       mark: null, // 唯一标识
 
       needPay: false,
@@ -133,6 +138,7 @@ export default {
         feed_content: this.content,
         feed_from: 1,
         feed_mark: this.mark,
+        topics: this.topics,
         images,
         amount: amount || undefined,
       }
@@ -160,6 +166,9 @@ export default {
     showPayModal (val) {
       if (val) this.selectedAmount = this.amountItems[0]
     },
+  },
+  mounted () {
+    if (this.topic) this.topics.push(this.topic)
   },
   methods: {
     async beforeSubmit () {

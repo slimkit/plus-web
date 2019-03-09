@@ -19,6 +19,12 @@
         </IButton>
       </header>
 
+      <Collapse>
+        <div v-if="logged && showPost" class="post-container">
+          <PostFeed :topic="topicId" @post="afterPostFeed" />
+        </div>
+      </Collapse>
+
       <Loadmore
         ref="loader"
         class="feeds-container"
@@ -99,6 +105,7 @@ import _ from 'lodash'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotTopics from '@/components/topic/SideWidgetHotTopics.vue'
 import FeedList from '@/components/feed/FeedList.vue'
+import PostFeed from '@/components/feed/PostFeed.vue'
 import { limit, getLastField } from '@/utils'
 
 export default {
@@ -107,6 +114,7 @@ export default {
     SideWidget,
     SideWidgetHotTopics,
     FeedList,
+    PostFeed,
   },
   data () {
     return {
@@ -114,6 +122,8 @@ export default {
       participants: [], // 参与话题的人
       feeds: [],
       creator: {}, // 话题创建者
+
+      showPost: false,
     }
   },
   computed: {
@@ -176,6 +186,10 @@ export default {
       this.isFollow = false
       this.$Message.success('取消关注话题')
     },
+    async afterPostFeed () {
+      this.loader.beforeRefresh()
+      this.showPost = false
+    },
   },
 }
 </script>
@@ -237,6 +251,12 @@ export default {
       padding: 30px;
       background-color: #fff;
     }
+  }
+
+  .post-container {
+    padding: 30px;
+    margin-bottom: 30px;
+    background-color: #fff;
   }
 
   .side-container {
