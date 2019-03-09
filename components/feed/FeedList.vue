@@ -4,7 +4,7 @@
       v-for="feed in feeds"
       :key="`${feed.pinned ? 'pinned' : 'feed'}-${feed.id}`"
       :feed="feed"
-      @delete="onDelete"
+      @after-delete="afterDelete"
     />
   </div>
 </template>
@@ -21,8 +21,8 @@ export default {
     feeds: { type: Array, default: () => [] },
   },
   methods: {
-    onDelete (feedId) {
-      this.$emit('delete', feedId)
+    afterDelete (feedId) {
+      this.$emit('after-delete', feedId)
     },
   },
 }

@@ -208,7 +208,7 @@ export default {
         loading: true,
         onOk: async () => {
           await this.$axios.$delete(`/feeds/${this.feed.id}/currency`)
-          this.$emit('delete', this.feed.id)
+          this.$emit('after-delete', this.feed.id)
           this.$Message.success('删除成功')
           this.$Modal.remove()
         },

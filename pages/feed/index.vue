@@ -28,7 +28,7 @@
         <FeedList
           class="feed-list"
           :feeds="feeds"
-          @delete="onDelete"
+          @after-delete="afterDeleteFeed"
         />
       </Loadmore>
     </main>
@@ -140,7 +140,7 @@ export default {
       this.$router.replace({ query: { type: 'new' } })
       this.loader.beforeRefresh()
     },
-    onDelete (feedId) {
+    afterDeleteFeed (feedId) {
       this.$store.commit('feed/DELETE_FEED', { feedId, type: this.type })
     },
   },

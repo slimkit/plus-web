@@ -31,7 +31,7 @@
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
-        <FeedList :feeds="feeds" />
+        <FeedList :feeds="feeds" @after-delete="afterDeleteFeed" />
       </Loadmore>
     </main>
 
@@ -189,6 +189,9 @@ export default {
     async afterPostFeed () {
       this.loader.beforeRefresh()
       this.showPost = false
+    },
+    afterDeleteFeed (feedId) {
+      this.feeds = _.filter(this.feeds, feed => feed.id !== feedId)
     },
   },
 }
