@@ -1,6 +1,6 @@
 <template>
   <li class="c-feed-list-item-comment-list-item">
-    {{ comment.user.name }}:
+    {{ user.name }}:
     <span v-if="comment.reply">回复<nuxt-link :to="`/user/${comment.reply.id}`">{{ comment.reply.name }}</nuxt-link>: </span>
     {{ comment.body }}
     <span v-if="pinned" class="pinned">置顶</span>
@@ -27,8 +27,11 @@ export default {
     isOwner: { type: Boolean, default: false }, // 是否属于自己的动态
   },
   computed: {
+    user () {
+      return this.comment.user || this.logged || {}
+    },
     isMine () {
-      return this.logged && this.comment.user.id === this.logged.id
+      return this.logged && this.user.id === this.logged.id
     },
     pinned () {
       return this.comment.pinned

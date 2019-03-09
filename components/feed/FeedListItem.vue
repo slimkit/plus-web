@@ -87,6 +87,7 @@
       <Collapse>
         <ArticleListCommentList
           v-if="showComments"
+          :feed-id="feed.id"
           :type="type"
           :article="articleId"
           :count.sync="commentCount"
