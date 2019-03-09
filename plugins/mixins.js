@@ -24,13 +24,13 @@ const mixins = {
     },
   },
   methods: {
-    checkAuth () {
+    async checkAuth () {
       if (!this.logged) {
         this.$Message.error('请先登录')
         this.$router.push('/auth/login')
-        return false
+        return Promise.reject('Unauthorized')
       }
-      return true
+      return Promise.resolve()
     },
   },
 }

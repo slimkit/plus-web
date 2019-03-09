@@ -106,8 +106,8 @@ export default {
     },
   },
   watch: {
-    type (val) {
-      if (val === 'joined' && !this.checkAuth()) return
+    async type (val) {
+      if (val === 'joined') await this.checkAuth()
       this.cateGroups = []
       this.loader.beforeRefresh()
     },

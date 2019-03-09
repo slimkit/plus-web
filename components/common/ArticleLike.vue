@@ -55,14 +55,16 @@ export default {
     }
   },
   methods: {
-    onCollect () {
+    async onCollect () {
+      await this.checkAuth()
       if (this.collectLock) return
       this.collectLock = true
       this.$emit('collect', () => {
         this.collectLock = false
       })
     },
-    onLike () {
+    async onLike () {
+      await this.checkAuth()
       if (this.likeLock) return
       this.likeLock = true
       this.$emit('like', () => {

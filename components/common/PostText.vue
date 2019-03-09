@@ -54,8 +54,8 @@ export default {
   },
   methods: {
     showMention () {},
-    onSubmit () {
-      this.checkAuth()
+    async onSubmit () {
+      await this.checkAuth()
       this.$emit('submit', this.content, this.replyUser)
     },
     reply (user) {

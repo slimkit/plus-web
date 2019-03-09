@@ -36,7 +36,7 @@
           size="large"
           :type="isFollow ? undefined : 'primary'"
           :long="true"
-          @click="isFollow ? onUnfollow : onFollow"
+          @click="checkAuth() && isFollow ? onUnfollow : onFollow"
         >
           <span v-if="isFollow" title="点击取消关注">
             已关注话题
@@ -52,6 +52,7 @@
           size="large"
           type="primary"
           :long="true"
+          @click="checkAuth() && (showPost = !showPost)"
         >
           <svg class="icon"><use xlink:href="#icon-edit" /></svg>
           发动态

@@ -166,6 +166,7 @@ export default {
       window.open(originalUrl)
     },
     async onLike () {
+      await this.checkAuth()
       if (!this.feed.has_like) {
         await this.$axios.$post(`/feeds/${this.feed.id}/like`)
         this.feed.has_like = true
@@ -178,6 +179,7 @@ export default {
       }
     },
     async onCollect () {
+      await this.checkAuth()
       if (!this.collected) {
         await this.$axios.$post(`/feeds/${this.feed.id}/collections`)
         this.$Message.success('收藏成功')
