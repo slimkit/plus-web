@@ -36,7 +36,7 @@ export default {
     type: { type: String, default: '', validator: val => ['', 'user'].includes(val) },
     users: { type: Array, default: () => [] },
     title: { type: String, default: '' },
-    loading: { type: Boolean, default: false },
+    loading: { type: [Boolean, Number], default: false },
   },
 }
 </script>
