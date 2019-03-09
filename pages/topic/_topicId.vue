@@ -5,6 +5,16 @@
         <h1 class="name">{{ topic.name }}</h1>
         <p class="creator">{{ topic.creator_user_id }}</p>
         <p class="description">{{ topic.desc }}</p>
+
+        <IButton
+          class="report-btn"
+          ghost
+          shape="circle"
+          size="small"
+          @click="onReport"
+        >
+          举报
+        </IButton>
       </header>
 
       <Loadmore
@@ -125,6 +135,12 @@ export default {
       const users = await this.$axios.$get('/users', { params: { id: id.join(',') } })
       this.participants = _.sortBy(users, user => user.id !== this.topic.creator_user_id)
     },
+    onReport () {
+      this.$root.$emit('report', {
+        type: 'topic',
+        id: this.topicId,
+      })
+    },
   },
 }
 </script>
@@ -158,7 +174,7 @@ export default {
         background-color: rgba(0,0,0,.4);
       }
 
-      .name, .creator, .description {
+      .name, .creator, .description, .report-btn {
         position: relative;
         z-index: 1;
       }
@@ -166,6 +182,13 @@ export default {
       .creator {
         margin: 24px 0 16px;
         font-size: @font-size-large;
+      }
+
+      .report-btn {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        padding: 3px 12px;
       }
     }
 

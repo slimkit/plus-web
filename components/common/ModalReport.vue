@@ -31,6 +31,7 @@ const apiMap = {
   answer (id, reason) { return this.$axios.$post(`/question-answers/${id}/reports`, { reason }) },
   comment (id, reason) { return this.$axios.$post(`/report/comments/${id}`, { reason }) },
   user (id, reason) { return this.$axios.$post(`/report/users/${id}`, { reason }) },
+  topic (id, reason) { return this.$axios.$put(`/user/report-feed-topics/${id}`, { message: reason }) },
 }
 
 export default {
