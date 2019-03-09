@@ -1,31 +1,33 @@
 <template>
   <div class="c-side-widget">
     <h3 v-if="title" class="title">{{ title }}</h3>
-    <div class="panel" :class="{'no-title': !title}">
-      <!-- 用户列表挂件 -->
-      <template v-if="type === 'user'">
-        <slot />
-        <ul class="user-list">
-          <li
-            v-for="userItem in users"
-            :key="userItem.id"
-            class="user-item"
-          >
-            <Avatar :user="userItem" />
-            <span class="username text-cut">{{ userItem.name }}</span>
-          </li>
-        </ul>
-      </template>
-
-      <!-- 通用挂件 -->
-      <template v-else>
-        <slot />
-      </template>
-
+    <!-- loading content -->
+    <div>
       <ISpin v-if="loading" fix />
-    </div>
+      <div class="panel" :class="{'no-title': !title}">
+        <!-- 用户列表挂件 -->
+        <template v-if="type === 'user'">
+          <slot />
+          <ul class="user-list">
+            <li
+              v-for="userItem in users"
+              :key="userItem.id"
+              class="user-item"
+            >
+              <Avatar :user="userItem" />
+              <span class="username text-cut">{{ userItem.name }}</span>
+            </li>
+          </ul>
+        </template>
 
-    <slot name="footer" />
+        <!-- 通用挂件 -->
+        <template v-else>
+          <slot />
+        </template>
+      </div>
+
+      <slot name="footer" />
+    </div>
   </div>
 </template>
 
