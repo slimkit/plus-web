@@ -35,7 +35,7 @@
           size="large"
           shape="circle"
         >
-          <h3><svg class="icon"><use xlink:href="#icon-topic4" /></svg> 创建话题</h3>
+          <svg class="icon"><use xlink:href="#icon-topic4" /></svg> 创建话题
         </IButton>
       </SideWidget>
 

@@ -32,11 +32,17 @@
         <IButton
           shape="circle"
           size="large"
-          type="primary"
+          :type="isFollow ? undefined : 'primary'"
           :long="true"
+          @click="isFollow ? onUnfollow : onFollow"
         >
-          <svg class="icon"><use xlink:href="#icon-topic" /></svg>
-          关注话题
+          <span v-if="isFollow" title="点击取消关注">
+            已关注话题
+          </span>
+          <template v-else>
+            <svg class="icon"><use xlink:href="#icon-topic" /></svg>
+            关注话题
+          </template>
         </IButton>
 
         <IButton
@@ -106,6 +112,14 @@ export default {
     topicId () {
       return +this.$route.params.topicId
     },
+    isFollow: {
+      get () {
+        return this.topic.has_followed
+      },
+      set (val) {
+        this.topic.has_followed = val
+      },
+    },
   },
   async asyncData ({ $axios, params }) {
     const { topicId } = params
@@ -140,6 +154,16 @@ export default {
         type: 'topic',
         id: this.topicId,
       })
+    },
+    async onFollow () {
+      await this.$axios.$put(`/user/feed-topics/${this.topicId}`)
+      this.isFollow = true
+      this.$Message.success('关注话题成功')
+    },
+    async onUnfollow () {
+      await this.$axios.$delete(`/user/feed-topics/${this.topicId}`)
+      this.isFollow = false
+      this.$Message.success('取消关注话题')
     },
   },
 }
