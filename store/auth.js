@@ -40,7 +40,7 @@ export const actions = {
     try {
       // 提交注销请求
       await this.$axios.$post('/auth/logout', {}, {
-        validateStatue: s => [200, 401].includes(s),
+        validateStatus: s => [200, 401].includes(s),
         timeout: 3000,
       })
     } catch (error) {
