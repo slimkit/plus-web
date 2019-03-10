@@ -21,17 +21,15 @@
       <IPoptip v-model="showMore" placement="bottom">
         <svg class="icon lg more"><use xlink:href="#icon-more" /></svg>
 
-        <ul
-          slot="content"
-          class="options"
-          @click="showMore = false"
-        >
-          <template v-if="isOwner || isMine">
-            <li v-if="!pinned" @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> {{ isOwner ? '评论置顶' : '申请置顶' }}</li>
-            <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除评论</li>
-          </template>
-          <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
-        </ul>
+        <template v-slot:content>
+          <ul class="options" @click="showMore = false">
+            <template v-if="isOwner || isMine">
+              <li v-if="!pinned" @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> {{ isOwner ? '评论置顶' : '申请置顶' }}</li>
+              <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除评论</li>
+            </template>
+            <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+          </ul>
+        </template>
       </IPoptip>
     </div>
   </li>

@@ -64,20 +64,18 @@
           >
             <svg class="icon lg"><use xlink:href="#icon-more" /></svg>
 
-            <ul
-              slot="content"
-              class="options"
-              @click="showMore = false"
-            >
-              <li :class="{active: collected}" @click="onCollect"><svg class="icon"><use xlink:href="#icon-collect" /></svg> {{ collected ? '已收藏' : '收藏' }}</li>
-              <template v-if="isMine">
-                <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
-                <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
-              </template>
-              <template v-else>
-                <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
-              </template>
-            </ul>
+            <template v-slot:content>
+              <ul class="options" @click="showMore = false">
+                <li :class="{active: collected}" @click="onCollect"><svg class="icon"><use xlink:href="#icon-collect" /></svg> {{ collected ? '已收藏' : '收藏' }}</li>
+                <template v-if="isMine">
+                  <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
+                  <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
+                </template>
+                <template v-else>
+                  <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+                </template>
+              </ul>
+            </template>
           </IPoptip>
         </div>
       </div>

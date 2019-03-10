@@ -20,19 +20,17 @@
             管理 <svg class="icon"><use xlink:href="#icon-setting" /></svg>
           </span>
 
-          <ul
-            slot="content"
-            class="options"
-            @click.capture="showMenu[index] = false"
-          >
-            <li
-              v-for="item in menu"
-              :key="item.label"
-              @click="item.method(member)"
-            >
-              {{ item.label }}
-            </li>
-          </ul>
+          <template v-slot:content>
+            <ul class="options" @click.capture="showMenu[index] = false">
+              <li
+                v-for="item in menu"
+                :key="item.label"
+                @click="item.method(member)"
+              >
+                {{ item.label }}
+              </li>
+            </ul>
+          </template>
         </IPoptip>
       </div>
     </li>

@@ -85,18 +85,20 @@
             />
           </div>
 
-          <div slot="content" class="tags-wrap">
-            <section v-for="tagCate in tags" :key="`cate-${tagCate.id}`">
-              <h4>{{ tagCate.name }}</h4>
-              <TagList
-                :tags="tagCate.tags"
-                size="sm"
-                :selected-tags="selectedTags"
-                @append="onTagAppend"
-                @remove="onTagRemove"
-              />
-            </section>
-          </div>
+          <template v-slot:content>
+            <div class="tags-wrap">
+              <section v-for="tagCate in tags" :key="`cate-${tagCate.id}`">
+                <h4>{{ tagCate.name }}</h4>
+                <TagList
+                  :tags="tagCate.tags"
+                  size="sm"
+                  :selected-tags="selectedTags"
+                  @append="onTagAppend"
+                  @remove="onTagRemove"
+                />
+              </section>
+            </div>
+          </template>
         </IPoptip>
       </IFormItem>
 

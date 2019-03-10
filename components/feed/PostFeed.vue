@@ -38,14 +38,12 @@
           <i class="drop-icon" />
         </div>
 
-        <ul
-          slot="content"
-          class="options"
-          @click="showPayOptions = false"
-        >
-          <li @click="needPay = false">免费</li>
-          <li @click="needPay = true">付费</li>
-        </ul>
+        <template v-slot:content>
+          <ul class="options" @click="showPayOptions = false">
+            <li @click="needPay = false">免费</li>
+            <li @click="needPay = true">付费</li>
+          </ul>
+        </template>
       </IPoptip>
       <IButton
         type="primary"

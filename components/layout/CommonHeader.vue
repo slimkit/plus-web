@@ -35,7 +35,7 @@
             <span class="username text-cut">{{ logged.name }}</span>
           </nuxt-link>
 
-          <template slot="content">
+          <template v-slot:content>
             <ul class="popup">
               <nuxt-link class="popup-item" :to="`/user/${logged.id}`">个人主页</nuxt-link>
               <hr>

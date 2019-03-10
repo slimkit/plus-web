@@ -17,22 +17,20 @@
         >
           <svg class="icon lg"><use xlink:href="#icon-more" /></svg>
 
-          <ul
-            slot="content"
-            class="options"
-            @click="showMore = false"
-          >
-            <template v-if="isManager">
-              <li v-if="!post.excellent_at" @click="onExcellent(true)"><svg class="icon"><use xlink:href="#icon-text" /></svg> 设为精华</li>
-              <li v-else @click="onExcellent(false)"><svg class="icon"><use xlink:href="#icon-text" /></svg> 取消精华</li>
+          <template v-slot:content>
+            <ul class="options" @click="showMore = false">
+              <template v-if="isManager">
+                <li v-if="!post.excellent_at" @click="onExcellent(true)"><svg class="icon"><use xlink:href="#icon-text" /></svg> 设为精华</li>
+                <li v-else @click="onExcellent(false)"><svg class="icon"><use xlink:href="#icon-text" /></svg> 取消精华</li>
 
-              <li v-if="!post.pinned" @click="onPinned(true)"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 置顶帖子</li>
-              <li v-else @click="onPinned(false)"><svg class="icon"><use xlink:href="#icon-pinned1" /></svg> 撤销置顶</li>
-            </template>
+                <li v-if="!post.pinned" @click="onPinned(true)"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 置顶帖子</li>
+                <li v-else @click="onPinned(false)"><svg class="icon"><use xlink:href="#icon-pinned1" /></svg> 撤销置顶</li>
+              </template>
 
-            <li @click="onRepostable"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
-            <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
-          </ul>
+              <li @click="onRepostable"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
+              <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+            </ul>
+          </template>
         </IPoptip>
       </header>
 

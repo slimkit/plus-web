@@ -38,14 +38,12 @@
           <IPoptip v-model="showMore" placement="bottom">
             <button class="button more"><svg class="icon lg"><use xlink:href="#icon-more" /></svg></button>
 
-            <ul
-              slot="content"
-              class="options"
-              @click="showMore = false"
-            >
-              <li @click="onReward"><svg class="icon"><use xlink:href="#icon-money" /></svg> 打赏</li>
-              <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
-            </ul>
+            <template v-slot:content>
+              <ul class="options" @click="showMore = false">
+                <li @click="onReward"><svg class="icon"><use xlink:href="#icon-money" /></svg> 打赏</li>
+                <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+              </ul>
+            </template>
           </IPoptip>
         </div>
       </nav>
