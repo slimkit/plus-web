@@ -9,6 +9,17 @@
         <p class="description">{{ topic.desc }}</p>
 
         <IButton
+          v-if="isCreator"
+          class="report-btn"
+          ghost
+          shape="circle"
+          size="small"
+          :to="`/topic/${topicId}/edit`"
+        >
+          编辑话题
+        </IButton>
+        <IButton
+          v-else
           class="report-btn"
           ghost
           shape="circle"
@@ -32,7 +43,7 @@
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
-        <div v-if="!feeds.length" v-empty:content/>
+        <div v-if="!feeds.length" v-empty:content />
 
         <FeedList
           :feeds="feeds"
@@ -128,6 +139,7 @@
 
 <script>
 import _ from 'lodash'
+import { mapState, mapActions } from 'vuex'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotTopics from '@/components/topic/SideWidgetHotTopics.vue'
 import FeedList from '@/components/feed/FeedList.vue'
@@ -144,9 +156,11 @@ export default {
     PostFeed,
     TopicParticipants,
   },
+  validate ({ params }) {
+    return /^\d+$/.test(params.topicId)
+  },
   data () {
     return {
-      topic: {},
       participants: [], // 参与话题的人
       feeds: [],
       creator: {}, // 话题创建者
@@ -156,6 +170,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('topic', {
+      topic: 'current',
+    }),
     topicId () {
       return +this.$route.params.topicId
     },
@@ -174,13 +191,16 @@ export default {
       return this.logged && this.logged.id === this.topic.creator_user_id
     },
   },
-  mounted () {
+  async mounted () {
     this.fetchTopic()
     this.fetchParticipants()
   },
   methods: {
+    ...mapActions('topic', {
+      getTopic: 'getTopic',
+    }),
     async fetchTopic () {
-      this.topic = await this.$axios.$get(`/feed/topics/${this.topicId}`)
+      await this.getTopic(this.topicId)
       this.creator = await this.$axios.$get(`/users/${this.topic.creator_user_id}`)
     },
     async onRefresh () {

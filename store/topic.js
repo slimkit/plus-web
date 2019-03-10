@@ -7,6 +7,7 @@ const LOCAL_KEY = {
 export const state = () => ({
   hot: [], // 热门话题
   new: [], // 最新话题
+  current: {}, // 当前话题
 })
 
 export const getters = {}
@@ -14,6 +15,7 @@ export const getters = {}
 export const TYPES = {
   LOAD_FROM_STORAGE: 'LOAD_FROM_STORAGE',
   SAVE_LIST: 'SAVE_LIST',
+  SAVE_TOPIC: 'SAVE_TOPIC',
 }
 
 export const mutations = {
@@ -31,6 +33,10 @@ export const mutations = {
       state[type].push(...list)
     }
   },
+
+  [TYPES.SAVE_TOPIC] (state, topic) {
+    state.current = topic
+  },
 }
 
 export const actions = {
@@ -46,5 +52,10 @@ export const actions = {
     if (isRefresh) commit(TYPES.LOAD_FROM_STORAGE)
     const list = await this.$axios.$get('/feed/topics', { params })
     commit(TYPES.SAVE_LIST, { type: 'new', list, append: !isRefresh })
+  },
+
+  async getTopic ({ commit }, topicId) {
+    const topic = await this.$axios.$get(`/feed/topics/${topicId}`)
+    commit(TYPES.SAVE_TOPIC, topic)
   },
 }

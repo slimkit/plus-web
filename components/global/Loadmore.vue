@@ -60,7 +60,7 @@ export default {
   },
   props: {
     autoLoad: { type: Boolean, default: true },
-    showBottom: { type: Boolean, default: true },
+    showBottom: { type: [Boolean, Number], default: true },
     limit: { type: [Boolean, Number], default: 3 },
   },
   data () {

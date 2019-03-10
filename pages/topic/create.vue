@@ -1,6 +1,6 @@
 <template>
   <main class="p-topic-create">
-    <h1>创建话题</h1>
+    <h1>{{ topicId ? '编辑话题' : '创建话题' }}</h1>
 
     <IForm
       ref="form"
@@ -20,7 +20,16 @@
             v-else
             class="image"
             :style="{backgroundImage: `url(${cover.preview})`}"
-          />
+          >
+            <IButton
+              class="change-btn"
+              ghost
+              shape="circle"
+              size="small"
+            >
+              改变话题封面
+            </IButton>
+          </div>
 
           <Uploader
             ref="uploader"
@@ -36,6 +45,7 @@
           v-model="name"
           size="large"
           placeholder="输入话题标题（必填）"
+          :disabled="!!topicId"
         />
       </IFormItem>
 
@@ -51,6 +61,7 @@
           type="primary"
           html-type="submit"
           size="large"
+          :disabled="!modifiedForm"
         >
           提交
         </IButton>
@@ -83,6 +94,9 @@ export default {
         logo: this.cover.value,
       }
     },
+    modifiedForm () {
+      return !!this.name
+    },
   },
   methods: {
     beforeSubmit () {
@@ -108,6 +122,7 @@ export default {
   .cover {
     margin: 16px 0;
     height: 400px;
+    cursor: pointer;
 
     .default {
       display: flex;
@@ -118,13 +133,19 @@ export default {
       height: 100%;
       font-size: 150%;
       color: @disabled-color;
-      cursor: pointer;
     }
 
     .image {
+      position: relative;
       width: 100%;
       height: 100%;
       background: center / cover no-repeat;
+
+      .change-btn {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+      }
     }
   }
 
