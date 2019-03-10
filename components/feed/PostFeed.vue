@@ -317,6 +317,11 @@ export default {
   .tools {
     display: flex;
 
+    .ivu-poptip {
+      display: flex;
+      align-items: center;
+    }
+
     .tool {
       padding-left: 0;
       padding-right: 0;
