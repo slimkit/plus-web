@@ -28,9 +28,12 @@
       <Loadmore
         ref="loader"
         class="feeds-container"
+        :show-bottom="feeds.length"
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
+        <div v-if="!feeds.length" v-empty:content/>
+
         <FeedList
           :feeds="feeds"
           :hide-topic="topicId"

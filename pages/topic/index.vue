@@ -29,14 +29,16 @@
 
     <div class="right-container">
       <SideWidget class="topic-widget">
-        <IButton
-          type="primary"
-          :long="true"
-          size="large"
-          shape="circle"
-        >
-          <svg class="icon"><use xlink:href="#icon-topic4" /></svg> 创建话题
-        </IButton>
+        <nuxt-link to="/topic/create">
+          <IButton
+            type="primary"
+            :long="true"
+            size="large"
+            shape="circle"
+          >
+            <svg class="icon"><use xlink:href="#icon-topic4" /></svg> 创建话题
+          </IButton>
+        </nuxt-link>
       </SideWidget>
 
       <SideWidgetHotTopics
