@@ -33,6 +33,18 @@
       @more="viewDetail"
     />
 
+    <ul v-if="topics.length" class="selected-topics">
+      <Tag
+        v-for="t in topics"
+        v-if="t.id !== hideTopic"
+        :key="t.id"
+        :selected="true"
+        size="sm"
+      >
+        <nuxt-link :to="`/topic/${t.id}`">{{ t.name }}</nuxt-link>
+      </Tag>
+    </ul>
+
     <footer class="feed-meta">
       <div class="meta-wrap">
         <div class="left">
@@ -110,6 +122,7 @@ export default {
   },
   props: {
     feed: { type: Object, required: true },
+    hideTopic: { type: Number, default: null },
   },
   data () {
     return {
@@ -131,6 +144,9 @@ export default {
     },
     images () {
       return this.feed.images || []
+    },
+    topics () {
+      return this.feed.topics.filter(t => t.id !== this.hideTopic)
     },
     pinned () {
       return this.feed.pinned || false
@@ -276,6 +292,19 @@ export default {
     .image {
       max-width: 100%;
       max-height: 400px;
+    }
+  }
+
+  .selected-topics {
+    display: flex;
+    margin-bottom: 8px;
+
+    > li {
+      margin-right: 8px;
+
+      a {
+        color: @primary-color;
+      }
     }
   }
 

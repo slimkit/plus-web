@@ -3,6 +3,7 @@
     <FeedListItem
       v-for="feed in feeds"
       :key="`${feed.pinned ? 'pinned' : 'feed'}-${feed.id}`"
+      v-bind="$attrs"
       :feed="feed"
       @after-delete="afterDelete"
     />

@@ -31,7 +31,11 @@
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
-        <FeedList :feeds="feeds" @after-delete="afterDeleteFeed" />
+        <FeedList
+          :feeds="feeds"
+          :hide-topic="topicId"
+          @after-delete="afterDeleteFeed"
+        />
       </Loadmore>
     </main>
 
