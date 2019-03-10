@@ -1,7 +1,13 @@
 <template>
   <li class="c-tag" :class="[size, {selected}]">
     <span class="tag-text"><slot>{{ text }}</slot></span>
-    <svg v-if="closeable" class="icon"><use xlink:href="#icon-close" /></svg>
+    <svg
+      v-if="closeable"
+      class="icon"
+      @click="onClose"
+    >
+      <use xlink:href="#icon-close" />
+    </svg>
   </li>
 </template>
 
@@ -18,6 +24,11 @@ export default {
     return {
 
     }
+  },
+  methods: {
+    onClose () {
+      this.$emit('close')
+    },
   },
 }
 </script>

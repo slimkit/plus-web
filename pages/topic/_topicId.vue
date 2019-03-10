@@ -21,7 +21,7 @@
 
       <Collapse>
         <div v-if="logged && showPost" class="post-container">
-          <PostFeed :topic="topicId" @post="afterPostFeed" />
+          <PostFeed :topic="topic" @post="afterPostFeed" />
         </div>
       </Collapse>
 
@@ -38,13 +38,15 @@
     <aside class="side-container">
       <SideWidget class="topic-widget" :loading="!topic.name">
         <IButton
+          v-if="!logged || !isCreator"
           shape="circle"
           size="large"
           :type="isFollow ? undefined : 'primary'"
           :long="true"
-          @click="checkAuth() && isFollow ? onUnfollow : onFollow"
+          @click="checkAuth() && isFollow ? onUnfollow() : onFollow()"
         >
           <span v-if="isFollow" title="点击取消关注">
+            <svg class="icon"><use xlink:href="#icon-topic2" /></svg>
             已关注话题
           </span>
           <template v-else>
@@ -135,11 +137,14 @@ export default {
     },
     isFollow: {
       get () {
-        return this.topic.has_followed
+        return this.logged && this.topic.has_followed
       },
       set (val) {
         this.topic.has_followed = val
       },
+    },
+    isCreator () {
+      return this.logged && this.logged.id === this.topic.creator_user_id
     },
   },
   mounted () {

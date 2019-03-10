@@ -11,6 +11,21 @@
       />
       <span class="count">还可输入 <span>{{ maxlength - content.length }}</span> 字</span>
     </div>
+
+    <Collapse>
+      <ul v-if="topics.length" class="selected-topics">
+        <Tag
+          v-for="t in topics"
+          :key="t.id"
+          :selected="true"
+          size="sm"
+          :text="t.name"
+          :closeable="!topic || t.id !== topic.id"
+          @close="removeTopic(t.id)"
+        />
+      </ul>
+    </Collapse>
+
     <div class="tools">
       <IButton
         type="text"
@@ -20,14 +35,27 @@
         <svg class="icon"><use xlink:href="#icon-img" /></svg>
         图片
       </IButton>
-      <IButton
-        type="text"
-        class="button tool"
-        @click="showMention"
+
+      <IPoptip
+        key="topic-selector"
+        v-model="showTopic"
+        placement="bottom"
       >
+        <IButton type="text" class="button tool">
+          <svg class="icon"><use xlink:href="#icon-topic4" /></svg>
+          话题
+        </IButton>
+
+        <template v-slot:content>
+          <TopicSelector @select="addTopic" />
+        </template>
+      </IPoptip>
+
+      <IButton type="text" class="button tool">
         <svg class="icon"><use xlink:href="#icon-mention" /></svg>
         某人
       </IButton>
+
       <IPoptip
         v-model="showPayOptions"
         class="need-pay"
@@ -96,18 +124,21 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import PostText from '@/components/common/PostText.vue'
 import PostFeedImages from './PostFeedImages.vue'
+import TopicSelector from '@/components/topic/TopicSelector.vue'
 
 export default {
   name: 'PostFeed',
   components: {
     PostFeedImages,
+    TopicSelector,
   },
   mixins: [ PostText ],
   props: {
     // 默认添加的话题
-    topic: { type: Number, default: null },
+    topic: { type: Object, default: null },
   },
   data () {
     return {
@@ -122,6 +153,8 @@ export default {
       selectedAmount: null,
       customAmount: null,
       setAmountIndex: null,
+      showTopic: false,
+      showMention: false,
     }
   },
   computed: {
@@ -136,7 +169,7 @@ export default {
         feed_content: this.content,
         feed_from: 1,
         feed_mark: this.mark,
-        topics: this.topics,
+        topics: this.topics.map(t => t.id),
         images,
         amount: amount || undefined,
       }
@@ -227,12 +260,27 @@ export default {
       this.needPay = false
       this.setAmountIndex = undefined
       this.images = []
+      this.topics = this.topic ? [this.topic] : []
       this.mark = null
       this.loading = false
     },
     onSetAmount (index) {
       this.setAmountIndex = index
       this.showPayModal = true
+    },
+    addTopic (topic) {
+      if (this.topics.length >= 5) {
+        this.$Message.error('最多添加5个话题')
+        this.showTopic = false
+      } else if (this.topics.find(t => t.id === topic.id)) {
+        this.$Message.error('你已经添加过该话题，不能重复添加')
+      } else {
+        this.topics.push(topic)
+        this.showTopic = false
+      }
+    },
+    removeTopic (topicId) {
+      this.topics = _.filter(this.topics, t => t.id !== topicId)
     },
   },
 }
@@ -314,6 +362,15 @@ export default {
     .submit-button {
       height: 100%;
       font-size: @font-size-base;
+    }
+  }
+
+  .selected-topics {
+    display: flex;
+    margin-top: 8px;
+
+    > li {
+      margin-right: 8px;
     }
   }
 

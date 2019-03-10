@@ -39,6 +39,8 @@ export default {
     return {
       content: '',
       replyUser: {},
+
+      showMention: false,
     }
   },
   computed: {
@@ -53,7 +55,6 @@ export default {
     },
   },
   methods: {
-    showMention () {},
     async onSubmit () {
       await this.checkAuth()
       this.$emit('submit', this.content, this.replyUser)
