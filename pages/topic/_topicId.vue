@@ -95,11 +95,28 @@
 
       <SideWidget
         key="topic-participants"
+        class="participants-widget"
         title="参与话题的人"
         type="user"
         :users="participants.slice(0, 9)"
         :loading="!participants.length"
-      />
+      >
+        <template v-if="participants.length > 9" v-slot:footer>
+          <div class="view-more" @click="showMoreParticipants = true">更多</div>
+          <IModal
+            v-model="showMoreParticipants"
+            title="参与话题的人"
+            :footer-hide="true"
+            :width="1050"
+          >
+            <TopicParticipants
+              v-if="showMoreParticipants"
+              :topic-id="topicId"
+              :initial-participants="participants"
+            />
+          </IModal>
+        </template>
+      </SideWidget>
 
       <SideWidgetHotTopics key="hot-topics" />
     </aside>
@@ -112,6 +129,7 @@ import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotTopics from '@/components/topic/SideWidgetHotTopics.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import PostFeed from '@/components/feed/PostFeed.vue'
+import TopicParticipants from '@/components/topic/TopicParticipants.vue'
 import { limit, getLastField } from '@/utils'
 
 export default {
@@ -121,6 +139,7 @@ export default {
     SideWidgetHotTopics,
     FeedList,
     PostFeed,
+    TopicParticipants,
   },
   data () {
     return {
@@ -130,6 +149,7 @@ export default {
       creator: {}, // 话题创建者
 
       showPost: false,
+      showMoreParticipants: false,
     }
   },
   computed: {
@@ -316,6 +336,18 @@ export default {
         align-items: center;
         background-color: @error-color;
         color: #fff;
+      }
+    }
+
+    .participants-widget {
+      /deep/ .view-more {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        background-color: #f9fcff;
+        color: #999;
+        cursor: pointer;
       }
     }
   }
