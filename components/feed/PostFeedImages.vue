@@ -89,9 +89,6 @@ export default {
       }
       return true
     },
-    onUploadSuccess (images) {
-      console.log(images)
-    },
     onUploadUpdate (image, index) {
       this.images[index] = image
     },

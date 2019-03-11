@@ -31,13 +31,13 @@ const navMap = [
 export default {
   name: 'SettingHome',
   middleware: ['requireAuth'],
-  fetch ({ route, redirect }) {
-    if (route.fullPath === '/setting') return redirect('/setting/profile')
-  },
   data () {
     return {
       navMap,
     }
+  },
+  fetch ({ route, redirect }) {
+    if (route.fullPath === '/setting') return redirect('/setting/profile')
   },
 }
 </script>

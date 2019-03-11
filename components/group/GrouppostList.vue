@@ -42,7 +42,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less" scoped>
-.c-group-post-list {}
-</style>

@@ -25,15 +25,15 @@ export default {
       group: 'current',
     }),
   },
-  fetch ({ route, redirect, params }) {
-    const { groupId } = params
-    if (route.name === 'group-groupId-manage') return redirect(`/group/${groupId}/manage/profile`)
-  },
   async asyncData ({ params, store, $axios }) {
     const groupId = Number(params.groupId)
     if (store.state.group.current.id !== groupId) {
       await store.dispatch('group/getGroupDetail', groupId)
     }
+  },
+  fetch ({ route, redirect, params }) {
+    const { groupId } = params
+    if (route.name === 'group-groupId-manage') return redirect(`/group/${groupId}/manage/profile`)
   },
 }
 </script>

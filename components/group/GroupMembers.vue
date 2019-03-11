@@ -126,8 +126,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less" scoped>
-.c-group-members {
-}
-</style>
