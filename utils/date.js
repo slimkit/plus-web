@@ -41,9 +41,11 @@ export function isYesterday (target) {
  *
  * @author mutoe <mutoe@foxmail.com>
  * @param {DateLike} target
+ * @param {Object} [options]
+ * @param {boolean} [options.full=false] 是否显示完整时间
  * @returns {string}
  */
-export function fromNow (target) {
+export function fromNow (target, options = {}) {
   const zulu = toZuluTimezone(target)
   const date = new Date(zulu)
   const offset = (new Date() - new Date(date)) / 1000
@@ -64,6 +66,8 @@ export function fromNow (target) {
   if (relative < 9) return `${relative}天前`
 
   // 超过 9 天
-  const dateString = `${date.getMonth() + 1}-${date.getDate()}`
-  return dateString
+  if (options.full) {
+    return `${date.toLocaleDateString().replace(/\//g, '-')} ${date.getHours()}:${date.getMinutes()}`
+  }
+  return `${date.getMonth() + 1}-${date.getDate()}`
 }

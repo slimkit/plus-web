@@ -16,7 +16,7 @@
         />
       </div>
       <div v-show="type !== 'all'">
-        <div v-show="!list.length" v-empty:content />
+        <div v-show="!loading && !list.length" v-empty:content />
         <Loadmore
           ref="loader"
           :auto-load="false"
@@ -54,6 +54,7 @@ export default {
       auditMembers: [],
       blackMembers: [],
 
+      loading: false,
       manageMap: {
         all: [
           { label: '加入黑名单', method: this.addToBlackList },
@@ -107,10 +108,12 @@ export default {
       this.initMembers = _.groupBy(members, 'role')
     },
     async onRefresh () {
+      this.loading = true
       const params = { limit, type: this.type }
       const members = await this.$axios.$get(`/plus-group/groups/${this.group.id}/members`, { params })
       this.list = members
       this.loader.afterRefresh(members.length < limit)
+      this.loading = false
     },
     async onLoadmore () {
       const params = { limit, type: this.type, after: getLastField() }

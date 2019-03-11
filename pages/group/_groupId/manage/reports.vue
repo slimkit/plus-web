@@ -35,18 +35,25 @@
           </thead>
           <tbody>
             <tr v-for="item in list" :key="item.id">
-              <td>{{ item.created_at }}</td>
+              <td class="time">{{ item.created_at | fromNow({full: true}) }}</td>
               <td>{{ item.user.name }}</td>
               <td class="content">{{ item.content }}</td>
-              <td class="resource" @click="viewResource(item)">
-                {{ item.type }}: {{ item.resource.body }}
+              <td class="resource text-cut">
+                <nuxt-link v-if="item.type === 'post'" :to="`/group/${item.group_id}/post/${item.resource.id}`">帖子：{{ item.resource.body }}</nuxt-link>
               </td>
-              <td>{{ item.status }}</td>
+              <td>
+                <template v-if="item.status === 0">
+                  <a class="primary-color" @click="onAccept(item)">通过</a>
+                  <a class="error-color" @click="onReject()">驳回</a>
+                </template>
+                <span v-else-if="item.status === 1">已处理</span>
+                <span v-else-if="item.status === 2">被驳回</span>
+              </td>
             </tr>
           </tbody>
         </table>
 
-        <div v-if="!list.length" v-empty:content />
+        <div v-if="!loading && !list.length" v-empty:content />
       </Loadmore>
     </main>
   </div>
@@ -55,16 +62,26 @@
 <script>
 import { limit, getLastField } from '@/utils'
 
+const auditMap = {
+  2: '被驳回',
+}
+
 export default {
   name: 'GroupManageReports',
+  filters: {
+    audit (status) {
+      return auditMap[status]
+    },
+  },
   data () {
     return {
       all: [],
       unhandled: [],
       accept: [],
       reject: [],
-
       date: [null, null],
+
+      loading: false,
     }
   },
   computed: {
@@ -100,14 +117,26 @@ export default {
   },
   methods: {
     async onRefresh () {
+      this.loading = true
       this.list = await this.$axios.$get('/plus-group/reports', { params: this.params })
       this.loader.afterRefresh(this.list.length < limit)
+      this.loading = false
     },
     async onLoadmore () {
       const params = { ...this.params, after: getLastField(this.list) }
       const list = await this.$axios.$get('/plus-group/reports', { params })
       this.list.push(...list)
       this.loader.afterLoadmore(list.length < limit)
+    },
+    async onAccept (report) {
+      await this.$axios.$patch(`/plus-group/reports/${report.id}/accept`)
+      this.$Message.success('处理成功')
+      this.loader.beforeRefresh()
+    },
+    async onReject (report) {
+      await this.$axios.$patch(`/plus-group/reports/${report.id}/reject`)
+      this.$Message.success('处理成功')
+      this.loader.beforeRefresh()
     },
   },
 }
@@ -135,12 +164,18 @@ export default {
     width: 100%;
     td {
       text-align: center;
+      &.time {
+        width: 10em;
+      }
       &.content {
         color: @warning-color;
       }
       &.resource {
+        max-width: 6em;
+      }
+
+      > a {
         color: @primary-color;
-        cursor: pointer;
       }
     }
     tr {
