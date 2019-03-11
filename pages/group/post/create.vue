@@ -11,7 +11,7 @@
         >
 
         <Select
-          v-model.number="groupId"
+          v-model.number="selectedGroup"
           placeholder="请选择圈子"
           no-found-text="暂无加入的圈子，请先加入圈子"
           filterable
@@ -29,8 +29,7 @@
         <MarkdownEditor
           v-model="content"
           class="markdown-editor"
-          init-content="123"
-          placeholder="请输入帖子内容， 支持 Markdown 语法"
+          placeholder="请输入帖子内容，支持 Markdown 语法"
         />
         <ICheckbox
           v-if="allowSyncToFeed"
@@ -65,6 +64,7 @@ import { mapState } from 'vuex'
 import { Message } from 'iview'
 import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
 import SideWidgetGroupRecommend from '@/components/group/SideWidgetGroupRecommend.vue'
+import { removeHTMLTags } from '@/utils'
 
 export default {
   name: 'GroupPostCreate',
@@ -80,7 +80,7 @@ export default {
   },
   data () {
     return {
-      groupId: null,
+      selectedGroup: null,
       title: '',
       content: '',
       syncToFeed: 0,
@@ -96,8 +96,6 @@ export default {
     form () {
       const form = {
         title: this.title,
-        body: this.content,
-        summary: this.content.substr(0, 100),
       }
       // TODO: 上传图片
       if (this.allowSyncToFeed) {
@@ -111,6 +109,9 @@ export default {
     currentGroup () {
       return this.joinedGroups.find(group => group.id === this.groupId) || {}
     },
+    groupId () {
+      return this.selectedGroup
+    },
   },
   async beforeRouterEnter (to, from, next) {
     if (!this.store.state.group.joined.length) {
@@ -123,6 +124,9 @@ export default {
     async onSubmit () {
       if (!this.title) return this.$Message.error('帖子标题必填')
       if (!this.content) return this.$Message.error('帖子内容必填')
+      const form = this.form
+      form.body = this.content
+      form.summary = removeHTMLTags(this.content).substr(0, 100)
       const { post } = await this.$axios.$post(`/plus-group/groups/${this.groupId}/posts`, this.form)
       this.$Message.success('发布成功')
       this.$router.replace(`/group/${post.group_id}/post/${post.id}`)

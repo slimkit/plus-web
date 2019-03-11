@@ -122,6 +122,9 @@ import ArticleComment from '@/components/common/ArticleComment.vue'
 
 export default {
   name: 'GroupPostDetail',
+  validate ({ params }) {
+    return /^\d+$/.test(params.postId)
+  },
   components: {
     SideWidget,
     ArticleLike,

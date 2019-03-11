@@ -224,7 +224,7 @@
 
     <EditorContent
       class="content markdown-body"
-      :content="content"
+      :content.sync="content"
       :editor="editor"
     />
   </div>
@@ -266,6 +266,7 @@ export default {
   props: {
     value: { type: String, default: '' },
     placeholder: { type: String, default: '' },
+    initContent: { type: String, default: '' },
   },
   data () {
     return {
@@ -278,7 +279,8 @@ export default {
         return this.value
       },
       set (val) {
-        this.$emit('update:input', val)
+        console.log(val)
+        this.$emit('input', val)
       },
     },
   },
@@ -313,8 +315,7 @@ export default {
         }),
       ],
       onUpdate: ({ getHTML, getJSON }) => {
-        console.log(getHTML())
-        console.log(getJSON())
+        this.content = getHTML()
       },
     })
   },

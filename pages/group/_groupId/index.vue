@@ -282,6 +282,9 @@ import SideWidgetGroupRecommend from '@/components/group/SideWidgetGroupRecommen
 
 export default {
   name: 'GroupDetail',
+  validate ({ params }) {
+    return /^\d+$/.test(params.groupId)
+  },
   head () {
     return {
       title: `${this.group.name} - 圈子`,

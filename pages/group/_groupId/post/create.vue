@@ -12,8 +12,7 @@
         <MarkdownEditor
           v-model="content"
           class="markdown-editor"
-          init-content="123"
-          placeholder="请输入帖子内容， 支持 Markdown 语法"
+          placeholder="请输入帖子内容，支持 Markdown 语法"
         />
         <ICheckbox
           v-if="allowSyncToFeed"
@@ -50,18 +49,21 @@ export default {
   name: 'GroupPostCreate',
   head () {
     return {
-      title: `发布帖子 - ${this.currentGroup.name}`,
+      title: `发布帖子 - ${this.group.name}`,
     }
   },
   extends: GroupPostCreate,
   data () {
     return {
-      currentGroup: { name: '圈子' },
+      group: { name: '圈子' },
     }
   },
   computed: {
     groupId () {
-      return Number(this.$route.params.groupId)
+      return +this.$route.params.groupId
+    },
+    currentGroup () {
+      return this.group
     },
   },
   mounted () {
@@ -69,8 +71,8 @@ export default {
   },
   methods: {
     async fetchGroupInfo () {
-      this.currentGroup = await this.$axios.$get(`/plus-group/groups/${this.groupId}`)
-      if (!this.currentGroup.joined) {
+      this.group = await this.$axios.$get(`/plus-group/groups/${this.groupId}`)
+      if (!this.group.joined) {
         this.$Message.error('请先加入圈子')
         this.$router.back()
       }

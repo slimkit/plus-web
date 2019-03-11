@@ -62,3 +62,12 @@ export const errorMessageHandler = content => {
   }
   return content
 }
+
+/**
+ * 移除一段文本中的 HTML 标签
+ * @param {string} content
+ * @returns {string}
+ */
+export const removeHTMLTags = content => {
+  return content.replace(/<[^>]+>|&[^>]+;/g, ' ').trim()
+}
