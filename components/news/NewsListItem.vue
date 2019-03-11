@@ -5,7 +5,7 @@
         type="image-wrap"
         :max-width="260"
         :max-height="160"
-        :file="news.image"
+        :file="news.image || {}"
       />
     </div>
     <div class="news-body">
