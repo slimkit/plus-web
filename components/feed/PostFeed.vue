@@ -346,8 +346,8 @@ export default {
           margin-left: 4px;
           border: 6px solid transparent;
           border-top-color: @text-color;
-          transform-origin: center 3px;
-          transform: translateY(4px);
+          transform-origin: center 2px;
+          transform: translateY(2px);
           transition: transform .2s;
         }
 

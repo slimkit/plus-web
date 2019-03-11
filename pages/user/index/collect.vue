@@ -2,11 +2,11 @@
   <div class="p-user-collect">
     <nav class="cate-wrap">
       <nuxt-link to="/user/collect/feed" replace> 动态 </nuxt-link>
+      <nuxt-link to="/user/collect/news" replace>文章</nuxt-link>
+      <nuxt-link to="/user/collect/post" replace> 帖子 </nuxt-link>
       <!--
-      <nuxt-link :to="{params: {type: 'news'}}" replace>文章</nuxt-link>
       <nuxt-link :to="{params: {type: 'answer'}}" replace>回答</nuxt-link>
       -->
-      <nuxt-link to="/user/collect/post" replace> 帖子 </nuxt-link>
     </nav>
 
     <main class="collect-wrap">
@@ -33,7 +33,7 @@ export default {
     margin-bottom: 16px;
 
     > a {
-      margin-right: 1em;
+      margin-right: 16px;
       color: @disabled-color;
 
       &.exact-active {

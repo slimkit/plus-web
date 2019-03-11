@@ -146,7 +146,8 @@ export default {
       return this.feed.images || []
     },
     topics () {
-      return this.feed.topics.filter(t => t.id !== this.hideTopic)
+      const topics = this.feed.topics || []
+      return topics.filter(t => t.id !== this.hideTopic)
     },
     pinned () {
       return this.feed.pinned || false

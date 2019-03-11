@@ -45,9 +45,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less" scoped>
-.p-user-collect-feed {
-
-}
-</style>
