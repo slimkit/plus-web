@@ -56,7 +56,7 @@
               <span>帖子 <span class="primary-color">{{ group.posts_count || 0 }}</span></span>
               <span>成员 <span class="primary-color">{{ group.users_count || 0 }}</span></span>
 
-              <address>
+              <address :title="location">
                 <svg class="icon"><use xlink:href="#icon-position" /></svg>
                 <span class="primary-color text-cut">{{ location }}</span>
               </address>
