@@ -28,6 +28,7 @@
 
     <div class="tools">
       <IButton
+        v-if="!isRepost"
         type="text"
         class="button tool"
         @click="$refs.images.select()"
@@ -56,7 +57,10 @@
         某人
       </IButton>
 
+      <div class="divider" />
+
       <IPoptip
+        v-if="!isRepost"
         v-model="showPayOptions"
         class="need-pay"
         placement="bottom"
@@ -80,7 +84,7 @@
         :loading="loading"
         @click="beforeSubmit"
       >
-        分享
+        {{ isRepost ? '转发' : '分享' }}
       </IButton>
     </div>
 
@@ -129,6 +133,16 @@ import PostText from '@/components/common/PostText.vue'
 import PostFeedImages from './PostFeedImages.vue'
 import TopicSelector from '@/components/topic/TopicSelector.vue'
 
+// 转发功能 前端字段转化为接口所需字段
+const typeMap = {
+  feed: 'feeds',
+  news: 'news',
+  group: 'groups',
+  post: 'group-posts',
+  question: 'questions',
+  answer: 'question-answers',
+}
+
 export default {
   name: 'PostFeed',
   components: {
@@ -139,6 +153,9 @@ export default {
   props: {
     // 默认添加的话题
     topic: { type: Object, default: null },
+    // 转发资源类型和id
+    repostType: { type: String, default: null, validator: type => Object.keys(typeMap).includes(type) },
+    repostId: { type: Number, default: null },
   },
   data () {
     return {
@@ -159,20 +176,36 @@ export default {
   },
   computed: {
     form () {
-      const images = this.images.map(image => ({
-        id: image.value,
-        amount: image.amount || undefined,
-        type: image.amount ? 'read' : undefined,
-      }))
-      const amount = !this.images.length && this.amount
-      return {
+      const form = {
         feed_content: this.content,
-        feed_from: 1,
+        feed_from: 1, // 1: PC
         feed_mark: this.mark,
-        topics: this.topics.map(t => t.id),
-        images,
-        amount: amount || undefined,
       }
+      if (this.images.length) {
+        form.images = this.images.map(image => ({
+          id: image.value,
+          amount: image.amount || undefined,
+          type: image.amount ? 'read' : undefined,
+        }))
+      } else if (this.amount) {
+        form.amount = this.amount
+      }
+      if (this.topics.length) {
+        form.topics = this.topics.map(t => t.id)
+      }
+      if (this.isRepost) {
+        form.repostable_type = typeMap[this.repostType]
+        form.repostable_id = this.repostId
+      }
+      return form
+    },
+    isRepost () {
+      return !!this.repostType
+    },
+    placeholder () {
+      if (this.isRepost) return '请输入转发内容'
+      if (this.replyUser.id) return `回复 ${this.replyUser.name}:`
+      return '说点什么吧'
     },
     amountItems () {
       const { items = [] } = this.boot.feed
@@ -238,7 +271,7 @@ export default {
       this.mark = `${this.logged.id}${+new Date()}`
       this.$axios.$post('/feeds', this.form)
         .then(({ id }) => {
-          this.$Message.success('发布成功')
+          this.$Message.success(this.isRepost ? '转发成功' : '发布成功')
           this.$emit('post', id)
           this.clear()
         })
@@ -254,6 +287,9 @@ export default {
       } else {
         this.onSubmit()
       }
+    },
+    focus () {
+      this.$refs.editor.focus()
     },
     clear () {
       this.content = ''
@@ -295,7 +331,7 @@ export default {
     .editor {
       background-color: @background-color-base;
       width: 100%;
-      min-height: 18px+21px*5;
+      min-height: 18px+21px*4;
       max-height: 18px+21px*10;
       padding: 8px 8px 24px;
       .border();
@@ -328,10 +364,13 @@ export default {
       margin-right: 16px;
     }
 
+    .divider {
+      margin-right: auto;
+    }
+
     .need-pay {
       display: flex;
       align-items: center;
-      margin-left: auto;
       margin-right: 1em;
 
       .label {

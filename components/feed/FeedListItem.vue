@@ -81,6 +81,7 @@
 
             <template v-slot:content>
               <ul class="options" @click="showMore = false">
+                <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
                 <li :class="{active: collected}" @click="onCollect"><svg class="icon"><use xlink:href="#icon-collect" /></svg> {{ collected ? '已收藏' : '收藏' }}</li>
                 <template v-if="isMine">
                   <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
@@ -193,6 +194,15 @@ export default {
         this.feed.has_like = false
         this.feed.like_count -= 1
       }
+    },
+    onRepost () {
+      this.$root.$emit('repost', {
+        type: 'feed',
+        source: this.feed,
+        callback: () => {
+          console.log('success')
+        },
+      })
     },
     async onCollect () {
       await this.checkAuth()
