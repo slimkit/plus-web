@@ -90,6 +90,8 @@ export const getObjectUrl = blob => {
  * @param {number|string} [params.blur] 模糊
  */
 export const getFileUrl = (file, params = {}) => {
+  if (process.server) return ''
+
   const paramsString = new URLSearchParams()
   let url = ''
 
