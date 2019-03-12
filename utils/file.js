@@ -81,24 +81,37 @@ export const getObjectUrl = blob => {
 
 /**
  * 获取图片的真实地址
- * @param {number} fileId
+ * @param {number|string} file || fileURL
  * @param {Object} [params]
+ * @param {string} [params.type=file]
  * @param {number|string} [params.w] 最大宽度
  * @param {number|string} [params.h] 最大宽度
  * @param {number|string} [params.quility] 压缩质量
  * @param {number|string} [params.blur] 模糊
  */
-export const getFileUrl = (fileId, params = {}) => {
-  let url = `${process.env.apiURL}/files/${fileId}`
-  const token = cookie.get('access_token')
-
-  // query
+export const getFileUrl = (file, params = {}) => {
   const paramsString = new URLSearchParams()
-  if (params.w) paramsString.append('w', params.w)
-  if (params.h) paramsString.append('h', params.h)
-  if (params.quility) paramsString.append('q', params.quility)
-  if (params.blur) paramsString.append('b', params.blur)
-  if (token) paramsString.append('token', token)
+  let url = ''
+
+  const { type = 'file' } = params
+  if (type === 'file') {
+    url = `${process.env.apiURL}/files/${file}`
+    if (params.w) paramsString.append('w', params.w)
+    if (params.h) paramsString.append('h', params.h)
+    if (params.quility) paramsString.append('q', params.quility)
+    if (params.blur) paramsString.append('b', params.blur)
+    const token = cookie.get('access_token')
+    if (token) paramsString.append('token', token)
+  } else {
+    url = file
+    let rule = []
+    if (params.w) rule.push(`w_${params.w}`)
+    if (params.h) rule.push(`h_${params.h}`)
+    if (params.quility) rule.push(`q_${params.quility}`)
+    if (params.blur) rule.push(`b_${params.blur}`)
+    if (rule.length) paramsString.append('rule', rule.join(','))
+  }
+
   if (paramsString.toString()) url += `?${paramsString.toString()}`
   return url
 }

@@ -35,9 +35,13 @@ export default {
     blur: { type: Number, default: null },
   },
   computed: {
+    fileSystem () {
+      return this.file.url ? 'storage' : 'file'
+    },
     src () {
-      const fileId = this.file.file || this.file.id
-      return getFileUrl(fileId, {
+      const file = this.fileSystem === 'file' ? (this.file.file || this.file.id) : this.file.url
+      return getFileUrl(file, {
+        type: this.fileSystem,
         w: this.maxWidth,
         h: this.maxHeight,
         blur: this.blur,
