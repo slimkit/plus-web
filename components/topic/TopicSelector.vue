@@ -9,13 +9,9 @@
     <template v-if="!keyword">
       <h4 class="topic-title">热门话题</h4>
       <ul class="topic-list">
-        <a
-          v-for="topic in hotTopics"
-          :key="topic.id"
-          @click="onSelectTopic(topic)"
-        >
-          {{ topic.name }}
-        </a>
+        <li v-for="topic in hotTopics" :key="topic.id">
+          <a @click="onSelectTopic(topic)">{{ topic.name }}</a>
+        </li>
       </ul>
     </template>
 
@@ -25,11 +21,9 @@
       <template v-else-if="result.length">
         <h4 class="topic-title">为你找到以下话题</h4>
         <ul class="topic-list">
-          <li
-            v-for="topic in result"
-            :key="topic.id"
-            v-html="topic.highlight"
-          />
+          <li v-for="topic in result" :key="topic.id">
+            <a @click="onSelectTopic(topic)" v-html="topic.highlight" />
+          </li>
         </ul>
       </template>
       <div
@@ -88,7 +82,7 @@ export default {
       this.result = []
       const params = { limit: 8, q: this.keyword }
       const result = await this.$axios.$get('/feed/topics', { params })
-      const regex = new RegExp(`(${this.keyword})`, 'g')
+      const regex = new RegExp(`(${this.keyword})`, 'ig')
       this.result = result.map(topic => {
         topic.highlight = topic.name.replace(regex, '<span class="keyword">$1</span>')
         return topic
@@ -113,7 +107,7 @@ export default {
     grid-template-columns: 1fr 1fr;
     margin-top: 8px;
 
-    > a {
+    > li {
       padding: 4px 0;
     }
   }
