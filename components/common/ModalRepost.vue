@@ -12,6 +12,7 @@
         v-if="show"
         :type="type"
         :source="source"
+        :no-link="true"
       />
 
       <PostFeed

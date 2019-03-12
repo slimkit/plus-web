@@ -16,6 +16,10 @@
       </div>
     </div>
 
+    <div v-if="feed.repostable_type" class="feed-reference">
+      <Reference :type="feed.repostable_type" :source="{id: feed.repostable_id}" />
+    </div>
+
     <div class="feed-content" @click="viewDetail">
       {{ feed.feed_content }}
     </div>
@@ -114,12 +118,14 @@
 import { getFileUrl } from '@/utils/file'
 import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
 import ArticleListCommentList from '@/components/common/ArticleListCommentList.vue'
+import Reference from '@/components/common/Reference.vue'
 
 export default {
   name: 'FeedListItem',
   components: {
     FeedListItemImageLayout,
     ArticleListCommentList,
+    Reference,
   },
   props: {
     feed: { type: Object, required: true },
@@ -197,11 +203,8 @@ export default {
     },
     onRepost () {
       this.$root.$emit('repost', {
-        type: 'feed',
+        type: 'feeds',
         source: this.feed,
-        callback: () => {
-          console.log('success')
-        },
       })
     },
     async onCollect () {

@@ -1,6 +1,10 @@
 <template>
   <div class="c-reference">
-    <Component :is="refer" :source="source" />
+    <Component
+      :is="refer"
+      :source="source"
+      v-bind="$attrs"
+    />
   </div>
 </template>
 
@@ -8,7 +12,7 @@
 import ReferenceFeed from './ReferenceFeed.vue'
 
 const referMap = {
-  feed: ReferenceFeed,
+  'feeds': ReferenceFeed,
 }
 
 export default {
@@ -34,6 +38,15 @@ export default {
 
   /deep/ .media {
     color: @primary-color;
+  }
+
+  /deep/ .link {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 }
 </style>

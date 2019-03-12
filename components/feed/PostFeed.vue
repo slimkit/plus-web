@@ -133,15 +133,14 @@ import PostText from '@/components/common/PostText.vue'
 import PostFeedImages from './PostFeedImages.vue'
 import TopicSelector from '@/components/topic/TopicSelector.vue'
 
-// 转发功能 前端字段转化为接口所需字段
-const typeMap = {
-  feed: 'feeds',
-  news: 'news',
-  group: 'groups',
-  post: 'group-posts',
-  question: 'questions',
-  answer: 'question-answers',
-}
+const allowedRepostType = [
+  'feeds',
+  'news',
+  'groups',
+  'group-posts',
+  'questions',
+  'question-answers',
+]
 
 export default {
   name: 'PostFeed',
@@ -154,7 +153,7 @@ export default {
     // 默认添加的话题
     topic: { type: Object, default: null },
     // 转发资源类型和id
-    repostType: { type: String, default: null, validator: type => Object.keys(typeMap).includes(type) },
+    repostType: { type: String, default: null, validator: type => allowedRepostType.includes(type) },
     repostId: { type: Number, default: null },
   },
   data () {

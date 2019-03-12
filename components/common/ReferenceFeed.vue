@@ -6,16 +6,21 @@
       该资源不存在或已被删除
     </template>
     <template v-else>
-      <strong>{{ feed.user.name }}：</strong>
+      <strong>{{ user.name }}：</strong>
       {{ feed.feed_content }}
-      <nuxt-link class="media" :to="`/feed/${feed.id}`">
+      <span v-if="video || image" class="media">
         <template v-if="video">
           <svg class="icon"><use xlink:href="#icon-video" /></svg> 查看视频
         </template>
         <template v-if="image">
           <svg class="icon"><use xlink:href="#icon-image" /></svg> 查看图片
         </template>
-      </nuxt-link>
+      </span>
+      <nuxt-link
+        v-if="!noLink"
+        class="link"
+        :to="`/feed/${feed.id}`"
+      />
     </template>
   </article>
 </template>
@@ -39,11 +44,14 @@ export default {
     feed () {
       return this.remoteFeed || this.source
     },
+    user () {
+      return this.feed.user || {}
+    },
     video () {
       return this.feed.video || null
     },
     image () {
-      return this.feed.images.length
+      return (this.feed.images || []).length
     },
   },
   mounted () {
