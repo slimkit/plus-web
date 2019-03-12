@@ -48,7 +48,7 @@
         </IButton>
 
         <template v-slot:content>
-          <TopicSelector @select="addTopic" />
+          <TopicSelector v-if="showTopic" @select="addTopic" />
         </template>
       </IPoptip>
 
