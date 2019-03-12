@@ -10,9 +10,11 @@
 
 <script>
 import ReferenceFeed from './ReferenceFeed.vue'
+import ReferenceNews from './ReferenceNews.vue'
 
 const referMap = {
   'feeds': ReferenceFeed,
+  'news': ReferenceNews,
 }
 
 export default {
