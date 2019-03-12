@@ -16,7 +16,7 @@
 
           <template v-slot:content>
             <ul class="options" @click="showMore = false">
-              <li @click="onRepostable"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
+              <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
               <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
             </ul>
           </template>
@@ -260,7 +260,12 @@ export default {
         id: this.feed.id,
       })
     },
-    async onRepostable () { },
+    async onRepost () {
+      this.$root.$emit('repost', {
+        type: 'feeds',
+        source: this.feed,
+      })
+    },
   },
 }
 </script>

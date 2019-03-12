@@ -44,6 +44,7 @@
 
                 <template v-slot:content>
                   <ul class="options" @click="showShareMenu = false">
+                    <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg>转发</li>
                     <li><svg class="icon"><use xlink:href="#icon-weibo" /></svg>微博</li>
                     <li><svg class="icon"><use xlink:href="#icon-qq" /></svg>QQ</li>
                     <li><svg class="icon"><use xlink:href="#icon-weixin" /></svg>微信</li>
@@ -462,6 +463,12 @@ export default {
       this.$root.$emit('report', {
         type: 'group',
         id: this.group.id,
+      })
+    },
+    onRepost () {
+      this.$root.$emit('repost', {
+        type: 'groups',
+        source: this.group,
       })
     },
     async onJoinGroup () {

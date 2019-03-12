@@ -66,6 +66,7 @@
 
             <template v-slot:content>
               <ul class="options" @click="showMore = false">
+                <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
                 <li :class="{active: collected}" @click="onCollect"><svg class="icon"><use xlink:href="#icon-collect" /></svg> {{ collected ? '已收藏' : '收藏' }}</li>
                 <template v-if="isMine">
                   <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> 申请置顶</li>
@@ -114,6 +115,12 @@ export default {
       this.$root.$emit('report', {
         type: 'post',
         id: this.feed.id,
+      })
+    },
+    onRepost () {
+      this.$root.$emit('repost', {
+        type: 'group-posts',
+        source: this.feed,
       })
     },
     async onCollect () {

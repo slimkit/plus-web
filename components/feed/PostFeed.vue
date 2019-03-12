@@ -193,7 +193,7 @@ export default {
         form.topics = this.topics.map(t => t.id)
       }
       if (this.isRepost) {
-        form.repostable_type = typeMap[this.repostType]
+        form.repostable_type = this.repostType
         form.repostable_id = this.repostId
       }
       return form
