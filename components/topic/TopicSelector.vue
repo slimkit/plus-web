@@ -64,9 +64,12 @@ export default {
   },
   watch: {
     keyword (val) {
-      if (val) this.searchTopicByKeyword()
-      else {
+      if (val) {
+        this.searchTopicByKeyword()
+        this.searchLock = true
+      } else {
         this.result = []
+        this.searchLock = false
       }
     },
   },
@@ -83,7 +86,6 @@ export default {
     searchTopicByKeyword: _.debounce(async function () {
       if (!this.keyword) return
       this.result = []
-      this.searchLock = true
       const params = { limit: 8, q: this.keyword }
       const result = await this.$axios.$get('/feed/topics', { params })
       const regex = new RegExp(`(${this.keyword})`, 'g')
