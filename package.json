@@ -26,7 +26,8 @@
     "markdown-it-plus-image": "^1.0.1",
     "nuxt": "^2.0.0",
     "tiptap": "^1.8.0",
-    "tiptap-extensions": "^1.8.0"
+    "tiptap-extensions": "^1.8.0",
+    "xss": "^1.0.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.2.3",

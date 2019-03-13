@@ -1,3 +1,4 @@
+import xss from 'xss'
 import { shyMatcher } from './matcher'
 
 /**
@@ -9,6 +10,7 @@ import { shyMatcher } from './matcher'
  * @returns {string}
  */
 export function convertAtHTML (string) {
+  string = xss(string)
   return string.replace(shyMatcher, function (m, username) {
     var url = `${process.env.NUXT_ENV_PATH_PREFIX}user/${username}`
     return `<a href="${url}">@${username}</a>`
