@@ -10,7 +10,7 @@
         <template v-if="comment.reply_user">
           回复 <nuxt-link class="reply" :to="`/user/${comment.reply.id}`">{{ comment.reply.name }}</nuxt-link>:&nbsp;
         </template>
-        {{ comment.body }}
+        <span v-html="convertAtHTML(comment.body)" />
       </p>
       <div class="options">
         <a v-if="!isMine" @click="onReply(comment.user)">回复</a>
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { convertAtHTML } from '@/utils/text'
+
 export default {
   name: 'ArticleCommentItem',
   props: {
@@ -59,6 +61,7 @@ export default {
     },
   },
   methods: {
+    convertAtHTML,
     onReply (user) {
       this.$emit('reply', user)
     },

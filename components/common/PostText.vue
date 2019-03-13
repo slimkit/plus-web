@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { textAtMatcher } from '@/utils/matcher.js'
 import InputAt from './InputAt.vue'
 
 export default {
@@ -62,8 +63,8 @@ export default {
   methods: {
     async onSubmit () {
       await this.checkAuth()
-      console.log(1)
-      // this.$emit('submit', this.content, this.replyUser)
+      const contentWithAt = this.content.replace(textAtMatcher, '\u00ad$1\u00ad$2')
+      this.$emit('submit', contentWithAt, this.replyUser)
     },
     reply (user) {
       this.replyUser = user

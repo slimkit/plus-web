@@ -1,14 +1,16 @@
-/**
- * 获取字符串长度 中文字符记2 英文字符记1
- * @param {string} string
- * @returns {number}
- */
-export function getLength (string) {
-  let realLength
+import { shyMatcher } from './matcher'
 
-  for (let i = 0; i < string.length; i++) {
-    const charCode = string.charCodeAt(i)
-    realLength += (charCode >= 0 && charCode <= 128) ? 1 : 2
-  }
-  return realLength
+/**
+ * 将字符串中的 at 信息抽取出来, 用链接包裹
+ *
+ * @author mutoe <mutoe@foxmail.com>
+ * @export
+ * @param {string} string
+ * @returns {string}
+ */
+export function convertAtHTML (string) {
+  return string.replace(shyMatcher, function (m, username) {
+    var url = `${process.env.NUXT_ENV_PATH_PREFIX}user/${username}`
+    return `<a href="${url}">@${username}</a>`
+  })
 }

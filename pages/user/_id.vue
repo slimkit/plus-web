@@ -91,23 +91,27 @@ export default {
   },
   async asyncData ({ route, params, store, redirect, $axios }) {
     // 如果user id 是已登录用户 重定向到个人主页
-    const userId = Number(params.id)
+    let user = params.id
+    const isUserId = /^\d+$/.test(params.id)
     const { logged = {} } = store.state.user
-    if (userId === logged.id) return redirect('/user')
+    if ((isUserId && (Number(user) === logged.id)) || (!isUserId && (user === logged.name))) {
+      return redirect('/user')
+    }
+
+    const visitUser = await $axios.$get(`/users/${encodeURIComponent(user)}`)
 
     // 首页重定向
-    if (route.name === 'user-id') return redirect(301, `/user/${userId}/feed`)
+    if (route.name === 'user-id') return redirect(301, `/user/${visitUser.id}/feed`)
 
-    const [visitUser, tags] = await Promise.all([
-      $axios.$get(`/users/${userId}`),
-      $axios.$get(`/users/${userId}/tags`),
-    ])
-    return {
-      visitUser,
-      tags,
-    }
+    return { visitUser }
+  },
+  mounted () {
+    this.fetchUserTags()
   },
   methods: {
+    async fetchUserTags () {
+      this.tags = await this.$axios.$get(`/users/${this.visitUser.id}/tags`)
+    },
     async onFollow () {
       if (this.followLock) return
       this.followLock = true

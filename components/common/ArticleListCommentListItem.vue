@@ -2,7 +2,7 @@
   <li class="c-feed-list-item-comment-list-item">
     {{ user.name }}:
     <span v-if="comment.reply">回复<nuxt-link :to="`/user/${comment.reply.id}`">{{ comment.reply.name }}</nuxt-link>: </span>
-    {{ comment.body }}
+    <span v-html="convertAtHTML(comment.body)" />
     <span v-if="pinned" class="pinned">置顶</span>
     <div class="options">
       <span v-if="isOwner" @click="onTop">置顶</span>
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { convertAtHTML } from '@/utils/text'
+
 export default {
   name: 'ArticleListCommentListItem',
   props: {
@@ -38,6 +40,7 @@ export default {
     },
   },
   methods: {
+    convertAtHTML,
     onApplyTop () {},
     onTop () {},
     onReply () {
