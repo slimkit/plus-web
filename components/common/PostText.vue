@@ -11,7 +11,7 @@
       <IButton
         type="text"
         class="button tool"
-        @click="showMention"
+        @click="onMention"
       >
         <svg class="icon"><use xlink:href="#icon-mention" /></svg>
         某人
@@ -45,8 +45,6 @@ export default {
     return {
       content: '',
       replyUser: {},
-
-      showMention: false,
     }
   },
   computed: {
@@ -73,6 +71,10 @@ export default {
     clean () {
       this.content = ''
       this.replyUser = {}
+    },
+    onMention () {
+      this.content += '@'
+      this.$refs.editor.focus()
     },
   },
 }

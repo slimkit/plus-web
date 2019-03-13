@@ -13,6 +13,6 @@ export function convertAtHTML (string) {
   string = xss(string)
   return string.replace(shyMatcher, function (m, username) {
     var url = `${process.env.NUXT_ENV_PATH_PREFIX}user/${username}`
-    return `<a href="${url}">@${username}</a>`
+    return `<a class="link-at-user" href="${url}">@${username}</a>`
   })
 }

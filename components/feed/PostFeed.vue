@@ -2,12 +2,12 @@
   <!-- TODO: 收费图片 -->
   <div class="c-post-text feed">
     <div class="content-wrap">
-      <textarea
+      <InputAt
         ref="editor"
         v-model="content"
-        v-ctrl-enter="beforeSubmit"
         class="editor"
         :placeholder="placeholder"
+        @submit="onSubmit"
       />
       <span class="count">还可输入 <span>{{ maxlength - content.length }}</span> 字</span>
     </div>
@@ -52,7 +52,11 @@
         </template>
       </IPoptip>
 
-      <IButton type="text" class="button tool">
+      <IButton
+        type="text"
+        class="button tool"
+        @click="onMention"
+      >
         <svg class="icon"><use xlink:href="#icon-mention" /></svg>
         某人
       </IButton>
@@ -129,6 +133,7 @@
 
 <script>
 import _ from 'lodash'
+import { textAtMatcher } from '@/utils/matcher'
 import PostText from '@/components/common/PostText.vue'
 import PostFeedImages from './PostFeedImages.vue'
 import TopicSelector from '@/components/topic/TopicSelector.vue'
@@ -170,13 +175,12 @@ export default {
       customAmount: null,
       setAmountIndex: null,
       showTopic: false,
-      showMention: false,
     }
   },
   computed: {
     form () {
       const form = {
-        feed_content: this.content,
+        feed_content: this.content.replace(textAtMatcher, '\u00ad$1\u00ad$2'),
         feed_from: 1, // 1: PC
         feed_mark: this.mark,
       }
@@ -326,16 +330,6 @@ export default {
   .content-wrap {
     position: relative;
     margin-bottom: 8px;
-
-    .editor {
-      background-color: @background-color-base;
-      width: 100%;
-      min-height: 18px+21px*4;
-      max-height: 18px+21px*10;
-      padding: 8px 8px 24px;
-      .border();
-      .placeholder-color(@text-info-color);
-    }
 
     .count {
       position: absolute;

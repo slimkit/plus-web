@@ -20,9 +20,12 @@
       <Reference :type="feed.repostable_type" :source="{id: feed.repostable_id}" />
     </div>
 
-    <div class="feed-content" @click="viewDetail">
-      {{ feed.feed_content }}
-    </div>
+    <div
+      class="feed-content"
+      @click="viewDetail"
+      v-html="convertAtHTML(feed.feed_content)"
+    />
+
     <AsyncFile
       v-if="feed.video"
       class="feed-video"
@@ -116,6 +119,7 @@
 
 <script>
 import { getFileUrl } from '@/utils/file'
+import { convertAtHTML } from '@/utils/text'
 import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
 import ArticleListCommentList from '@/components/common/ArticleListCommentList.vue'
 import Reference from '@/components/common/Reference.vue'
@@ -180,6 +184,7 @@ export default {
     },
   },
   methods: {
+    convertAtHTML,
     viewDetail () {
       this.$router.push(`/feed/${this.feed.id}`)
     },

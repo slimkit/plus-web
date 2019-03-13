@@ -16,7 +16,7 @@
 
     <!-- 用户选择列表 -->
     <div
-      v-if="locationNestAt"
+      v-if="inAtRange"
       class="at-list"
       :style="{...atPosition}"
     >
@@ -66,11 +66,11 @@ function onKeyup (event) {
 
   event.preventDefault()
   if (event.type === 'mouseup') {
-    if (vm.locationNestAt && el.selectionStart === el.selectionEnd) {
+    if (vm.inAtRange && el.selectionStart === el.selectionEnd) {
       el.setSelectionRange(vm.locationNestAt, vm.locationAfterSearch)
     }
   } else {
-    if (vm.locationNestAt && arrowKeys.includes(event.key)) {
+    if (vm.inAtRange && arrowKeys.includes(event.key)) {
       el.setSelectionRange(vm.locationNestAt, vm.locationAfterSearch)
     }
   }
@@ -98,7 +98,7 @@ function onKeydown (event) {
       break
     // 回车选择
     case 'Enter':
-      if (!vm.locationNestAt) return
+      if (!vm.inAtRange) return
       event.preventDefault()
       const user = vm.users[vm.selectIndex]
       vm.onSelectUser(user.name)
@@ -159,6 +159,9 @@ export default {
       if (this.searchUsers.length && this.searchUser) return this.searchUsers
       return this.friends
     },
+    inAtRange () {
+      return this.locationNestAt !== null
+    },
     // 光标前的最后一个 @ 字符的位置
     locationNestAt () {
       if (this.locationCursor < 0) return null
@@ -169,7 +172,7 @@ export default {
     },
     // 光标前最后一个 @ 存在时，光标后的空格、换行符、@符号的位置
     locationAfterSearch () {
-      if (!this.locationNestAt) return -1
+      if (!this.inAtRange) return -1
       const patterns = [
         this.content.indexOf(' ', this.locationNestAt),
         this.content.indexOf('\n', this.locationNestAt),
@@ -181,13 +184,13 @@ export default {
     },
     // 当前 at 用户的名字 （光标前最后一个 @ 到光标后的空格、换行符、@之间的字符串）
     searchUser () {
-      if (!this.locationNestAt) return ''
+      if (!this.inAtRange) return ''
       const betweenAtToSpace = this.content.substring(this.locationNestAt, this.locationAfterSearch)
       return betweenAtToSpace.replace(/^@/, '')
     },
     // 镜像容器所需要的 HTML 内容，产生 @ 符号用于定位
     mirrowHTML () {
-      if (!this.locationNestAt) return ''
+      if (!this.inAtRange) return ''
       return this.content.substr(0, this.locationNestAt)
         .replace(/\n/g, '<br>') + '<span class="at">@</span>'
     },
@@ -250,7 +253,7 @@ export default {
     },
     // 搜索器（debounce 防抖）
     onSearchUser: _.debounce(async function () {
-      const params = { limit: 5, keyword: this.searchUser.replace(/^@/, '') }
+      const params = { limit: 5, keyword: this.searchUser }
       this.searchUsers = await this.$axios.$get('/user/search', { params })
       this.searchLock = false
     }, 450),
@@ -295,6 +298,7 @@ export default {
     background-color: #fff;
     font-size: @font-size-small;
     z-index: 10;
+    transition: all .2s;
 
     > p {
       font-weight: bold;
