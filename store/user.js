@@ -5,10 +5,12 @@ const LOCAL_KEY = {
   CURRENT_USER: 'user_logged',
   RECOMMEND_USERS: 'user_recommend',
   HOT_USERS: 'user_hot',
+  FRIEND: 'user_friend',
 }
 
 export const state = () => ({
   logged: null, // 已登录用户
+  friend: [], // 好友
   recommend: [], // 推荐用户（已缓存）
   hot: [], // 热门用户（已缓存）
   new: [], // 最新用户
@@ -20,6 +22,7 @@ export const TYPES = {
   SAVE_RECOMMEND_USERS: 'SAVE_RECOMMEND_USERS',
   SAVE_HOT_USERS: 'SAVE_HOT_USERS',
   SAVE_NEW_USERS: 'SAVE_NEW_USERS',
+  SAVE_FRIEND: 'SAVE_FRIEND',
 }
 
 export const mutations = {
@@ -31,6 +34,9 @@ export const mutations = {
     // 加载热门用户
     const hot = local.get(LOCAL_KEY.HOT_USERS)
     if (hot) state.hot = hot
+
+    const friend = local.get(LOCAL_KEY.FRIEND)
+    if (friend) state.friend = friend
   },
 
   [TYPES.SAVE_CURRENT_USER] (state, user) {
@@ -40,6 +46,10 @@ export const mutations = {
     } else {
       local.remove(LOCAL_KEY.CURRENT_USER)
     }
+  },
+
+  [TYPES.SAVE_FRIEND] (state, users = []) {
+    state.friend = users
   },
 
   [TYPES.SAVE_RECOMMEND_USERS] (state, { users, offset = 0 }) {
@@ -73,6 +83,12 @@ export const actions = {
   async getCurrentUser ({ commit }) {
     const user = await this.$axios.$get('/user')
     commit(TYPES.SAVE_CURRENT_USER, user)
+  },
+
+  async getUserFriends ({ commit }) {
+    const params = { limit: 5 }
+    const users = await this.$axios.$get('/user/follow-mutual', { params })
+    commit(TYPES.SAVE_FRIEND, users)
   },
 
   async fetchRecommendUsers ({ commit }, offset) {

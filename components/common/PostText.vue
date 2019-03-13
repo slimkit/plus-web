@@ -1,11 +1,11 @@
 <template>
   <div class="c-post-text">
-    <textarea
+    <InputAt
       ref="editor"
       v-model="content"
-      v-ctrl-enter="onSubmit"
       class="editor"
       :placeholder="placeholder"
+      @submit="onSubmit"
     />
     <div class="tools">
       <IButton
@@ -30,8 +30,13 @@
 </template>
 
 <script>
+import InputAt from './InputAt.vue'
+
 export default {
   name: 'PostText',
+  components: {
+    InputAt,
+  },
   props: {
     maxlength: { type: Number, default: 255 },
   },
@@ -57,7 +62,8 @@ export default {
   methods: {
     async onSubmit () {
       await this.checkAuth()
-      this.$emit('submit', this.content, this.replyUser)
+      console.log(1)
+      // this.$emit('submit', this.content, this.replyUser)
     },
     reply (user) {
       this.replyUser = user
@@ -73,15 +79,6 @@ export default {
 
 <style lang="less" scoped>
 .c-post-text {
-  .editor {
-    background-color: @background-color-base;
-    width: 100%;
-    min-height: 18px+21px*3;
-    max-height: 18px+21px*10;
-    padding: 8px;
-    .border();
-    .placeholder-color(@text-info-color);
-  }
 
   .tools {
     display: flex;
