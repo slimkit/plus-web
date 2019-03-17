@@ -1,7 +1,7 @@
 
 <template>
   <!-- TODO: 这里的代码有点脆 需要补充单元测试 -->
-  <div class="c-input-at">
+  <div v-click-outside="blur" class="c-input-at">
     <textarea
       ref="editor"
       v-model="content"
@@ -28,9 +28,8 @@
             :key="index"
             :class="{active: index === selectIndex}"
             @click.prevent="onSelectUser(user.name)"
-          >
-            {{ user.name }}
-          </li>
+            v-text="user.name"
+          />
         </ul>
       </template>
       <p v-else-if="searchLock">搜索中</p>
@@ -79,7 +78,7 @@ function onKeyup (event) {
 // onKeydown 用于拦截用户选择框默认行为
 function onKeydown (event) {
   // 如果监测到按上下或者回车键、空格键，就拦截默认的光标跳转行为 改为控制选择器
-  if (!['ArrowUp', 'ArrowDown', 'Enter', ' '].includes(event.key)) return
+  if (!['ArrowUp', 'ArrowDown', 'Enter', 'Tab', ' '].includes(event.key)) return
   const { el, vnode: { context: vm } } = this
 
   const maxIndex = vm.users.length - 1
@@ -97,6 +96,7 @@ function onKeydown (event) {
       event.preventDefault()
       break
     // 回车选择
+    case 'Tab':
     case 'Enter':
       if (!vm.inAtRange) return
       event.preventDefault()
@@ -229,6 +229,11 @@ export default {
       this.$refs.editor.focus()
       this.setCursorPosition(pos)
     },
+    blur () {
+      const len = this.content.length
+      this.setCursorPosition(len)
+      this.$refs.editor.blur()
+    },
     // 设置光标位置
     setCursorPosition (start, end = start) {
       this.$refs.editor.setSelectionRange(start, end)
@@ -298,7 +303,6 @@ export default {
     background-color: #fff;
     font-size: @font-size-small;
     z-index: 10;
-    transition: all .2s;
 
     > p {
       font-weight: bold;
