@@ -8,6 +8,9 @@
 
     <FloatWidget class="bottom" />
 
+    <!-- 通知栏 -->
+    <NotificationBar v-if="logged" />
+
     <CommonFooter />
 
     <ModalReport />
@@ -22,6 +25,7 @@
 import CommonHeader from '@/components/layout/CommonHeader.vue'
 import CommonFooter from '@/components/layout/CommonFooter.vue'
 import FloatWidget from '@/components/layout/FloatWidget.vue'
+import NotificationBar from '@/components/notification/NotificationBar.vue'
 import ModalReport from '@/components/common/ModalReport.vue'
 import ModalRepost from '@/components/common/ModalRepost.vue'
 import ModalReward from '@/components/common/ModalReward.vue'
@@ -34,6 +38,7 @@ export default {
     CommonHeader,
     CommonFooter,
     FloatWidget,
+    NotificationBar,
     ModalReport,
     ModalRepost,
     ModalReward,
@@ -45,6 +50,7 @@ export default {
 
 <style lang="less" scoped>
 .layout-default {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
