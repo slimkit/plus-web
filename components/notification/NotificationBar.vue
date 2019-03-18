@@ -7,7 +7,7 @@
           theme="light"
           :content="previewAt"
         >
-          <svg class="icon lg"><use xlink:href="#icon-side-mention" /></svg>
+          <svg class="icon lg" @click="showNotificationModal('at')"><use xlink:href="#icon-side-mention" /></svg>
         </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="comment.badge">
@@ -16,7 +16,7 @@
           theme="light"
           :content="previewComment"
         >
-          <svg class="icon lg"><use xlink:href="#icon-side-msg" /></svg>
+          <svg class="icon lg" @click="showNotificationModal('comment')"><use xlink:href="#icon-side-msg" /></svg>
         </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="like.badge">
@@ -25,7 +25,7 @@
           theme="light"
           :content="previewLike"
         >
-          <svg class="icon lg"><use xlink:href="#icon-side-like" /></svg>
+          <svg class="icon lg" @click="showNotificationModal('like')"><use xlink:href="#icon-side-like" /></svg>
         </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="system.badge">
@@ -34,7 +34,7 @@
           theme="light"
           :content="previewSystem"
         >
-          <svg class="icon lg"><use xlink:href="#icon-side-notice" /></svg>
+          <svg class="icon lg" @click="showNotificationModal('system')"><use xlink:href="#icon-side-notice" /></svg>
         </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="unreadAudits">
@@ -43,21 +43,25 @@
           theme="light"
           :content="previewAudit"
         >
-          <svg class="icon lg"><use xlink:href="#icon-side-auth" /></svg>
+          <svg class="icon lg" @click="showNotificationModal('audit')"><use xlink:href="#icon-side-auth" /></svg>
         </ITooltip>
       </NotificationBarItem>
     </ul>
+
+    <ModalNotification />
   </aside>
 </template>
 
 <script>
-import NotificationBarItem from './NotificationBarItem.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import NotificationBarItem from './NotificationBarItem.vue'
+import ModalNotification from './ModalNotification.vue'
 
 export default {
   name: 'NotificationBar',
   components: {
     NotificationBarItem,
+    ModalNotification,
   },
   computed: {
     ...mapState('notification', ['comment', 'like', 'system', 'at']),
@@ -77,6 +81,9 @@ export default {
     ...mapActions('notification', {
       getNotifications: 'getNotificationStatistics',
     }),
+    showNotificationModal (type) {
+      this.$root.$emit('notification', { type })
+    },
   },
 }
 </script>
