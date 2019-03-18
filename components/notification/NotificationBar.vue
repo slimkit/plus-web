@@ -2,19 +2,49 @@
   <aside class="c-notification-bar">
     <ul class="list">
       <NotificationBarItem :badge="at.badge">
-        <svg class="icon lg"><use xlink:href="#icon-side-mention" /></svg>
+        <ITooltip
+          placement="left"
+          theme="light"
+          :content="previewAt"
+        >
+          <svg class="icon lg"><use xlink:href="#icon-side-mention" /></svg>
+        </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="comment.badge">
-        <svg class="icon lg"><use xlink:href="#icon-side-msg" /></svg>
+        <ITooltip
+          placement="left"
+          theme="light"
+          :content="previewComment"
+        >
+          <svg class="icon lg"><use xlink:href="#icon-side-msg" /></svg>
+        </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="like.badge">
-        <svg class="icon lg"><use xlink:href="#icon-side-like" /></svg>
+        <ITooltip
+          placement="left"
+          theme="light"
+          :content="previewLike"
+        >
+          <svg class="icon lg"><use xlink:href="#icon-side-like" /></svg>
+        </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="system.badge">
-        <svg class="icon lg"><use xlink:href="#icon-side-notice" /></svg>
+        <ITooltip
+          placement="left"
+          theme="light"
+          :content="previewSystem"
+        >
+          <svg class="icon lg"><use xlink:href="#icon-side-notice" /></svg>
+        </ITooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="unreadAudits">
-        <svg class="icon lg"><use xlink:href="#icon-side-auth" /></svg>
+        <ITooltip
+          placement="left"
+          theme="light"
+          :content="previewAudit"
+        >
+          <svg class="icon lg"><use xlink:href="#icon-side-auth" /></svg>
+        </ITooltip>
       </NotificationBarItem>
     </ul>
   </aside>
@@ -31,7 +61,14 @@ export default {
   },
   computed: {
     ...mapState('notification', ['comment', 'like', 'system', 'at']),
-    ...mapGetters('notification', ['unreadAudits']),
+    ...mapGetters('notification', [
+      'unreadAudits',
+      'previewComment',
+      'previewAt',
+      'previewLike',
+      'previewSystem',
+      'previewAudit',
+    ]),
   },
   mounted () {
     this.getNotifications()
