@@ -92,6 +92,16 @@ export default {
       > span {
         margin-right: 24px;
         cursor: pointer;
+        color: @disabled-color;
+      }
+
+      > a:hover {
+        color: @primary-color;
+      }
+
+      .exact-active,
+      > span {
+        color: @text-color;
       }
     }
   }

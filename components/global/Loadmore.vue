@@ -112,6 +112,7 @@ export default {
 
 <style lang="less" scoped>
 .c-loadmore {
+  width: 100%;
   transform: translate(0, 0); // 硬件加速
 
   .loadmore-head {
