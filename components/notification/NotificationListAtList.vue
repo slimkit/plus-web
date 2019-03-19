@@ -24,7 +24,7 @@
 import Reference from '@/components/common/Reference.vue'
 
 export default {
-  name: 'NotificationListAtItem',
+  name: 'NotificationListAtList',
   components: {
     Reference,
   },
@@ -52,9 +52,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less" scoped>
-.c-notification-list-item.at {
-
-}
-</style>

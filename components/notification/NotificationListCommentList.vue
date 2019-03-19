@@ -33,7 +33,7 @@ const typeMap = {
 }
 
 export default {
-  name: 'NotificationListCommentItem',
+  name: 'NotificationListCommentList',
   components: {
     Reference,
   },
@@ -58,9 +58,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less" scoped>
-.c-notification-list-item.comment {
-
-}
-</style>

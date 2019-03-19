@@ -11,26 +11,48 @@
     </aside>
 
     <main>
-      <h3 class="title">{{ computedType.title }}</h3>
+      <h3 class="title">
+        {{ computedType.title }}
+        <div v-if="type === 'audit'" class="audit-selector">
+          <Select v-model="auditType" size="small">
+            <Option
+              v-for="(label, name) in auditTypeMap"
+              :key="name"
+              :value="name"
+              :label="label"
+            />
+          </Select>
+        </div>
+      </h3>
 
       <div class="list-container">
-        <Component :is="computedType.component" />
+        <Component :is="computedType.component" :audit-type="auditType" />
       </div>
     </main>
   </div>
 </template>
 
 <script>
-import NotificationListAtItem from './NotificationListAtItem.vue'
-import NotificationListLikeItem from './NotificationListLikeItem.vue'
-import NotificationListCommentItem from './NotificationListCommentItem.vue'
-import NotificationListSystemItem from './NotificationListSystemItem.vue'
+import NotificationListAtList from './NotificationListAtList.vue'
+import NotificationListLikeList from './NotificationListLikeList.vue'
+import NotificationListCommentList from './NotificationListCommentList.vue'
+import NotificationListSystemList from './NotificationListSystemList.vue'
+import NotificationListAuditList from './NotificationListAuditList.vue'
 
 const typeMap = {
-  at: { title: 'at我的', component: NotificationListAtItem },
-  like: { title: '赞我的', component: NotificationListLikeItem },
-  comment: { title: '评论我的', component: NotificationListCommentItem },
-  system: { title: '系统消息', component: NotificationListSystemItem },
+  at: { title: 'at我的', component: NotificationListAtList },
+  like: { title: '赞我的', component: NotificationListLikeList },
+  comment: { title: '评论我的', component: NotificationListCommentList },
+  system: { title: '系统消息', component: NotificationListSystemList },
+  audit: { title: '审核通知', component: NotificationListAuditList },
+}
+
+const auditTypeMap = {
+  feedCommentPinned: '动态评论置顶',
+  newsCommentPinned: '资讯评论置顶',
+  postCommentPinned: '帖子评论置顶',
+  postPinned: '帖子置顶',
+  // groupJoin: '圈子加入申请',
 }
 
 export default {
@@ -40,6 +62,8 @@ export default {
   },
   data () {
     return {
+      auditTypeMap,
+      auditType: Object.keys(auditTypeMap)[0],
     }
   },
   computed: {
@@ -53,7 +77,9 @@ export default {
 <style lang="less" scoped>
 .c-notification-list {
   display: flex;
-  max-height: 90vh;
+  height: 80vh;
+  max-height: 1200px;
+  min-height: 400px;
 
   aside {
     flex: none;
@@ -102,6 +128,12 @@ export default {
   .list-container {
     flex: auto;
     overflow: auto;
+  }
+
+  .audit-selector {
+    font-size: @font-size-base;
+    font-weight: normal;
+    margin-left: 16px;
   }
 }
 </style>

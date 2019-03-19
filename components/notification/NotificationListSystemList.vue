@@ -22,7 +22,7 @@
 import { getNotificationDisplay } from './messageMap'
 
 export default {
-  name: 'NotificationListSystemItem',
+  name: 'NotificationListSystemList',
   filters: {
     getNotificationDisplay,
   },
