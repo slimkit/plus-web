@@ -67,7 +67,7 @@ export function fromNow (target, options = {}) {
 
   // 超过 9 天
   if (options.full) {
-    return `${date.toLocaleDateString().replace(/\//g, '-')} ${date.getHours()}:${date.getMinutes()}`
+    return `${date.toLocaleDateString().replace(/\//g, '-')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
   }
   return `${date.getMonth() + 1}-${date.getDate()}`
 }

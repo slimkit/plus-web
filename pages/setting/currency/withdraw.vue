@@ -1,5 +1,5 @@
 <template>
-  <div class="p-setting-currency-detail">
+  <div class="p-setting-currency-withdraw">
     <Loadmore
       ref="loader"
       @refresh="onRefresh"
@@ -9,7 +9,6 @@
         <thead>
           <tr>
             <th>时间</th>
-            <th>途径</th>
             <th>状态</th>
             <th>数量</th>
           </tr>
@@ -17,9 +16,8 @@
         <tbody>
           <tr v-for="(item, index) in list" :key="index">
             <td>{{ item.created_at | fromNow({full: true}) }}</td>
-            <td>{{ item.title }}</td>
-            <td>{{ item.state === 1 ? '成功' : '失败' }}</td>
-            <td :class="item.type === 1 ? 'income' : 'pay'">{{ item.type === 1 ? '+': '-' }}{{ item.amount }}积分</td>
+            <td :class="{pending: item.state !== 1}">{{ item.state === 1 ? '成功' : '等待' }}</td>
+            <td :class="item.state === 1 ? 'income' : 'pending'">-{{ item.amount }}积分</td>
           </tr>
         </tbody>
       </table>
@@ -39,13 +37,13 @@ export default {
   },
   methods: {
     async onRefresh () {
-      const params = { limit }
+      const params = { limit, action: 'cash', type: -1 }
       const list = await this.$axios.$get('/currency/orders', { params })
       this.list = list
       this.loader.afterRefresh(list.length < limit)
     },
     async onLoadmore () {
-      const params = { limit, after: getLastField(this.list) }
+      const params = { limit, action: 'cash', type: -1, after: getLastField(this.list) }
       const list = await this.$axios.$get('/currency/orders', { params })
       this.list.push(...list)
       this.loader.afterLoadmore(list.length < limit)
@@ -55,7 +53,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.p-setting-currency-detail {
+.p-setting-currency-withdraw {
   main {
     display: flex;
     justify-content: space-between;
@@ -71,8 +69,8 @@ export default {
       &.income {
         color: @warning-color;
       }
-      &.pay {
-        color: @error-color;
+      &.pending {
+        color: @disabled-color;
       }
 
       > a {
