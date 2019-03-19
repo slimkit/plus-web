@@ -1,5 +1,5 @@
 <template>
-  <div class="p-setting-currency-detail">
+  <div class="p-setting-wallet-detail">
     <Loadmore
       ref="loader"
       @refresh="onRefresh"
@@ -9,7 +9,7 @@
         <thead>
           <tr>
             <th>时间</th>
-            <th>途径</th>
+            <th>名称</th>
             <th>状态</th>
             <th>数量</th>
           </tr>
@@ -31,7 +31,7 @@
 import { limit, getLastField } from '@/utils'
 
 export default {
-  name: 'SettingCurrencyDetail',
+  name: 'SettingWalletDetail',
   data () {
     return {
       list: [],
@@ -40,13 +40,13 @@ export default {
   methods: {
     async onRefresh () {
       const params = { limit }
-      const list = await this.$axios.$get('/currency/orders', { params })
+      const list = await this.$axios.$get('/plus-pay/orders', { params })
       this.list = list
       this.loader.afterRefresh(list.length < limit)
     },
     async onLoadmore () {
       const params = { limit, after: getLastField(this.list) }
-      const list = await this.$axios.$get('/currency/orders', { params })
+      const list = await this.$axios.$get('/plus-pay/orders', { params })
       this.list.push(...list)
       this.loader.afterLoadmore(list.length < limit)
     },
@@ -55,7 +55,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.p-setting-currency-detail {
+.p-setting-wallet-detail {
   main {
     display: flex;
     justify-content: space-between;
