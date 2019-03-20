@@ -25,6 +25,8 @@ module.exports = {
     script: [
       // fonticon
       { src: '//at.alicdn.com/t/font_800619_qfgjd3y7yma.js' },
+      // social share https://github.com/overtrue/share.js/
+      { src: '/scripts/social-share.min.js' },
     ],
   },
 
