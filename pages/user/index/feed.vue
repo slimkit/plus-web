@@ -9,12 +9,13 @@
       @refresh="onRefresh"
       @loadmore="onLoadmore"
     >
-      <FeedList :feeds="feeds" />
+      <FeedList :feeds="feeds" @after-delete="afterDeleteFeed" />
     </Loadmore>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 import { limit, getLastField } from '@/utils'
 import FeedList from '@/components/feed/FeedList.vue'
 
@@ -47,6 +48,9 @@ export default {
         after,
       }
       return this.$axios.$get('/feeds', { params })
+    },
+    afterDeleteFeed (feedId) {
+      this.feeds = _.filter(this.feeds, feed => feed.id !== feedId)
     },
   },
 }
