@@ -45,14 +45,18 @@
                 <template v-slot:content>
                   <ul class="options" @click="showShareMenu = false">
                     <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg>转发</li>
-                    <li><svg class="icon"><use xlink:href="#icon-weibo" /></svg>微博</li>
-                    <li><svg class="icon"><use xlink:href="#icon-qq" /></svg>QQ</li>
-                    <li><svg class="icon"><use xlink:href="#icon-weixin" /></svg>微信</li>
                   </ul>
                 </template>
               </IPoptip>
             </h1>
-            <p class="description text-cut-2">{{ group.summary }}</p>
+            <div class="group-desc">
+              <p class="description text-cut-2">{{ group.summary }}</p>
+              <SocialShare
+                :title="group.name"
+                :description="group.summary"
+                :image="group.avatar.url"
+              />
+            </div>
             <div class="meta-wrap">
               <span>帖子 <span class="primary-color">{{ group.posts_count || 0 }}</span></span>
               <span>成员 <span class="primary-color">{{ group.users_count || 0 }}</span></span>
@@ -276,6 +280,7 @@ import _ from 'lodash'
 import { mapState } from 'vuex'
 import { limit } from '@/utils'
 import TagList from '@/components/tag/TagList.vue'
+import SocialShare from '@/components/common/SocialShare.vue'
 import GrouppostList from '@/components/group/GrouppostList.vue'
 import GroupMembers from '@/components/group/GroupMembers.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
@@ -293,6 +298,7 @@ export default {
   },
   components: {
     TagList,
+    SocialShare,
     GrouppostList,
     GroupMembers,
     SideWidget,
@@ -572,6 +578,11 @@ export default {
             margin-left: auto;
             font-weight: normal;
           }
+        }
+
+        .group-desc {
+          display: flex;
+          justify-content: space-between;
         }
 
         .description {
