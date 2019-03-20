@@ -99,10 +99,11 @@
 
         <template #footer>
           <footer>
-            分享至：
-            <svg class="icon"><use xlink:href="#icon-weibo" /></svg>
-            <svg class="icon"><use xlink:href="#icon-qq" /></svg>
-            <svg class="icon"><use xlink:href="#icon-weixin" /></svg>
+            <SocialShare
+              :title="topic.name"
+              :description="topic.desc"
+              :image="cover.url"
+            />
           </footer>
         </template>
       </SideWidget>
@@ -142,6 +143,7 @@ import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotTopics from '@/components/topic/SideWidgetHotTopics.vue'
+import SocialShare from '@/components/common/SocialShare.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import PostFeed from '@/components/feed/PostFeed.vue'
 import TopicParticipants from '@/components/topic/TopicParticipants.vue'
@@ -152,6 +154,7 @@ export default {
   components: {
     SideWidget,
     SideWidgetHotTopics,
+    SocialShare,
     FeedList,
     PostFeed,
     TopicParticipants,
@@ -359,6 +362,10 @@ export default {
         align-items: center;
         background-color: @error-color;
         color: #fff;
+
+        /deep/ .share-icon {
+          fill: #fff;
+        }
       }
     }
 
