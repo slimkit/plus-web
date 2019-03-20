@@ -219,7 +219,7 @@ export default {
     },
   },
   mounted () {
-    if (!this.friends.length) this.getUserFriends()
+    if (this.logged && !this.friends.length) this.getUserFriends()
   },
   methods: {
     ...mapActions('user', {
