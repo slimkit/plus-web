@@ -22,17 +22,19 @@
     </div>
 
     <div class="meta-item">
-      分享至：
-      <svg class="icon lg share-icon" :style="{color: '#f97d72'}"><use xlink:href="#icon-weibo" /></svg>
-      <svg class="icon lg share-icon" :style="{color: '#54c58c'}"><use xlink:href="#icon-weixin" /></svg>
-      <svg class="icon lg share-icon" :style="{color: '#5fbddf'}"><use xlink:href="#icon-qq" /></svg>
+      <SocialShare v-bind="share" />
     </div>
   </section>
 </template>
 
 <script>
+import SocialShare from '@/components/common/SocialShare.vue'
+
 export default {
   name: 'ArticleLike',
+  components: {
+    SocialShare,
+  },
   props: {
     likeCount: { type: Number, default: 0 },
     collectCount: { type: Number, default: 0 },
@@ -42,8 +44,7 @@ export default {
     /**
      * @property {Object} share
      * @property {string} share.title 分享标题
-     * @property {string} share.content 分享内容
-     * @property {string} share.link 分享链接
+     * @property {string} share.description 分享内容
      * @property {string} share.image 图片链接
      */
     share: { type: Object, default: () => {} },

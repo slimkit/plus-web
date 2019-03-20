@@ -47,6 +47,7 @@
           :like-count="feed.like_count"
           :liked="feed.has_like"
           :collected="feed.has_collect"
+          :share="shareInfo"
           @like="onLike"
           @collect="onCollect"
         />
@@ -161,6 +162,13 @@ export default {
       set (val) {
         this.feed.reward.count = val
       },
+    },
+    shareInfo () {
+      const info = {
+        title: this.feed.feed_content,
+      }
+      if (this.images.length) info.image = this.images[0]
+      return info
     },
   },
   async asyncData ({ $axios, params }) {
