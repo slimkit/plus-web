@@ -23,7 +23,7 @@
     <div
       class="feed-content"
       @click="viewDetail"
-      v-html="convertAtHTML(feed.feed_content)"
+      v-html="formatContent(feed.feed_content)"
     />
 
     <AsyncFile
@@ -119,7 +119,7 @@
 
 <script>
 import { getFileUrl } from '@/utils/file'
-import { convertAtHTML } from '@/utils/text'
+import { convertAtHTML, convertLinkHTML } from '@/utils/text'
 import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
 import ArticleListCommentList from '@/components/common/ArticleListCommentList.vue'
 import Reference from '@/components/common/Reference.vue'
@@ -184,7 +184,11 @@ export default {
     },
   },
   methods: {
-    convertAtHTML,
+    formatContent (text) {
+      text = convertLinkHTML(text)
+      text = convertAtHTML(text)
+      return text
+    },
     viewDetail () {
       this.$router.push(`/feed/${this.feed.id}`)
     },
@@ -300,6 +304,10 @@ export default {
   .feed-content {
     cursor: pointer;
     margin-bottom: 16px;
+
+    a {
+      color: @primary-color;
+    }
 
     /* for group post layout */
     .title {

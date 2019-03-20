@@ -40,7 +40,7 @@
           </template>
         </div>
 
-        <div class="text-wrap" v-html="convertAtHTML(feed.feed_content)" />
+        <div class="text-wrap" v-html="formatContent(feed.feed_content)" />
       </main>
       <footer class="article-footer">
         <ArticleLike
@@ -104,7 +104,7 @@
 <script>
 import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
-import { convertAtHTML } from '@/utils/text'
+import { convertAtHTML, convertLinkHTML } from '@/utils/text'
 import { noop, limit } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
@@ -182,7 +182,11 @@ export default {
     ...mapActions('user', {
       fetchRecommendUsers: 'fetchRecommendUsers',
     }),
-    convertAtHTML,
+    formatContent (text) {
+      text = convertLinkHTML(text)
+      text = convertAtHTML(text)
+      return text
+    },
     async fetchRewards (offset = 0, callback = noop) {
       const list = await this.$axios.$get(`/feeds/${this.feed.id}/rewards`, { params: { offset, limit } })
       if (!offset) {
@@ -325,6 +329,12 @@ export default {
 
     .video-wrap {
       margin-bottom: 24px;
+    }
+
+    .text-wrap {
+      /deep/ a {
+        color: @primary-color;
+      }
     }
   }
 

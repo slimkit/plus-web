@@ -15,3 +15,8 @@ export const textAtMatcher = /(@[^\r\n\t\v\f@ ]+)(\s?)/g
  * });
  */
 export const shyMatcher = /\u00ad@([^/]+?)\u00ad/gi
+
+/**
+ * 匹配文本中的超级链接
+ */
+export const linkMatcher = /((?:https?|mailto|ftp):\/\/([^\s<'"“”‘’，。}]*)?)/gi
