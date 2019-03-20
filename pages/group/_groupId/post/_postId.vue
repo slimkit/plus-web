@@ -56,6 +56,7 @@
           :like-count="post.likes_count"
           :liked="post.liked"
           :collected="post.collected"
+          :share="shareInfo"
           @like="onLike"
           @collect="onCollect"
         />
@@ -167,6 +168,13 @@ export default {
     },
     renderedBody () {
       return markdown(this.post.body)
+    },
+    shareInfo () {
+      return {
+        title: this.post.title,
+        description: this.post.summary,
+        image: this.images.length ? this.images[0] : null,
+      }
     },
   },
   async asyncData ({ params, $axios }) {
