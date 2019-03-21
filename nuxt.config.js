@@ -65,6 +65,7 @@ module.exports = {
     { src: '@/plugins/components', ssr: true },
     { src: '@/plugins/filters', ssr: true },
     { src: '@/plugins/directives', ssr: true },
+    { src: '@/plugins/vueCropper', ssr: false },
   ],
 
   /*
@@ -114,6 +115,7 @@ module.exports = {
     vendor: [
       'iview',
       'lodash',
+      'vue-cropper',
     ],
     /*
     ** You can extend webpack config here
