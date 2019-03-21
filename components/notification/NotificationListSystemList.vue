@@ -67,19 +67,24 @@ export default {
           url = `/question/${data.answer.question_id}/answer/${data.answer.id}`; break
         case 'qa:invitation':
           url = `/question/${data.question.id}`; break
-        // case 'group:join':
-          // url = `/message/audits/groupjoins`; break
-        // case 'pinned:feed/comment':
-        //   url = `/message/audits/feedcomments`; break
-        // case 'pinned:news/comment':
-        //   url = `/message/audits/newscomments`; break
-        // case 'group:comment-pinned':
-        // case 'group:send-comment-pinned':
-        //   url = `/message/audits/groupcomments`; break
-        // case 'group:post-pinned':
-        //   url = `/message/audits/groupposts`; break
+        case 'group:join':
+          url = `/group/${data.group.id}/manage/members?type=audit`; break
+        case 'pinned:feed/comment':
+          return this.$root.$emit('notification', { type: 'audit', auditType: 'feedCommentPinned' })
+        case 'pinned:news/comment':
+          return this.$root.$emit('notification', { type: 'audit', auditType: 'newsCommentPinned' })
+        case 'group:comment-pinned':
+        case 'group:send-comment-pinned':
+          return this.$root.$emit('notification', { type: 'audit', auditType: 'postCommentPinned' })
+        case 'group:post-pinned':
+          return this.$root.$emit('notification', { type: 'audit', auditType: 'postPinned' })
+        case 'group:pinned-admin':
+          url = `/group/${data.group_id}/post/${data.post.id}`
       }
-      if (url) this.$router.push(url)
+      if (url) {
+        this.$router.push(url)
+        this.$root.$emit('notification:close')
+      }
     },
   },
 }

@@ -17,7 +17,11 @@
 
       <main>
         <!-- 通知列表 -->
-        <NotificationList v-if="show" :type.sync="type" />
+        <NotificationList
+          v-if="show"
+          :type.sync="type"
+          :audit-type.sync="auditType"
+        />
 
         <!-- 聊天列表 -->
         <!-- <ChatList v-else /> -->
@@ -37,6 +41,7 @@ export default {
   data () {
     return {
       type: 'comment',
+      auditType: 'auditType',
 
       show: false,
       loading: true,
@@ -50,7 +55,11 @@ export default {
   created () {
     this.$root.$on('notification', options => {
       if (options.type) this.type = options.type
+      if (options.auditType) this.auditType = options.auditType
       this.open()
+    })
+    this.$root.$on('notification:close', () => {
+      this.close()
     })
   },
   destoryed () {

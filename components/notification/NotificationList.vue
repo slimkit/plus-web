@@ -14,7 +14,7 @@
       <h3 class="title">
         {{ computedType.title }}
         <div v-if="type === 'audit'" class="audit-selector">
-          <Select v-model="auditType" size="small">
+          <Select v-model="audit" size="small">
             <Option
               v-for="(label, name) in auditTypeMap"
               :key="name"
@@ -26,7 +26,7 @@
       </h3>
 
       <div class="list-container">
-        <Component :is="computedType.component" :audit-type="auditType" />
+        <Component :is="computedType.component" :audit-type="audit" />
       </div>
     </main>
   </div>
@@ -59,14 +59,22 @@ export default {
   name: 'NotificationList',
   props: {
     type: { type: String, default: 'comment' },
+    auditType: { type: String, default: 'feedCommentPinned' },
   },
   data () {
     return {
       auditTypeMap,
-      auditType: Object.keys(auditTypeMap)[0],
     }
   },
   computed: {
+    audit: {
+      get () {
+        return this.auditType
+      },
+      set (type) {
+        this.$emit('update:audit-type', type)
+      },
+    },
     computedType () {
       return typeMap[this.type]
     },

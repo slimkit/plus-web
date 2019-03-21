@@ -47,5 +47,7 @@ export function getNotificationDisplay (data) {
     case 'group:post-pinned':
       return `${data.state !== 'reject' ? '同意' : '拒绝'}用户帖子「${data.post.title}」的置顶请求`
       // return i18n.t(`message.system.pinned_post[${data.state !== 'reject' ? 1 : 0}]`, { post: data.post.title })
+    case 'group:pinned-admin':
+      return `你的帖子「${data.post.title}」已被管理员置顶`
   }
 }
