@@ -18,12 +18,19 @@
             size="xl"
             :link="false"
           />
-          <IButton :loading="avatarUploadingLock" @click="$refs.uploader.select()">更换头像</IButton>
+          <IButton :loading="avatarUploadingLock" @click="$refs.cropper.open()">更换头像</IButton>
+          <ImageCropper
+            ref="cropper"
+            title="更换头像"
+            :circle="true"
+            :fixed="true"
+            :preview="true"
+            @after-crop="onAfterCrop"
+          />
           <Uploader
             ref="uploader"
             :preview-size="{width: 320}"
             accept="image/*"
-            :before-upload="beforeAvatarUpload"
             @finish="afterAvatarUpload"
           />
         </div>
@@ -73,10 +80,14 @@
 
 <script>
 import _ from 'lodash'
+import ImageCropper from '@/components/common/ImageCropper.vue'
 import { parseSearchTree } from '@/utils/location'
 
 export default {
   name: 'SettingProfile',
+  components: {
+    ImageCropper,
+  },
   data: function () {
     return {
       form: {
@@ -135,10 +146,8 @@ export default {
       this.avatarPreview = ''
       this.avatarUploadingLock = false
     },
-    beforeAvatarUpload (images) {
-      this.avatarUploadingLock = true
-      // TODO: 裁切头像
-      return images
+    onAfterCrop (blob, fileName) {
+      this.$refs.uploader.uploadBlob(blob, fileName)
     },
     afterAvatarUpload (image) {
       this.avatarUploadingLock = false

@@ -60,7 +60,7 @@ export default {
       const size = sizeMap[this.size]
       src += `?role=w_${size},h_${size}`
       return {
-        backgroundImage: `url(${src})`,
+        backgroundImage: `url("${src}")`,
       }
     },
     verify () {

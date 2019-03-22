@@ -58,6 +58,15 @@ export default {
       this.$refs.fileInput.click()
     },
 
+    async uploadBlob (blob, fileName = '') {
+      // blob to file
+      blob.lastModifiedDate = new Date()
+      blob.name = fileName
+
+      const file = await this.createObject(blob)
+      this.onUpload([file])
+    },
+
     /**
      * 上传单个文件
      * @export
@@ -97,7 +106,7 @@ export default {
       if (this.multiple) files = [...this.value, ...files]
 
       // 上传前处理
-      const result = this.beforeUpload(files)
+      const result = await this.beforeUpload(files)
       if (!result) return
       files = (result instanceof Array) ? result : files // 返回的不是数组的话就使用原始值
       this.update(files)

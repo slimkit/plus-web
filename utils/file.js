@@ -27,7 +27,7 @@ export const hashFile = file => {
  * @param {Object} [limit={}] 不填则不限制
  * @param {number} [limit.width] 最大宽度
  * @param {number} [limit.height] 最大高度
- * @returns {Blob} Blob 对象
+ * @returns {string} blobURL
  */
 export const getImageCover = async (file, limit = {}) => {
   return new Promise(resolve => {
@@ -51,11 +51,38 @@ export const getImageCover = async (file, limit = {}) => {
       canvas.height = height
       // 绘制图片帧（第一帧）
       canvas.getContext('2d').drawImage(image, 0, 0, width, height)
-      const blob = canvas.toDataURL('image/png')
-      return resolve(blob)
+      const base64DomString = canvas.toDataURL('image/jpeg', 0.6)
+      const base64 = base64DomString.replace(/^data:image\/jpeg;base64,/, '')
+      const blob = base64toBlob(base64, 'image/jpeg')
+      return resolve(getObjectUrl(blob))
     }
     image.src = getObjectUrl(file)
   })
+}
+
+/**
+ * Base64 字符串转化为 Blob 对象
+ * @param {string} base64
+ * @param {string} contentType example: 'image/png'
+ * @param {number} sliceSize
+ * @returns {Blob}
+ */
+export const base64toBlob = (base64, contentType = '', sliceSize = 512) => {
+  const byteChars = atob(base64.replace(/\s/g, ''))
+  const byteArrays = []
+
+  for (let offset = 0; offset < byteChars.length; offset += sliceSize) {
+    const slice = byteChars.slice(offset, offset + sliceSize)
+    const byteNumbers = new Array(slice.length)
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i)
+    }
+    const byteArray = new Uint8Array(byteNumbers)
+    byteArrays.push(byteArray)
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType })
+  return blob
 }
 
 /**

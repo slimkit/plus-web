@@ -6,6 +6,7 @@
       :width="preview ? 960 : 720"
       :footer-hide="!image"
       :transfer="false"
+      @on-cancel="close"
     >
       <template v-slot:default>
         <div v-if="show" class="modal-container">
@@ -54,6 +55,7 @@
               size="small"
               :long="true"
               type="primary"
+              @click="onConfirm"
             >
               确定
             </IButton>
@@ -78,7 +80,8 @@ export default {
     return {
       show: false,
       image: null,
-      html: '',
+      html: '预览',
+      fileName: '',
     }
   },
   computed: {
@@ -97,14 +100,25 @@ export default {
       this.show = true
     },
     close () {
+      this.image = null
+      this.html = '预览'
       this.show = false
     },
     handleSelectFile (event) {
       const file = this.$refs.input.files[0]
+      this.fileName = file.name
       this.image = getObjectUrl(file)
     },
     onCropMoving (data) {
       this.html = data.html
+    },
+    onConfirm () {
+      this.$refs.cropper.getCropBlob(blob => {
+        const isJpeg = this.fileName.match(/\.jpe?g$/)
+        if (!isJpeg) this.fileName += '.jpg'
+        this.$emit('after-crop', blob, this.fileName)
+        this.close()
+      })
     },
   },
 }
