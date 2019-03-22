@@ -28,7 +28,6 @@
             :width="320"
             :height="320"
             output-type="png"
-            :center-box="false"
             @after-crop="onAfterCrop"
           />
           <Uploader

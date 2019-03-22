@@ -549,7 +549,7 @@ export default {
               content: '';
               position: absolute;
               top: 100%;
-              left: 0;
+              left: 1px;
               display: block;
               width: 0;
               height: 0;
