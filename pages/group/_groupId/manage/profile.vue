@@ -19,12 +19,22 @@
             :link="false"
             :square="true"
           />
-          <IButton :loading="avatarUploadingLock" @click="$refs.uploader.select()">更换圈子头像</IButton>
+          <IButton :loading="avatarUploadingLock" @click="$refs.cropper.open()">更换圈子头像</IButton>
+          <ImageCropper
+            ref="cropper"
+            title="更换圈子头像"
+            :preview="true"
+            :fixed="true"
+            :width="320"
+            :height="320"
+            output-type="png"
+            :center-box="false"
+            @after-crop="onAfterCrop"
+          />
           <Uploader
             ref="uploader"
             :preview-size="{width: 320}"
             accept="image/*"
-            :before-upload="beforeAvatarUpload"
             @finish="afterAvatarUpload"
           />
         </div>
@@ -176,17 +186,19 @@
 import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
 import { parseSearchTree } from '@/utils/location'
+import ImageCropper from '@/components/common/ImageCropper.vue'
 import TagList from '@/components/tag/TagList.vue'
 
 export default {
   name: 'SettingProfile',
   components: {
+    ImageCropper,
     TagList,
   },
   data: function () {
     return {
       form: {
-        avatar: null,
+        // avatar: null,
         name: '',
         summary: '',
         location: '',
@@ -219,14 +231,17 @@ export default {
   },
   computed: {
     ...mapState('group', {
-      group: 'current',
       categories: 'category',
     }),
     ...mapState({
       tags: 'tags',
     }),
     group () {
-      return this.$parent.group
+      const group = this.$parent.group
+      if (this.avatarPreview) {
+        group.avatar.url = this.avatarPreview
+      }
+      return group
     },
     mode () {
       if (this.needPaid) return 'paid'
@@ -236,7 +251,6 @@ export default {
     originForm () {
       return {
         ..._.pick(this.group, ['name', 'location', 'summary', 'notice', 'permissions', 'category_id', 'allow_feed', 'mode', 'money']),
-        avatar: null,
         tags: this.group.tags.map(t => t.id).sort().join(','),
       }
     },
@@ -300,16 +314,20 @@ export default {
       this.avatarPreview = ''
       this.avatarUploadingLock = false
     },
-    beforeAvatarUpload (images) {
-      this.avatarUploadingLock = true
-      // TODO: 裁切头像
-      return images
+    onAfterCrop (blob, fileName) {
+      this.$refs.uploader.uploadBlob(blob, fileName)
     },
     afterAvatarUpload (image) {
       this.avatarUploadingLock = false
       if (image.error) return this.$Message.error(image.error)
       this.avatarPreview = image.preview
-      this.form.avatar = image.value
+      this.modifyAvatar(image.file)
+    },
+    async modifyAvatar (blob) {
+      const form = new FormData()
+      form.append('avatar', blob)
+      await this.$axios.$post(`/plus-group/groups/${this.group.id}`, form)
+      this.$Message.success('圈子头像修改成功')
     },
     onSearchLocation: _.debounce(async function (keyword) {
       this.searchLocation = []

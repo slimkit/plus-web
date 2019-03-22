@@ -15,8 +15,19 @@
         label="圈子头像"
         required
       >
-        <figure class="avatar-wrap" @click="$refs.uploader.select()">
+        <figure class="avatar-wrap" @click="$refs.cropper.open()">
           <div class="avatar-src" :style="{backgroundImage: `url(${avatar.preview})`}" />
+
+          <ImageCropper
+            ref="cropper"
+            title="上传圈子头像"
+            :preview="true"
+            :fixed="true"
+            :width="320"
+            :height="320"
+            output-type="png"
+            @after-crop="onAfterCrop"
+          />
 
           <Uploader
             ref="uploader"
@@ -190,11 +201,13 @@ import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
 import markdown from '@/utils/markdown.js'
 import { parseSearchTree } from '@/utils/location.js'
+import ImageCropper from '@/components/common/ImageCropper.vue'
 import TagList from '@/components/tag/TagList.vue'
 
 export default {
   name: 'GroupCreate',
   components: {
+    ImageCropper,
     TagList,
   },
   data () {
@@ -365,6 +378,9 @@ export default {
       const result = await this.$axios.$get('/locations/search', { params })
       this.searchLocation = result.map(item => parseSearchTree(item.tree))
     }, 450),
+    onAfterCrop (blob, fileName) {
+      this.$refs.uploader.uploadBlob(blob, fileName)
+    },
     validateForm () {
       return new Promise((resolve, reject) => {
         this.$refs.form.validate(valid => {
