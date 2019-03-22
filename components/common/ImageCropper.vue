@@ -3,21 +3,20 @@
     <IModal
       v-model="show"
       :title="title"
-      :width="preview ? 960 : 720"
       :footer-hide="!image"
+      :width="width * (preview ? 2 : 1) * 1.25 + 32"
       :transfer="false"
-      @on-cancel="close"
     >
       <template v-slot:default>
-        <div v-if="show" class="modal-container">
+        <div class="modal-container" :style="{width: `${width * 1.25 * (preview ? 2 : 1)}px`, height: `${height * 1.2}px`}">
           <input
             ref="input"
             type="file"
             class="hidden"
             @change="handleSelectFile"
           >
-          <div :class="['cropper-wrap', {single: !preview}]" @click.once="$refs.input.click()">
-            <div class="placeholder">
+          <div :class="['cropper-wrap', {single: !preview}]">
+            <div class="placeholder" @click="$refs.input.click()">
               <svg class="icon xl"><use xlink:href="#icon-ico_upload" /></svg>
               点击上传文件
             </div>
@@ -75,6 +74,9 @@ export default {
     title: { type: String, default: null },
     circle: { type: Boolean, default: false },
     preview: { type: Boolean, default: false },
+    width: { type: Number, default: 640 },
+    height: { type: Number, default: 640 },
+    fixed: { type: Boolean, default: false },
   },
   data () {
     return {
@@ -87,12 +89,24 @@ export default {
   computed: {
     cropperProps () {
       return {
-        ...this.$attrs,
+        mode: 'cover',
         autoCrop: true, // 自动打开截图框
-        autoCropWidth: '1000',
-        autoCropHeight: '1000',
-        centerBox: true, // 截图框限制在图片里面
+        autoCropWidth: this.width,
+        autoCropHeight: this.height,
+        fixed: this.fixed,
+        fixedBox: this.fixed,
+        fixedNumber: [this.width, this.height],
+        'center-box': true, // 截图框限制在图片里面
+        canMoveBox: !this.fixed,
+        maxImageSize: Math.max(this.width, this.height),
+
+        ...this.$attrs,
       }
+    },
+  },
+  watch: {
+    show (val) {
+      if (!val) this.close()
     },
   },
   methods: {
@@ -114,8 +128,13 @@ export default {
     },
     onConfirm () {
       this.$refs.cropper.getCropBlob(blob => {
-        const isJpeg = this.fileName.match(/\.jpe?g$/)
-        if (!isJpeg) this.fileName += '.jpg'
+        if (this.$attrs['output-type'] === 'png') {
+          const isPng = this.fileName.match(/\.png$/)
+          if (!isPng) this.fileName += '.png'
+        } else {
+          const isJpeg = this.fileName.match(/\.jpe?g$/)
+          if (!isJpeg) this.fileName += '.jpg'
+        }
         this.$emit('after-crop', blob, this.fileName)
         this.close()
       })
@@ -136,7 +155,6 @@ export default {
   .modal-container {
     display: flex;
     justify-content: center;
-    height: 400px;
   }
 
   .cropper-wrap {

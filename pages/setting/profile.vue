@@ -23,13 +23,17 @@
             ref="cropper"
             title="更换头像"
             :circle="true"
-            :fixed="true"
             :preview="true"
+            :fixed="true"
+            :width="320"
+            :height="320"
+            output-type="png"
+            :center-box="false"
             @after-crop="onAfterCrop"
           />
           <Uploader
             ref="uploader"
-            :preview-size="{width: 320}"
+            :preview-size="{width: 400}"
             accept="image/*"
             @finish="afterAvatarUpload"
           />

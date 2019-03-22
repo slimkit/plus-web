@@ -10,8 +10,12 @@
       @submit.native.prevent="onSubmit"
     >
       <IFormItem prop="logo">
-        <div class="cover" @click="$refs.uploader.select()">
-          <div v-if="!cover.preview" class="default">
+        <div class="cover">
+          <div
+            v-if="!cover.preview"
+            class="default"
+            @click="$refs.cropper.open()"
+          >
             <svg class="icon"><use xlink:href="#icon-ico_upload" /></svg>
             上传话题封面图
           </div>
@@ -26,10 +30,20 @@
               ghost
               shape="circle"
               size="small"
+              @click="$refs.cropper.open()"
             >
               改变话题封面
             </IButton>
           </div>
+
+          <ImageCropper
+            ref="cropper"
+            title="上传话题封面"
+            :fixed="true"
+            :width="720"
+            :height="380"
+            @after-crop="onAfterCrop"
+          />
 
           <Uploader
             ref="uploader"
@@ -71,8 +85,13 @@
 </template>
 
 <script>
+import ImageCropper from '@/components/common/ImageCropper.vue'
+
 export default {
   name: 'TopicCreate',
+  components: {
+    ImageCropper,
+  },
   middlewares: ['requireAuth'],
   data () {
     return {
@@ -87,6 +106,9 @@ export default {
     }
   },
   computed: {
+    topicId () {
+      return null
+    },
     form () {
       return {
         name: this.name,
@@ -99,6 +121,9 @@ export default {
     },
   },
   methods: {
+    onAfterCrop (blob, fileName) {
+      this.$refs.uploader.uploadBlob(blob, fileName)
+    },
     beforeSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) this.onSubmit()
@@ -106,9 +131,14 @@ export default {
       })
     },
     async onSubmit () {
-      const { id } = await this.$axios.$post('/feed/topics', this.form)
-      this.$Message.success('话题创建成功')
-      this.$router.push(`/topic/${id}`)
+      const { id, need_review: needReview = false } = await this.$axios.$post('/feed/topics', this.form)
+      if (needReview) {
+        this.$Message.success('话题创建成功，请等待审核')
+        this.$router.push('/topic')
+      } else {
+        this.$Message.success('话题创建成功')
+        this.$router.push(`/topic/${id}`)
+      }
     },
   },
 }
@@ -120,8 +150,9 @@ export default {
   background-color: #fff;
 
   .cover {
-    margin: 16px 0;
-    height: 400px;
+    margin: 24px auto;
+    width: 720px;
+    height: 380px;
     cursor: pointer;
 
     .default {

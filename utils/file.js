@@ -51,9 +51,10 @@ export const getImageCover = async (file, limit = {}) => {
       canvas.height = height
       // 绘制图片帧（第一帧）
       canvas.getContext('2d').drawImage(image, 0, 0, width, height)
-      const base64DomString = canvas.toDataURL('image/jpeg', 0.6)
-      const base64 = base64DomString.replace(/^data:image\/jpeg;base64,/, '')
-      const blob = base64toBlob(base64, 'image/jpeg')
+      const outputType = 'image/png'
+      const base64DomString = canvas.toDataURL(outputType)
+      const base64 = base64DomString.replace(new RegExp(`^data:${outputType};base64,`), '')
+      const blob = base64toBlob(base64, outputType)
       return resolve(getObjectUrl(blob))
     }
     image.src = getObjectUrl(file)
