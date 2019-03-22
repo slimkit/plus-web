@@ -36,7 +36,7 @@ export default {
       return this.remoteComment || this.source
     },
     jumpRoute () {
-      const { resourceable } = this.comment
+      const resourceable = this.comment.resourceable || {}
       switch (resourceable.type) {
         case 'feeds':
           return `/feed/${resourceable.id}`

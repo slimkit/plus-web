@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       type: 'comment',
-      auditType: 'auditType',
+      auditType: 'feedCommentPinned',
 
       show: false,
       loading: true,
