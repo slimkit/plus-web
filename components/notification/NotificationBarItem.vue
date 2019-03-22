@@ -3,7 +3,7 @@
     <div class="logo-wrap">
       <slot />
     </div>
-    <i v-if="badge">{{ badge | max(99) }}</i>
+    <i v-if="badge" class="badge">{{ badge | max(99) }}</i>
   </li>
 </template>
 
@@ -32,21 +32,10 @@ export default {
     height: 48px;
     font-size: 120%;
   }
-
-  > i {
+  .badge {
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     right: 4px;
     top: 4px;
-    width: 16px;
-    height: 16px;
-    border-radius: 10px;
-    border: 1px solid #fff;
-    background-color: @error-color;
-    color: #fff;
-    font-size: @font-size-small * .8;
   }
 }
 </style>

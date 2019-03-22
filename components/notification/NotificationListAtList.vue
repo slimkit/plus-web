@@ -35,6 +35,9 @@ export default {
       nextApi: null,
     }
   },
+  mounted () {
+    this.$store.dispatch('notification/clearUnreadNotification', 'at')
+  },
   methods: {
     async onRefresh () {
       const params = { type: 'at' }

@@ -59,7 +59,7 @@ export default {
     },
   },
   props: {
-    auditType: { type: String, required: true, validator: type => Object.keys(typeMap).includes(type) },
+    auditType: { type: String, default: 'feedCommentPinned', validator: type => Object.keys(typeMap).includes(type) },
   },
   data () {
     return {

@@ -43,6 +43,9 @@ export default {
       comments: [],
     }
   },
+  mounted () {
+    this.$store.dispatch('notification/clearUnreadNotification', 'comment')
+  },
   methods: {
     async onRefresh () {
       const params = { limit }

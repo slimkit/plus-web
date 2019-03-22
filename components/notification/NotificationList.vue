@@ -2,11 +2,51 @@
   <div class="c-notification-list">
     <aside>
       <ul class="nav">
-        <li :class="{active: type === 'at'}" @click="$emit('update:type', 'at')"><svg class="icon lg"><use xlink:href="#icon-side-mention" /></svg> @我的</li>
-        <li :class="{active: type === 'comment'}" @click="$emit('update:type', 'comment')"><svg class="icon lg"><use xlink:href="#icon-side-msg" /></svg> 评论我的</li>
-        <li :class="{active: type === 'like'}" @click="$emit('update:type', 'like')"><svg class="icon lg"><use xlink:href="#icon-side-like" /></svg> 赞了我的</li>
-        <li :class="{active: type === 'system'}" @click="$emit('update:type', 'system')"><svg class="icon lg"><use xlink:href="#icon-side-notice" /></svg> 系统通知</li>
-        <li :class="{active: type === 'audit'}" @click="$emit('update:type', 'audit')"><svg class="icon lg"><use xlink:href="#icon-side-auth" /></svg> 审核通知</li>
+        <li :class="{active: type === 'at'}" @click="$emit('update:type', 'at')">
+          <svg class="icon lg"><use xlink:href="#icon-side-mention" /></svg>
+          <span class="text">@我的</span>
+          <i
+            v-if="at.badge"
+            class="badge"
+            v-text="at.badge"
+          />
+        </li>
+        <li :class="{active: type === 'comment'}" @click="$emit('update:type', 'comment')">
+          <svg class="icon lg"><use xlink:href="#icon-side-msg" /></svg>
+          <span class="text">评论我的</span>
+          <i
+            v-if="comment.badge"
+            class="badge"
+            v-text="comment.badge"
+          />
+        </li>
+        <li :class="{active: type === 'like'}" @click="$emit('update:type', 'like')">
+          <svg class="icon lg"><use xlink:href="#icon-side-like" /></svg>
+          <span class="text">赞了我的</span>
+          <i
+            v-if="like.badge"
+            class="badge"
+            v-text="like.badge"
+          />
+        </li>
+        <li :class="{active: type === 'system'}" @click="$emit('update:type', 'system')">
+          <svg class="icon lg"><use xlink:href="#icon-side-notice" /></svg>
+          <span class="text">系统通知</span>
+          <i
+            v-if="system.badge"
+            class="badge"
+            v-text="system.badge"
+          />
+        </li>
+        <li :class="{active: type === 'audit'}" @click="$emit('update:type', 'audit')">
+          <svg class="icon lg"><use xlink:href="#icon-side-auth" /></svg>
+          <span class="text">审核通知</span>
+          <i
+            v-if="unreadAudits"
+            class="badge"
+            v-text="unreadAudits"
+          />
+        </li>
       </ul>
     </aside>
 
@@ -38,6 +78,7 @@ import NotificationListLikeList from './NotificationListLikeList.vue'
 import NotificationListCommentList from './NotificationListCommentList.vue'
 import NotificationListSystemList from './NotificationListSystemList.vue'
 import NotificationListAuditList from './NotificationListAuditList.vue'
+import { mapState, mapGetters } from 'vuex'
 
 const typeMap = {
   at: { title: 'at我的', component: NotificationListAtList },
@@ -67,6 +108,8 @@ export default {
     }
   },
   computed: {
+    ...mapState('notification', ['at', 'like', 'comment', 'system']),
+    ...mapGetters('notification', ['unreadAudits']),
     audit: {
       get () {
         return this.auditType
@@ -111,8 +154,16 @@ export default {
         background-color: @btn-disable-color;
       }
 
+      .text {
+        margin-right: auto;
+      }
+
       .icon {
         margin-right: .5em;
+      }
+
+      i.badge {
+        border: none;
       }
     }
   }

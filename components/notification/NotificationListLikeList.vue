@@ -43,6 +43,9 @@ export default {
       likes: [],
     }
   },
+  mounted () {
+    this.$store.dispatch('notification/clearUnreadNotification', 'like')
+  },
   methods: {
     async onRefresh () {
       const params = { limit }

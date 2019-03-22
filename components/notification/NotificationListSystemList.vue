@@ -33,6 +33,9 @@ export default {
       nextApi: null,
     }
   },
+  mounted () {
+    this.$store.dispatch('notification/clearUnreadNotification', 'system')
+  },
   methods: {
     async onRefresh () {
       const params = { type: 'system' }

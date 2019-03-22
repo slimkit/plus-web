@@ -46,6 +46,7 @@ export const getters = {
 
 export const TYPES = {
   SAVE_NOTIFICATIONS: 'SAVE_NOTIFICATIONS',
+  CLEAR_UNREAD_NOTIFICATION: 'CLEAR_UNREAD_NOTIFICATION',
 }
 
 export const mutations = {
@@ -54,11 +55,20 @@ export const mutations = {
       state[key] = notifications[key]
     }
   },
+
+  [TYPES.CLEAR_UNREAD_NOTIFICATION] (state, type) {
+    state[type].badge = 0
+  },
 }
 
 export const actions = {
   async getNotificationStatistics ({ commit }) {
     const data = await this.$axios.$get('/user/notification-statistics')
     commit(TYPES.SAVE_NOTIFICATIONS, data)
+  },
+
+  async clearUnreadNotification ({ commit }, type) {
+    await this.$axios.$patch('/user/notifications', {}, { params: { type } })
+    commit(TYPES.CLEAR_UNREAD_NOTIFICATION, type)
   },
 }
