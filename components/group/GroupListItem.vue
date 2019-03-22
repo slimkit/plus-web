@@ -4,6 +4,7 @@
       <Avatar
         :user="group"
         size="xl"
+        :link="false"
         :square="true"
       />
     </nuxt-link>
