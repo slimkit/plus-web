@@ -190,25 +190,30 @@
         class="notice"
         title="圈子公告"
       >
-        <div class="notice-content text-cut-4">
-          {{ group.notice }}
-        </div>
+        <template v-slot:default>
+          <div class="notice-content text-cut-4">
+            {{ group.notice }}
+            <div v-if="!group.notice" class="no-notice">什么也没写</div>
+          </div>
+        </template>
 
-        <footer
-          slot="footer"
-          class="side-widget-footer"
-          @click="onViewNotice"
-        >
-          查看详细公告
-        </footer>
+        <template v-slot:footer>
+          <footer
+            v-if="group.notice"
+            class="side-widget-footer"
+            @click="onViewNotice"
+          >
+            查看详细公告
+          </footer>
 
-        <IModal
-          v-model="showNotice"
-          :footer-hide="true"
-          title="圈子公告"
-        >
-          <article class="text-pre">{{ group.notice }}</article>
-        </IModal>
+          <IModal
+            v-model="showNotice"
+            :footer-hide="true"
+            title="圈子公告"
+          >
+            <article class="text-pre">{{ group.notice }}</article>
+          </IModal>
+        </template>
       </SideWidget>
 
       <SideWidget v-if="isManager">
@@ -659,6 +664,15 @@ export default {
 
     .post-btn {
       margin-bottom: 30px;
+    }
+
+    .notice-content {
+      .no-notice {
+        width: 100%;
+        text-align: center;
+        color: @text-info-color;
+        font-style: italic;
+      }
     }
 
     .members {
