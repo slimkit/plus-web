@@ -12,6 +12,14 @@
       color: @btn-disable-color;
     }
   }
+
+  &-ghost {
+    &.disabled {
+      background-color: transparent;
+      color: fade(#000, 25%);
+      border-color: @border-color-base;
+    }
+  }
 }
 
 .ivu-input {
