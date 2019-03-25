@@ -7,14 +7,14 @@
       <p>关注 <span>{{ topic.follows_count }}</span> 回答 <span>{{ topic.questions_count }}</span></p>
       <IButton
         class="follow-btn"
-        :class="{disabled: topic.has_follow}"
+        :class="{disabled: hasFollowed}"
         size="small"
         shape="circle"
         type="primary"
         ghost
-        :title="topic.has_follow ? '点击取消关注' : '点击关注专题'"
+        :title="hasFollowed ? '点击取消关注' : '点击关注专题'"
       >
-        {{ topic.has_follow ? '已关注' :'+ 关注' }}
+        {{ hasFollowed ? '已关注' :'+ 关注' }}
       </IButton>
     </div>
   </li>
@@ -26,7 +26,11 @@ export default {
   props: {
     topic: { type: Object, required: true },
   },
-  computed: { },
+  computed: {
+    hasFollowed () {
+      return this.$route.query.type === 'follow' || this.topic.has_follow
+    },
+  },
 }
 </script>
 

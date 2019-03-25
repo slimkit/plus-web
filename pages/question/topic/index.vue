@@ -1,18 +1,21 @@
 <template>
-  <div class="p-question-index">
+  <div class="p-question-topic">
     <div class="main-container">
       <nav class="main-nav">
         <nuxt-link :class="{'exact-active': $route.path === '/question'}" to="/question">问答</nuxt-link>
         <nuxt-link :class="{'exact-active': $route.path === '/question/topic'}" to="/question/topic">专题</nuxt-link>
       </nav>
 
-      <main class="question-list">
+      <div class="topic-list">
         <nav class="nav">
-          <nuxt-link :class="{'exact-active': type === 'hot'}" :to="{query: {type: 'hot'}}">热门</nuxt-link>
-          <nuxt-link :class="{'exact-active': type === 'excellent'}" :to="{query: {type: 'excellent'}}">精选</nuxt-link>
-          <nuxt-link :class="{'exact-active': type === 'reward'}" :to="{query: {type: 'reward'}}">悬赏</nuxt-link>
-          <nuxt-link :class="{'exact-active': type === 'new'}" :to="{query: {type: 'new'}}">最新</nuxt-link>
-          <nuxt-link :class="{'exact-active': type === 'all'}" :to="{query: {type: 'all'}}">全部</nuxt-link>
+          <nuxt-link :class="{'exact-active': type === 'all'}" :to="{query: {type: 'all'}}">全部专题</nuxt-link>
+          <nuxt-link
+            v-if="logged"
+            :class="{'exact-active': type === 'follow'}"
+            :to="{query: {type: 'follow'}}"
+          >
+            我关注的
+          </nuxt-link>
         </nav>
 
         <main>
@@ -21,10 +24,10 @@
             @refresh="onRefresh"
             @loadmore="onLoadmore"
           >
-            <QuestionList :questions="questions" />
+            <QuestionTopicList :topics="topics" />
           </Loadmore>
         </main>
-      </main>
+      </div>
     </div>
 
     <aside class="right-container">
@@ -44,31 +47,35 @@
         </div>
       </SideWidget>
 
-      <SideWidgetHotQuestions key="hot-questions" />
+      <SideWidgetHotQuestionTopics key="hot-question-topics" />
     </aside>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { getLastField } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
-import SideWidgetHotQuestions from '@/components/question/SideWidgetHotQuestions.vue'
-import QuestionList from '@/components/question/QuestionList.vue'
+import SideWidgetHotQuestionTopics from '@/components/question/SideWidgetHotQuestionTopics.vue'
+import QuestionTopicList from '@/components/question/QuestionTopicList.vue'
 
 export default {
   name: 'QuestionIndex',
   components: {
     SideWidget,
-    SideWidgetHotQuestions,
-    QuestionList,
+    SideWidgetHotQuestionTopics,
+    QuestionTopicList,
   },
   computed: {
-    ...mapState('question', ['all', 'new', 'hot', 'excellent', 'reward']),
+    ...mapState('question', {
+      all: 'topics',
+      follow: 'followedTopics',
+    }),
     type () {
-      return this.$route.query.type || 'hot'
+      return this.$route.query.type || 'all'
     },
-    questions () {
-      return this[this.type] || this.hot
+    topics () {
+      return this[this.type] || this.all
     },
   },
   watch: {
@@ -78,24 +85,45 @@ export default {
   },
   methods: {
     ...mapActions('question', {
-      getQuestionList: 'getQuestionList',
+      getQuestionTopicList: 'getQuestionTopicList',
+      getFollowedTopicList: 'getFollowedTopicList',
     }),
     async onRefresh () {
-      const params = { type: this.type }
-      const noMore = await this.getQuestionList(params)
+      let noMore, params
+      switch (this.type) {
+        case 'all':
+          params = {}
+          if (this.logged) params.follow = 1
+          noMore = await this.getQuestionTopicList(params)
+          break
+        case 'follow':
+          params = {}
+          noMore = await this.getFollowedTopicList(params)
+          break
+      }
       this.loader.afterRefresh(noMore)
     },
     async onLoadmore () {
-      const params = { type: this.type, offset: this.questions.length }
-      const noMore = await this.getQuestionList(params)
-      this.loader.afterLoadmore(noMore)
+      let noMore, params
+      switch (this.type) {
+        case 'all':
+          params = { offset: this.all.length }
+          if (this.logged) params.follow = 1
+          noMore = await this.getQuestionTopicList(params)
+          break
+        case 'follow':
+          params = { after: getLastField(this.follow) }
+          noMore = await this.getFollowedTopicList(params)
+          break
+      }
+      this.loader.afterRefresh(noMore)
     },
   },
 }
 </script>
 
 <style lang="less" scoped>
-.p-question-index {
+.p-question-topic {
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -138,7 +166,7 @@ export default {
     }
   }
 
-  .question-list {
+  .topic-list {
     padding: 30px;
     background-color: #fff;
 
