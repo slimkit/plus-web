@@ -2,8 +2,8 @@
   <div class="p-question-base">
     <div class="main-container">
       <nav class="main-nav">
-        <nuxt-link to="/question">问答</nuxt-link>
-        <nuxt-link to="/question/topic">专题</nuxt-link>
+        <nuxt-link :class="{'exact-active': $route.path === '/question'}" to="/question">问答</nuxt-link>
+        <nuxt-link :class="{'exact-active': $route.path === '/question/topic'}" to="/question/topic">专题</nuxt-link>
       </nav>
       <main>
         <nuxt-child />
@@ -47,7 +47,9 @@ export default {
 
 <style lang="less" scoped>
 .p-question-base {
+  position: relative;
   display: flex;
+  align-items: flex-start;
 
   .main-container {
     flex: auto;
@@ -70,6 +72,8 @@ export default {
   }
 
   .right-container {
+    position: sticky;
+    top: 30px;
     flex: none;
     width: @sidebar-width;
 

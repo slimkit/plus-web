@@ -50,5 +50,7 @@ export const actions = {
     commit(TYPES.LOAD_FROM_STORAGE)
     const list = await this.$axios.$get('/questions', { params })
     commit(TYPES.SAVE_LIST, { type: params.type, list, append: params.offset })
+    const noMore = list.length < limit
+    return noMore
   },
 }

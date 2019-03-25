@@ -94,8 +94,13 @@ export default {
 
   .user-avatar,
   .anonymity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
-    border-radius: 50%;
+    border-radius: 100px;
     background: @avatar-bg center / cover no-repeat;
   }
 
