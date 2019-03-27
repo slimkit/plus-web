@@ -1,9 +1,5 @@
 <template>
-  <SideWidget
-    v-if="topics.length"
-    title="热门专题"
-    :loading="loading"
-  >
+  <SideWidget title="热门专题" :loading="loading">
     <ul class="hot-list">
       <li
         v-for="(topic, index) in topics.slice(0, 9)"
@@ -11,6 +7,7 @@
         :class="{top3: index < 3}"
       >
         <nuxt-link class="text-cut" :to="`/question/topic/${topic.id}`">{{ topic.name }}</nuxt-link>
+        <p>关注 {{ topic.follows_count }} 问题 {{ topic.questions_count }}</p>
       </li>
     </ul>
   </SideWidget>
@@ -87,6 +84,11 @@ export default {
     > a {
       display: inline-block;
       width: 100%;
+    }
+
+    p {
+      color: @disabled-color;
+      font-size: @font-size-small;
     }
   }
 }

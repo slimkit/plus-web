@@ -89,16 +89,15 @@ export default {
       getFollowedTopicList: 'getFollowedTopicList',
     }),
     async onRefresh () {
-      let noMore, params
+      let noMore
       switch (this.type) {
         case 'all':
-          params = {}
+          const params = {}
           if (this.logged) params.follow = 1
           noMore = await this.getQuestionTopicList(params)
           break
         case 'follow':
-          params = {}
-          noMore = await this.getFollowedTopicList(params)
+          noMore = await this.getFollowedTopicList()
           break
       }
       this.loader.afterRefresh(noMore)
@@ -116,7 +115,7 @@ export default {
           noMore = await this.getFollowedTopicList(params)
           break
       }
-      this.loader.afterRefresh(noMore)
+      this.loader.afterLoadmore(noMore)
     },
   },
 }
