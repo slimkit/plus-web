@@ -51,11 +51,21 @@
             </h1>
             <div class="group-desc">
               <p class="description text-cut-2">{{ group.summary }}</p>
-              <SocialShare
-                :title="group.name"
-                :description="group.summary"
-                :image="group.avatar.url"
-              />
+              <IPoptip trigger="hover" placement="bottom">
+                <template v-slot:default>
+                  <a><svg class="icon"><use xlink:href="#icon-share" /></svg> 分享</a>
+                </template>
+
+                <template v-slot:content>
+                  <div class="social-share-wrap">
+                    <SocialShare
+                      :title="group.name"
+                      :description="group.summary"
+                      :image="group.avatar.url"
+                    />
+                  </div>
+                </template>
+              </IPoptip>
             </div>
             <div class="meta-wrap">
               <span>帖子 <span class="primary-color">{{ group.posts_count || 0 }}</span></span>
@@ -285,11 +295,11 @@ import _ from 'lodash'
 import { mapState } from 'vuex'
 import { limit } from '@/utils'
 import TagList from '@/components/tag/TagList.vue'
-import SocialShare from '@/components/common/SocialShare.vue'
 import GrouppostList from '@/components/group/GrouppostList.vue'
 import GroupMembers from '@/components/group/GroupMembers.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetGroupRecommend from '@/components/group/SideWidgetGroupRecommend.vue'
+import SocialShare from '@/components/common/SocialShare.vue'
 
 export default {
   name: 'GroupDetail',
@@ -303,11 +313,11 @@ export default {
   },
   components: {
     TagList,
-    SocialShare,
     GrouppostList,
     GroupMembers,
     SideWidget,
     SideWidgetGroupRecommend,
+    SocialShare,
   },
   data () {
     return {
@@ -710,6 +720,14 @@ export default {
       color: @disabled-color;
       cursor: pointer;
     }
+  }
+
+  .social-share-wrap {
+    padding: 16px;
+  }
+
+  /deep/ .ivu-poptip-body-content {
+    overflow: visible;
   }
 }
 </style>

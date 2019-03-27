@@ -22,7 +22,7 @@
     </div>
 
     <div class="meta-item">
-      <SocialShare v-bind="share" />
+      <SocialShare v-if="Object.keys(share).length" v-bind="share" />
     </div>
   </section>
 </template>
