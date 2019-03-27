@@ -47,7 +47,7 @@
                 <svg class="icon"><use xlink:href="#icon-auth" /></svg>
                 我的认证
               </nuxt-link>
-              <nuxt-link class="popup-item" to="/setting/collect">
+              <nuxt-link class="popup-item" to="/user/collect">
                 <svg class="icon"><use xlink:href="#icon-collect" /></svg>
                 我的收藏
               </nuxt-link>
