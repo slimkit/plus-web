@@ -13,6 +13,7 @@ import ReferenceFeed from './ReferenceFeed.vue'
 import ReferenceNews from './ReferenceNews.vue'
 import ReferenceGroup from './ReferenceGroup.vue'
 import ReferencePost from './ReferencePost.vue'
+import ReferenceAnswer from './ReferenceAnswer.vue'
 import ReferenceComment from './ReferenceComment.vue'
 
 const referMap = {
@@ -21,6 +22,7 @@ const referMap = {
   'groups': ReferenceGroup,
   'group-posts': ReferencePost,
   'comments': ReferenceComment,
+  'question-answers': ReferenceAnswer,
 }
 
 export default {
