@@ -57,8 +57,11 @@
           <template v-slot:content>
             <ul class="options" @click="showMore = false">
               <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
-              <template v-if="!isMine">
-                <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+              <template v-if="isMine">
+                <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
+              </template>
+              <template v-else>
+                <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
               </template>
             </ul>
           </template>
@@ -216,6 +219,17 @@ export default {
       this.$root.$emit('report', {
         type: 'question',
         id: this.question.id,
+      })
+    },
+    onDelete () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确认要删除该问题？',
+        onOk: async () => {
+          await this.$axios.$delete(`/questions/${this.question.id}`)
+          this.$Message.success('删除成功!')
+          this.$router.back()
+        },
       })
     },
   },
