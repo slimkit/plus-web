@@ -65,9 +65,33 @@ export default {
       }
       this.answer.collected = !this.answer.collected
     },
-    onLike () {},
-    onRepost () {},
-    onReport () {},
+    async onLike () {
+      await this.checkAuth()
+      if (!this.answer.liked) {
+        await this.$axios.$post(`/question-answers/${this.answer.id}/likes`)
+        this.answer.liked = true
+        this.answer.likes_count += 1
+        this.$Message.success('点赞成功')
+      } else {
+        await this.$axios.$delete(`/question-answers/${this.answer.id}/likes`)
+        this.answer.liked = false
+        this.answer.likes_count -= 1
+      }
+    },
+    onRepost () {
+      const source = this.answer
+      source.question = this.question
+      this.$root.$emit('repost', {
+        type: 'question-answers',
+        source,
+      })
+    },
+    onReport () {
+      this.$root.$emit('report', {
+        type: 'answer',
+        id: this.answer.id,
+      })
+    },
   },
 }
 </script>
