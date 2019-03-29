@@ -97,7 +97,7 @@
     <div class="question-answers-wrap">
       <main class="answers-list">
         <nav class="answer-nav">
-          <h3>3个回答</h3>
+          <h3>{{ allAnswers.length }} 个回答</h3>
           <IDropdown
             trigger="click"
             transform="true"
@@ -118,11 +118,14 @@
         <div class="answers">
           <Loadmore
             ref="loader"
+            :show-bottom="allAnswers.length"
             @refresh="onRefresh"
             @loadmore="onLoadmore"
           >
             <AnswerList :question="question" :answers="allAnswers" />
           </Loadmore>
+
+          <div v-if="!allAnswers.length" v-empty:content />
         </div>
       </main>
 
