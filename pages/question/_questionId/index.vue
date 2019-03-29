@@ -12,9 +12,17 @@
         </Tag>
       </ul>
       <div class="user-info">
-        <Avatar :user="question.user" />
+        <Avatar :user="question.user" :anonymity="question.anonymity" />
         <div class="date">
-          <nuxt-link class="username" :to="`/users/${question.user.id}`">{{ question.user.name }}</nuxt-link>
+          <nuxt-link
+            v-if="!question.anonymity"
+            class="username"
+            :to="`/users/${question.user.id}`"
+          >
+            {{ question.user.name }}
+          </nuxt-link>
+          <span v-else-if="isMine" class="username">{{ question.user.name }} (匿名)</span>
+          <span v-else>匿名用户</span>
           <time>{{ question.created_at | fromNow }}</time>
         </div>
       </div>
@@ -43,12 +51,8 @@
           </template>
         </IPoptip>
 
-        <IButton
-          type="text"
-          class="primary-color"
-          size="small"
-        >
-          未设置悬赏
+        <IButton type="text" size="small">
+          <span class="primary-color">未设置悬赏</span>
         </IButton>
 
         <IPoptip v-model="showMore" placement="bottom">
@@ -58,6 +62,7 @@
             <ul class="options" @click="showMore = false">
               <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
               <template v-if="isMine">
+                <li v-if="!question.excellent" @click="applyExtra"><svg class="icon"><use xlink:href="#icon-text" /></svg> 申请为精选</li>
                 <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
               </template>
               <template v-else>
@@ -229,6 +234,16 @@ export default {
           await this.$axios.$delete(`/questions/${this.question.id}`)
           this.$Message.success('删除成功!')
           this.$router.back()
+        },
+      })
+    },
+    async applyExtra () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确认要申请该问题为精选问题？',
+        onOk: async () => {
+          await this.$axios.$post(`/user/question-application/${this.question.id}`)
+          this.$Message.success('申请成功!')
         },
       })
     },

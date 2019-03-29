@@ -4,17 +4,19 @@
       <nuxt-link :to="`/question/${question.id}`">{{ question.subject }}</nuxt-link>
       <nuxt-link class="time" :to="`/question/${question.id}`">{{ question.created_at | fromNow }}</nuxt-link>
     </h2>
-    <div class="user-info">
-      <Avatar
-        :user="user"
-        size="xs"
-        :anonymity="!user.name"
-      />
-      <nuxt-link :to="`/user/${user.id}`" class="username">{{ user.name || '(匿名)' }}</nuxt-link>
-    </div>
 
-    <p class="answer-body">{{ answer.body }}</p>
-    <nuxt-link class="primary-color" :to="`/question/${question.id}/answer/${answer.id}`">查看详情</nuxt-link>
+    <template v-if="answer.body">
+      <div v-if="user.name" class="user-info">
+        <Avatar
+          :user="user"
+          size="xs"
+          :anonymity="!user.name"
+        />
+        <nuxt-link :to="`/user/${user.id}`" class="username">{{ user.name || '(匿名)' }}</nuxt-link>
+      </div>
+      <p class="answer-body">{{ answer.body }}</p>
+      <nuxt-link class="primary-color" :to="`/question/${question.id}/answer/${answer.id}`">查看详情</nuxt-link>
+    </template>
 
     <footer class="footer">
       <nuxt-link :to="`/question/${question.id}`">
@@ -67,7 +69,7 @@ export default {
   .user-info {
     display: flex;
     align-items: center;
-    margin: 16px 0;
+    margin: 24px 0 8px;
 
     .username {
       margin-left: 8px;
