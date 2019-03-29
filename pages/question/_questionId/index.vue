@@ -203,7 +203,12 @@ export default {
       this.answers.push(...list)
       this.loader.afterLoadmore(list.length < limit)
     },
-    onRepost () {},
+    onRepost () {
+      this.$root.$emit('repost', {
+        type: 'questions',
+        source: this.question,
+      })
+    },
     onReport () {
       this.$root.$emit('report', {
         type: 'question',

@@ -7,7 +7,7 @@
     </template>
     <template v-else>
       <h3>{{ question.subject }}</h3>
-      <p>{{ answer.body }}</p>
+      <p>{{ answer.user.name }}: {{ answer.body }}</p>
 
       <nuxt-link
         v-if="!noLink"
