@@ -13,19 +13,21 @@
           </div>
           <div class="extra">
             <div><IButton class="">已关注</IButton></div>
-            <IPoptip trigger="hover" placement="bottom">
+            <IPoptip
+              trigger="hover"
+              placement="bottom"
+              class="poptip-social-share"
+            >
               <template v-slot:default>
                 <a><svg class="icon"><use xlink:href="#icon-share" /></svg> 分享</a>
               </template>
 
               <template v-slot:content>
-                <div class="social-share-wrap">
-                  <SocialShare
-                    :title="topic.title"
-                    :description="topic.description"
-                    :image="topic.avatar"
-                  />
-                </div>
+                <SocialShare
+                  :title="topic.title"
+                  :description="topic.description"
+                  :image="topic.avatar"
+                />
               </template>
             </IPoptip>
           </div>
@@ -190,14 +192,6 @@ export default {
           justify-content: space-around;
           margin-left: auto;
         }
-      }
-
-      .social-share-wrap {
-        padding: 16px;
-      }
-
-      /deep/ .ivu-poptip-body-content {
-        overflow: visible;
       }
     }
   }

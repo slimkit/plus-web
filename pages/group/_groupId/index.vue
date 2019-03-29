@@ -51,19 +51,21 @@
             </h1>
             <div class="group-desc">
               <p class="description text-cut-2">{{ group.summary }}</p>
-              <IPoptip trigger="hover" placement="bottom">
+              <IPoptip
+                trigger="hover"
+                placement="bottom"
+                class="poptip-social-share"
+              >
                 <template v-slot:default>
                   <a><svg class="icon"><use xlink:href="#icon-share" /></svg> 分享</a>
                 </template>
 
                 <template v-slot:content>
-                  <div class="social-share-wrap">
-                    <SocialShare
-                      :title="group.name"
-                      :description="group.summary"
-                      :image="group.avatar.url"
-                    />
-                  </div>
+                  <SocialShare
+                    :title="group.name"
+                    :description="group.summary"
+                    :image="group.avatar.url"
+                  />
                 </template>
               </IPoptip>
             </div>
@@ -720,14 +722,6 @@ export default {
       color: @disabled-color;
       cursor: pointer;
     }
-  }
-
-  .social-share-wrap {
-    padding: 16px;
-  }
-
-  /deep/ .ivu-poptip-body-content {
-    overflow: visible;
   }
 }
 </style>

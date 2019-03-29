@@ -133,4 +133,11 @@ export default {
     }
   }
 }
+
+.poptip-social-share {
+  .ivu-poptip-body-content {
+    overflow: visible;
+    padding: 16px;
+  }
+}
 </style>

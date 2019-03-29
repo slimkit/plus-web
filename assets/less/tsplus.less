@@ -11,6 +11,10 @@ a.link-at-user {
   color: @primary-color;
 }
 
+.disabled-color {
+  color: @disabled-color;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -106,7 +110,8 @@ ul.options {
       margin-right: 0.5em;
     }
 
-    &:hover {
+    &:hover,
+    &.active {
       color: @primary-color;
     }
   }

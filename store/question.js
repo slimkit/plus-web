@@ -37,7 +37,7 @@ export const mutations = {
   [TYPES.SAVE_LIST] (state, { type, list, append = false }) {
     if (!append) {
       state[type] = list
-      local.set(LOCAL_KEY[type.toUpperCase()], state[type])
+      if (type === 'hot') local.set(LOCAL_KEY[type.toUpperCase()], state[type])
     } else {
       state[type].push(...list)
     }
@@ -57,6 +57,7 @@ export const actions = {
     params = { limit, ...params }
     commit(TYPES.LOAD_FROM_STORAGE)
     const list = await this.$axios.$get('/questions', { params })
+    console.log(list)
     commit(TYPES.SAVE_LIST, { type: params.type, list, append: params.offset })
     const noMore = list.length < limit
     return noMore

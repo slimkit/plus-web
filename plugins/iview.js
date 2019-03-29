@@ -23,6 +23,9 @@ import {
   AutoComplete,
   Select,
   Option,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
 } from 'iview'
 
 const components = {
@@ -43,6 +46,9 @@ const components = {
   Spin,
   Tag,
   AutoComplete,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
 }
 
 const install = function (Vue, opts = {}) {
