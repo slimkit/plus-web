@@ -7,7 +7,7 @@
     </template>
     <template v-else>
       <h3>{{ question.subject }}</h3>
-      <p>{{ answer.user.name }}: {{ answer.body }}</p>
+      <p>{{ user.name || '(匿名)' }}: {{ answer.body }}</p>
 
       <nuxt-link
         v-if="!noLink"
@@ -39,6 +39,9 @@ export default {
     },
     question () {
       return this.answer.question || {}
+    },
+    user () {
+      return this.answer.user || {}
     },
   },
   mounted () {
