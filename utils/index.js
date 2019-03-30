@@ -11,6 +11,16 @@ export const noop = () => {}
 export const limit = 15
 
 /**
+ * 判断一个变量是否为数字
+ * @param {*} val
+ */
+export const isNumber = val => {
+  if (typeof val === 'number') return true
+  else if (typeof val !== 'string') return false
+  else return /^\d+$/.test(val)
+}
+
+/**
  * 获取关注状态
  * @param {boolean} follower 被关注
  * @param {boolean} following 关注

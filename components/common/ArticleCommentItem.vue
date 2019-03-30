@@ -1,9 +1,9 @@
 <template>
   <li class="c-article-comment-item">
-    <Avatar class="avatar" :user="comment.user" />
+    <Avatar class="avatar" :user="user" />
     <div class="detail">
-      <nuxt-link :to="`/user/${comment.user.id}`">
-        <h6 class="username">{{ comment.user.name }}</h6>
+      <nuxt-link :to="`/user/${user.id}`">
+        <h6 class="username">{{ user.name }}</h6>
       </nuxt-link>
       <p class="time">{{ comment.created_at | fromNow }}</p>
       <p class="content">
@@ -13,7 +13,7 @@
         <span v-html="convertAtHTML(comment.body)" />
       </p>
       <div class="options">
-        <a v-if="!isMine" @click="onReply(comment.user)">回复</a>
+        <a v-if="!isMine" @click="onReply(user)">回复</a>
       </div>
     </div>
     <div class="right">
@@ -24,7 +24,7 @@
         <template v-slot:content>
           <ul class="options" @click="showMore = false">
             <template v-if="isOwner || isMine">
-              <li v-if="!pinned" @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> {{ isOwner ? '评论置顶' : '申请置顶' }}</li>
+              <li v-if="showPinned && !pinned" @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned2" /></svg> {{ isOwner ? '评论置顶' : '申请置顶' }}</li>
               <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除评论</li>
             </template>
             <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
@@ -53,8 +53,14 @@ export default {
     isOwner () {
       return this.logged && this.comment.target_user === this.logged.id
     },
+    user () {
+      return this.comment.user || {}
+    },
     isMine () {
-      return this.logged && this.comment.user.id === this.logged.id
+      return this.logged && this.user.id === this.logged.id
+    },
+    showPinned () {
+      return this.type !== 'answer'
     },
     pinned () {
       return this.comment.pinned
