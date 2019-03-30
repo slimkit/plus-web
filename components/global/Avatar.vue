@@ -40,7 +40,7 @@ export default {
   props: {
     user: { type: Object, default: () => {} },
     size: { type: String, default: 'def', validator: val => ['def', 'sm', 'lg', 'xl', 'xs'].includes(val) },
-    anonymity: { type: Boolean, default: false },
+    anonymity: { type: [Boolean, Number], default: false },
     link: { type: Boolean, default: true },
     square: { type: Boolean, default: false },
   },

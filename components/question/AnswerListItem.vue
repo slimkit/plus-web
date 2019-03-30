@@ -3,7 +3,10 @@
     <div class="user-wrap">
       <Avatar :user="user" />
       <div class="user-info">
-        <h4><nuxt-link :to="`/user/${user.id}`">{{ user.name }}</nuxt-link></h4>
+        <h4>
+          <nuxt-link :to="`/user/${user.id}`">{{ user.name }}</nuxt-link>
+          <span v-if="answer.adoption" class="badge adopt">已采纳</span>
+        </h4>
         <time>{{ answer.created_at | fromNow }}</time>
       </div>
     </div>
@@ -112,6 +115,20 @@ export default {
       flex-direction: column;
       justify-content: space-around;
       margin-left: 16px;
+
+      .badge {
+        padding: 0 4px;
+        margin-left: 8px;
+        .border();
+        border-radius: @border-radius-small;
+        font-size: @font-size-small;
+        font-weight: normal;
+
+        &.adopt {
+          color: @success-color;
+          border-color: @success-color;
+        }
+      }
 
       time {
         color: @disabled-color;
