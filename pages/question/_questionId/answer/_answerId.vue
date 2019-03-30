@@ -4,7 +4,7 @@
       <header class="article-header">
         <Avatar :user="user" />
         <div class="author-info">
-          <h3>{{ user.name }} <small class="bio text-cut">{{ user.bio }}</small></h3>
+          <h3>{{ user.name }} <small class="bio text-cut" :title="user.bio">{{ user.bio }}</small></h3>
           <p class="time">{{ answer.created_at | fromNow }}</p>
         </div>
         <IPoptip
@@ -68,11 +68,23 @@
         <div class="user">
           <div class="avatar-wrap">
             <Avatar :user="user" />
-            <IButton type="primary" size="small">关注</IButton>
+            <IButton
+              type="primary"
+              size="small"
+              class="follow-btn"
+              :class="{disabled: user.follower}"
+              :loading="followUserLock"
+              :title="user.follower ? '点击取消关注' : '点击关注用户'"
+              @click="onFollowUser"
+            >
+              <template v-if="!followUserLock">
+                {{ user.follower ? '已关注' : '+ 关注' }}
+              </template>
+            </IButton>
           </div>
           <div class="info">
             <h3>{{ user.name }}</h3>
-            <p class="bio text-cut-3">{{ user.bio || '暂无简介' }}</p>
+            <p class="bio text-cut-3" :title="user.bio">{{ user.bio || '暂无简介' }}</p>
           </div>
         </div>
         <div class="meta">
@@ -117,6 +129,7 @@ export default {
       comments: [],
 
       showMore: false,
+      followUserLock: false,
     }
   },
   computed: {
@@ -236,6 +249,18 @@ export default {
       // 删除成功会调(关闭对话框)
       callback()
     },
+    async onFollowUser () {
+      this.followUserLock = true
+      if (this.user.follower) {
+        await this.$axios.$delete(`/user/followings/${this.user.id}`)
+        this.user.follower = false
+      } else {
+        await this.$axios.$put(`/user/followings/${this.user.id}`)
+        this.user.follower = true
+        this.$Message.success('关注成功')
+      }
+      this.followUserLock = false
+    },
     async onReport () {
       this.$root.$emit('report', {
         type: 'answer',
@@ -256,6 +281,7 @@ export default {
 .p-question-answer-detail {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
 
   .article {
     flex: auto;
@@ -318,6 +344,8 @@ export default {
   }
 
   .widgets {
+    position: sticky;
+    top: 30px;
     flex: none;
     width: @sidebar-width;
 
@@ -330,12 +358,17 @@ export default {
         padding: 16px;
 
         .avatar-wrap {
+          flex: none;
           display: flex;
           flex-direction: column;
           align-items: center;
 
-          .ivu-btn {
+          .follow-btn {
             margin-top: 8px;
+
+            &.disabled {
+              cursor: pointer;
+            }
           }
         }
 
