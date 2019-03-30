@@ -11,6 +11,7 @@
           <nuxt-link :to="`/question/topic/${topic.id}`">{{ topic.name }}</nuxt-link>
         </Tag>
       </ul>
+
       <div class="user-info">
         <Avatar :user="question.user" :anonymity="question.anonymity" />
         <div class="date">
@@ -26,6 +27,7 @@
           <time>{{ question.created_at | fromNow }}</time>
         </div>
       </div>
+
       <h1 class="title">{{ question.subject }}</h1>
       <p class="description">{{ question.body }}</p>
 
@@ -51,9 +53,11 @@
           </template>
         </IPoptip>
 
-        <IButton type="text" size="small">
-          <span class="primary-color">未设置悬赏</span>
-        </IButton>
+        <div class="set-amount">
+          <a v-if="!question.amount">未设置悬赏</a>
+          <a v-else-if="question.invitations.length">已邀请悬赏</a>
+          <a v-else>已设置悬赏 金额：{{ question.amount }}</a>
+        </div>
 
         <IPoptip v-model="showMore" placement="bottom">
           <a><svg class="icon lg more"><use xlink:href="#icon-more" /></svg></a>
@@ -73,6 +77,8 @@
         </IPoptip>
 
         <div class="devide" />
+
+        <span v-if="question.amount && question.invitations.length && totalLookAmount" class="onlook-amount">总围观金额：{{ totalLookAmount }}</span>
 
         <IButton
           class="extra-btn"
@@ -94,14 +100,31 @@
         </IButton>
       </div>
 
-      <div class="meta-info">
-        <div class="meta">
-          <strong>{{ question.watchers_count }}</strong>
-          关注
+      <div class="other-info">
+        <div class="meta-info">
+          <div class="meta">
+            <strong>{{ question.watchers_count }}</strong>
+            关注
+          </div>
+          <div class="meta">
+            <strong>{{ question.views_count }}</strong>
+            浏览
+          </div>
         </div>
-        <div class="meta">
-          <strong>{{ question.views_count }}</strong>
-          浏览
+
+        <div v-if="question.amount && question.invitations.length" class="invite-info">
+          <span class="amount">¥{{ question.amount }}</span>
+          <span class="invitor">
+            已邀请悬赏：
+            <div
+              v-for="u in question.invitations"
+              :key="u.id"
+              class="invite-user"
+            >
+              <Avatar :user="u" size="xs" />
+              {{ u.name }}
+            </div>
+          </span>
         </div>
       </div>
     </header>
@@ -116,7 +139,7 @@
             @on-click="val => (orderType = val)"
           >
             <template v-slot:default>
-              <a>默认排序 <svg class="icon sm triangle"><use xlink:href="#icon-arrowDown-copy" /></svg></a>
+              <a>{{ orderType === 'default' ? '默认排序' : '时间排序' }} <svg class="icon sm triangle"><use xlink:href="#icon-arrowDown-copy" /></svg></a>
             </template>
             <template v-slot:list>
               <IDropdownMenu>
@@ -192,6 +215,11 @@ export default {
     relevantQuestions () {
       const list = this.$store.state.question.new || []
       return list.slice(0, 9)
+    },
+    totalLookAmount () {
+      return this.question.invitation_answers
+        .map(a => +a.onlookers_total)
+        .reduce((sum, i) => sum + i, 0)
     },
   },
   watch: {
@@ -285,6 +313,10 @@ export default {
     .tags {
       display: flex;
       margin-bottom: 16px;
+
+      > li {
+        margin-right: 8px;
+      }
     }
 
     .user-info {
@@ -319,7 +351,7 @@ export default {
       margin-top: 24px;
 
       > * {
-        margin-left: 12px;
+        margin-left: 16px;
         color: @disabled-color;
 
         &:first-child {
@@ -327,8 +359,19 @@ export default {
         }
       }
 
+      .set-amount {
+        a {
+          color: @primary-color;
+        }
+      }
+
       .devide {
         margin-left: auto;
+      }
+
+      .onlook-amount {
+        margin-right: 24px;
+        color: @primary-color;
       }
 
       .extra-btn {
@@ -342,10 +385,16 @@ export default {
       }
     }
 
-    .meta-info {
+    .other-info {
       position: absolute;
       top: 30px;
       right: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .meta-info {
       display: flex;
 
       .meta {
@@ -365,6 +414,33 @@ export default {
         }
       }
     }
+
+    .invite-info {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+
+      .amount {
+        color: @error-color;
+        margin-right: 1em;
+        font-size: @font-size-large;
+      }
+
+      .invitor {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .invite-user {
+        display: inline-flex;
+        align-items: center;
+
+        .c-avatar {
+          margin-right: 8px;
+        }
+      }
+    }
+
   }
 
   .question-answers-wrap {

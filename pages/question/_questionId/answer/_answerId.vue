@@ -2,9 +2,14 @@
   <article class="p-question-answer-detail">
     <div class="article">
       <header class="article-header">
-        <Avatar :user="user" />
+        <Avatar :user="user" :anonymity="answer.anonymity" />
         <div class="author-info">
-          <h3>{{ user.name }} <small class="bio text-cut" :title="user.bio">{{ user.bio }}</small></h3>
+          <h3>
+            <template v-if="answer.anonymity">匿名用户</template>
+            <nuxt-link v-else :to="`/user/${user.id}`">
+              {{ user.name }} <small class="bio text-cut" :title="user.bio">{{ user.bio }}</small>
+            </nuxt-link>
+          </h3>
           <p class="time">{{ answer.created_at | fromNow }}</p>
         </div>
         <IPoptip
@@ -67,8 +72,9 @@
       <SideWidget class="author-widget">
         <div class="user">
           <div class="avatar-wrap">
-            <Avatar :user="user" />
+            <Avatar :user="user" :anonymity="answer.anonymity" />
             <IButton
+              v-if="!answer.anonymity"
               type="primary"
               size="small"
               class="follow-btn"
@@ -83,11 +89,16 @@
             </IButton>
           </div>
           <div class="info">
-            <h3>{{ user.name }}</h3>
-            <p class="bio text-cut-3" :title="user.bio">{{ user.bio || '暂无简介' }}</p>
+            <h3>
+              <template v-if="answer.anonymity">匿名用户</template>
+              <nuxt-link v-else :to="`/user/${user.id}`">{{ user.name }}</nuxt-link>
+            </h3>
+            <p class="bio text-cut-3" :title="user.bio">
+              {{ user.bio || '暂无简介' }}
+            </p>
           </div>
         </div>
-        <div class="meta">
+        <div v-if="!answer.anonymity" class="meta">
           <div class="meta-item">提问 <span>{{ user.extra.questions_count || 0 }}</span></div>
           <div class="meta-item">回答 <span>{{ user.extra.answers_count || 0 }}</span></div>
         </div>

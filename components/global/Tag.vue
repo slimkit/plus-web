@@ -58,12 +58,16 @@ export default {
   }
 
   &.selected,
-  &:hover {
+  &:hover,{
     color: @primary-color;
     background-color: tint(@primary-color, 90%);
 
     .icon {
       font-size: 90%;
+      color: @primary-color;
+    }
+
+    a {
       color: @primary-color;
     }
   }
