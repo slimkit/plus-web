@@ -16,6 +16,11 @@ export const state = () => ({
   topics: [], // 全部专题
   followedTopics: [], // 关注的专题
   current: {}, // 当前问题
+  rankAnswer: { // 解答排行榜
+    day: [],
+    week: [],
+    month: [],
+  },
 })
 
 export const getters = {}
@@ -25,6 +30,7 @@ export const TYPES = {
   SAVE_LIST: 'SAVE_LIST',
   SAVE_QUESTION: 'SAVE_QUESTION',
   SAVE_QUESTION_TOPICS: 'SAVE_QUESTION_TOPICS',
+  SAVE_ANSWER_RANKS: 'SAVE_ANSWER_RANKS',
 }
 
 export const mutations = {
@@ -50,6 +56,10 @@ export const mutations = {
   [TYPES.SAVE_QUESTION_TOPICS] (state, { type, list }) {
     state[type] = list
   },
+
+  [TYPES.SAVE_ANSWER_RANKS] (state, { type, list }) {
+    state.rankAnswer[type] = list
+  },
 }
 
 export const actions = {
@@ -57,7 +67,6 @@ export const actions = {
     params = { limit, ...params }
     commit(TYPES.LOAD_FROM_STORAGE)
     const list = await this.$axios.$get('/questions', { params })
-    console.log(list)
     commit(TYPES.SAVE_LIST, { type: params.type, list, append: params.offset })
     const noMore = list.length < limit
     return noMore
@@ -79,5 +88,15 @@ export const actions = {
     commit(TYPES.SAVE_QUESTION_TOPICS, { type: 'followedTopics', list })
     const noMore = list.length < limit
     return noMore
+  },
+
+  async getQuestionAnswerRanks ({ commit }) {
+    const promises = ['day', 'week', 'month'].map(type => {
+      return this.$axios.$get('/question-ranks/answers', { params: { type } })
+    })
+    const [day, week, month] = await Promise.all(promises)
+    commit(TYPES.SAVE_ANSWER_RANKS, { type: 'day', list: day })
+    commit(TYPES.SAVE_ANSWER_RANKS, { type: 'week', list: week })
+    commit(TYPES.SAVE_ANSWER_RANKS, { type: 'month', list: month })
   },
 }

@@ -45,6 +45,8 @@
       </SideWidget>
 
       <SideWidgetHotQuestions key="hot-questions" />
+
+      <SideWidgetRanks key="answer-ranks" />
     </aside>
   </div>
 </template>
@@ -53,6 +55,7 @@
 import { mapState, mapActions } from 'vuex'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotQuestions from '@/components/question/SideWidgetHotQuestions.vue'
+import SideWidgetRanks from '@/components/question/SideWidgetRanks.vue'
 import QuestionList from '@/components/question/QuestionList.vue'
 
 export default {
@@ -60,6 +63,7 @@ export default {
   components: {
     SideWidget,
     SideWidgetHotQuestions,
+    SideWidgetRanks,
     QuestionList,
   },
   computed: {
@@ -121,7 +125,7 @@ export default {
   }
 
   .right-container {
-    position: sticky;
+    // position: sticky;
     top: 30px;
     flex: none;
     width: @sidebar-width;
