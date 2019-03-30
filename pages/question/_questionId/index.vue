@@ -76,10 +76,14 @@
 
         <IButton
           class="extra-btn"
+          :class="{disabled: question.watched}"
           type="primary"
           size="small"
+          :loading="followLock"
+          :title="question.watched ? '点击取消关注' : '点击关注问题'"
+          @click="onFollow"
         >
-          已关注
+          {{ question.watched ? '已关注' : '关注' }}
         </IButton>
         <IButton
           class="extra-btn"
@@ -171,6 +175,7 @@ export default {
       answers: [],
 
       showMore: false,
+      followLock: false,
     }
   },
   computed: {
@@ -236,6 +241,20 @@ export default {
           this.$router.back()
         },
       })
+    },
+    async onFollow () {
+      this.followLock = true
+      if (this.question.watched) {
+        await this.$axios.$delete(`/user/question-watches/${this.question.id}`)
+        this.question.watched = false
+        this.question.watchers_count -= 1
+      } else {
+        await this.$axios.$put(`/user/question-watches/${this.question.id}`)
+        this.question.watched = true
+        this.question.watchers_count += 1
+        this.$Message.success('关注问题成功！')
+      }
+      this.followLock = false
     },
     async applyExtra () {
       this.$Modal.confirm({
@@ -311,6 +330,11 @@ export default {
       .extra-btn {
         color: #fff;
         padding: 4px 16px;
+
+        &.disabled {
+          cursor: pointer;
+          color: @disabled-color;
+        }
       }
     }
 
