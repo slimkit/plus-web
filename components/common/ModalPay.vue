@@ -67,6 +67,7 @@ export default {
     async onSubmit (password) {
       const data = { ...this.params, password }
       const res = await this.$axios.$post(this.api, data)
+      this.$Message.success('支付成功')
       this.close()
       this.callback(res, this.amount)
     },

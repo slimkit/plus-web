@@ -88,12 +88,11 @@ export default {
       return this.logged && this.logged.id === this.user.id
     },
     isBlur () {
-      if (!this.logged) return true
       if (this.isMyQuestion || this.isMyAnswer) return false
       return (
         this.question.look &&
         this.answer.invited &&
-        !this.answer.could
+        (!this.logged || !this.answer.could)
       )
     },
   },
