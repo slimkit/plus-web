@@ -153,8 +153,8 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
-      padding: 0 1em;
-      margin-right: 2em;
+      padding: 0 0.75em;
+      margin-right: 1.5em;
       font-size: @font-size-large;
       cursor: pointer;
 
@@ -222,11 +222,12 @@ export default {
       display: flex;
       justify-content: center;
       font-size: @font-size-base;
-      width: 6em;
+      width: 5em;
     }
 
     .search-box {
       margin-right: 12px;
+      max-width: 14em;
 
       .ivu-input {
         border-radius: 100px;

@@ -24,7 +24,7 @@
     </main>
 
     <aside class="news-right-container">
-      <SideWidget :title="热门资讯">
+      <SideWidget title="热门资讯">
         <ul>
           <li v-for="item in hot" :key="item.id">
             {{ item.name }}
