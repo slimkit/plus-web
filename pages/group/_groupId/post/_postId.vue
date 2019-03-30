@@ -62,6 +62,7 @@
         />
 
         <ArticleReward
+          v-if="allowReward"
           type="post"
           :article="post.id"
           :count="post.reward_number"
@@ -168,6 +169,9 @@ export default {
     },
     renderedBody () {
       return markdown(this.post.body)
+    },
+    allowReward () {
+      return this.boot['group:reward'].status
     },
     shareInfo () {
       return {

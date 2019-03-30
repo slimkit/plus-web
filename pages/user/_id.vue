@@ -40,7 +40,7 @@
 
             <template v-slot:content>
               <ul class="options" @click="showMore = false">
-                <li @click="onReward"><svg class="icon"><use xlink:href="#icon-money" /></svg> 打赏</li>
+                <li v-if="allowReward" @click="onReward"><svg class="icon"><use xlink:href="#icon-money" /></svg> 打赏</li>
                 <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
               </ul>
             </template>

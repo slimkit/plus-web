@@ -39,6 +39,7 @@
         />
 
         <ArticleReward
+          v-if="allowReward"
           type="answer"
           :article="answer.id"
           :count="rewardCount"

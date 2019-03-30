@@ -53,6 +53,7 @@
         />
 
         <ArticleReward
+          v-if="allowReward"
           type="feed"
           :article="feed.id"
           :count="rewardCount"
@@ -146,6 +147,9 @@ export default {
     },
     images () {
       return this.feed.images || []
+    },
+    allowReward () {
+      return this.boot.feed.reward
     },
     rewardAmount: {
       get () {

@@ -22,6 +22,10 @@ const mixins = {
         afterLoadmoare: noop,
       }
     },
+    allowReward () {
+      const config = this.boot.site || {}
+      return config.reward.status
+    },
   },
   methods: {
     async checkAuth () {

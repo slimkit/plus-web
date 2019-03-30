@@ -37,6 +37,9 @@ import { noop } from '@/utils'
 const apiMap = {
   user: id => `/user/${id}/new-rewards`,
   feed: id => `/feeds/${id}/new-rewards`,
+  news: id => `/news/${id}/new-rewards`,
+  post: id => `/plus-group/group-posts/${id}/new-rewards`,
+  answer: id => `/question-answers/${id}/new-rewards`,
 }
 
 export default {
