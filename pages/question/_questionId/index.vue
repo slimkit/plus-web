@@ -183,7 +183,11 @@ export default {
       return this.logged && this.logged.id === this.question.user_id
     },
     allAnswers () {
-      return [...this.question.adoption_answers, ...this.answers]
+      return [
+        ...this.question.invitation_answers,
+        ...this.question.adoption_answers,
+        ...this.answers,
+      ]
     },
     relevantQuestions () {
       const list = this.$store.state.question.new || []

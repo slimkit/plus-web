@@ -5,6 +5,7 @@
       <div class="user-info">
         <h4>
           <nuxt-link :to="`/user/${user.id}`">{{ user.name }}</nuxt-link>
+          <span v-if="answer.invited" class="badge invited">邀请回答</span>
           <span v-if="answer.adoption" class="badge adopt">已采纳</span>
         </h4>
         <time>{{ answer.created_at | fromNow }}</time>
@@ -127,6 +128,11 @@ export default {
         &.adopt {
           color: @success-color;
           border-color: @success-color;
+        }
+
+        &.invited {
+          color: @primary-color;
+          border-color: @primary-color;
         }
       }
 
