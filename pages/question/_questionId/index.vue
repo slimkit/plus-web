@@ -32,7 +32,7 @@
       <p class="description">{{ question.body }}</p>
 
       <div class="extra">
-        <a>
+        <a @click="showComment = !showComment">
           <svg class="icon"><use xlink:href="#icon-comment" /></svg>
           {{ question.comments_count }} 评论
         </a>
@@ -130,37 +130,53 @@
     </header>
 
     <div class="question-answers-wrap">
-      <main class="answers-list">
-        <nav class="answer-nav">
-          <h3>{{ allAnswers.length }} 个回答</h3>
-          <IDropdown
-            trigger="click"
-            transform="true"
-            @on-click="val => (orderType = val)"
-          >
-            <template v-slot:default>
-              <a>{{ orderType === 'default' ? '默认排序' : '时间排序' }} <svg class="icon sm triangle"><use xlink:href="#icon-arrowDown-copy" /></svg></a>
-            </template>
-            <template v-slot:list>
-              <IDropdownMenu>
-                <IDropdownItem name="default" :selected="orderType === 'default'">默认排序</IDropdownItem>
-                <IDropdownItem name="time" :selected="orderType === 'time'">时间排序</IDropdownItem>
-              </IDropdownMenu>
-            </template>
-          </IDropdown>
-        </nav>
+      <main class="left-wrap">
+        <Collapse>
+          <div v-if="showComment" class="comment-list">
+            <ArticleComment
+              ref="comment"
+              type="question"
+              :count="question.comments_count"
+              :comments="comments"
+              @fetch="fetchComments"
+              @comment="onComment"
+              @comment:delete="onCommentDelete"
+            />
+          </div>
+        </Collapse>
 
-        <div class="answers">
-          <Loadmore
-            ref="loader"
-            :show-bottom="allAnswers.length"
-            @refresh="onRefresh"
-            @loadmore="onLoadmore"
-          >
-            <AnswerList :question="question" :answers="allAnswers" />
-          </Loadmore>
+        <div class="answers-list">
+          <nav class="answer-nav">
+            <h3>{{ allAnswers.length }} 个回答</h3>
+            <IDropdown
+              trigger="click"
+              transform="true"
+              @on-click="val => (orderType = val)"
+            >
+              <template v-slot:default>
+                <a>{{ orderType === 'default' ? '默认排序' : '时间排序' }} <svg class="icon sm triangle"><use xlink:href="#icon-arrowDown-copy" /></svg></a>
+              </template>
+              <template v-slot:list>
+                <IDropdownMenu>
+                  <IDropdownItem name="default" :selected="orderType === 'default'">默认排序</IDropdownItem>
+                  <IDropdownItem name="time" :selected="orderType === 'time'">时间排序</IDropdownItem>
+                </IDropdownMenu>
+              </template>
+            </IDropdown>
+          </nav>
 
-          <div v-if="!allAnswers.length" v-empty:content />
+          <div class="answers">
+            <Loadmore
+              ref="loader"
+              :show-bottom="allAnswers.length"
+              @refresh="onRefresh"
+              @loadmore="onLoadmore"
+            >
+              <AnswerList :question="question" :answers="allAnswers" />
+            </Loadmore>
+
+            <div v-if="!allAnswers.length" v-empty:content />
+          </div>
         </div>
       </main>
 
@@ -178,11 +194,12 @@
 </template>
 
 <script>
-import { limit } from '@/utils'
+import { mapActions } from 'vuex'
+import { limit, noop } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SocialShare from '@/components/common/SocialShare.vue'
 import AnswerList from '@/components/question/AnswerList.vue'
-import { mapActions } from 'vuex'
+import ArticleComment from '@/components/common/ArticleComment.vue'
 
 export default {
   name: 'QuestionDetail',
@@ -190,14 +207,17 @@ export default {
     SocialShare,
     SideWidget,
     AnswerList,
+    ArticleComment,
   },
   data () {
     return {
       question: {},
       orderType: 'default',
       answers: [],
+      comments: [],
 
       showMore: false,
+      showComment: false,
       followLock: false,
     }
   },
@@ -250,6 +270,43 @@ export default {
       const list = await this.$axios.$get(`/questions/${this.question.id}/answers`, { params })
       this.answers.push(...list)
       this.loader.afterLoadmore(list.length < limit)
+    },
+    async fetchComments (after = 0, callback = noop) {
+      const params = { after, limit }
+      const comments = await this.$axios.$get(`/questions/${this.question.id}/comments`, { params })
+      if (!after) {
+        this.comments = comments
+      } else {
+        this.comments.push(...comments)
+      }
+      const noMore = comments.length < limit
+      callback(noMore)
+    },
+    async onComment (content, replyUser = {}) {
+      const ret = await this.$axios.$post(`/questions/${this.question.id}/comments`, {
+        body: content,
+        reply_user: replyUser.id,
+      })
+      this.$Message.success('评论成功')
+
+      // 更新评论列表
+      if (replyUser.id) ret.comment.reply = replyUser
+      ret.comment.user = this.logged
+      this.comments.unshift(ret.comment)
+      this.question.comments_count += 1
+
+      // 清空评论框
+      this.$refs.comment.clean()
+    },
+    async onCommentDelete (comment, callback) {
+      await this.$axios.$delete(`/questions/${comment.commentable_id}/comments/${comment.id}`)
+      this.$Message.success('删除成功')
+      // 更新评论列表
+      this.comments = this.comments.filter(item => item.id !== comment.id)
+      this.question.comments_count -= 1
+
+      // 删除成功会调(关闭对话框)
+      callback()
     },
     onRepost () {
       this.$root.$emit('repost', {
@@ -449,9 +506,18 @@ export default {
     align-items: flex-start;
   }
 
-  .answers-list {
+  .left-wrap {
     flex: auto;
     margin-right: 30px;
+  }
+
+  .comment-list {
+    padding: 30px;
+    background-color: #fff;
+    margin-bottom: 30px;
+  }
+
+  .answers-list {
     padding: 30px;
     background-color: #fff;
 

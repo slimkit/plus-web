@@ -60,7 +60,7 @@ export default {
       return this.logged && this.user.id === this.logged.id
     },
     showPinned () {
-      return this.type !== 'answer'
+      return !['answer', 'question'].includes(this.type)
     },
     pinned () {
       return this.comment.pinned
