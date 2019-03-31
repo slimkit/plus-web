@@ -13,6 +13,7 @@
 
     <MarkdownEditor
       v-model="content"
+      :init-content="initContent"
       class="markdown-editor"
       placeholder="开始你的表演，支持 Markdown 语法"
     />
@@ -41,6 +42,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { filterHTMLTags } from '@/utils/text'
+import markdown from '@/utils/markdown'
 import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
 import TagList from '@/components/tag/TagList.vue'
 
@@ -58,6 +60,7 @@ export default {
     return {
       content: '',
       anonymity: false,
+      initContent: '',
 
       submitLock: false,
     }
@@ -70,6 +73,7 @@ export default {
   mounted () {
     if (this.answer) {
       this.content = this.answer.body
+      this.initContent = markdown(this.content)
       this.activated = this.anonymity
     } else if (!this.userTags.length) this.getCurrentUserTags()
   },
