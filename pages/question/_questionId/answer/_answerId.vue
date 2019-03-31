@@ -22,7 +22,11 @@
           <template v-slot:content>
             <ul class="options" @click="showMore = false">
               <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
-              <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+              <template v-if="isMyAnswer">
+                <li @click="onEdit"><svg class="icon"><use xlink:href="#icon-edit" /></svg> 编辑</li>
+                <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
+              </template>
+              <li v-else @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
             </ul>
           </template>
         </IPoptip>
@@ -149,6 +153,9 @@ export default {
     },
     user () {
       return this.answer.user || {}
+    },
+    isMyAnswer () {
+      return this.logged && this.logged.id === this.user.id
     },
     rewardAmount: {
       get () {
@@ -282,6 +289,18 @@ export default {
       this.$root.$emit('repost', {
         type: 'question-answers',
         source: this.answer,
+      })
+    },
+    onEdit () {},
+    async onDelete () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确定删除这条回答？',
+        onOk: async () => {
+          await this.$axios.$delete(`/question-answers/${this.answer.id}`)
+          this.$Message.success('删除成功')
+          this.$router.back()
+        },
       })
     },
   },
