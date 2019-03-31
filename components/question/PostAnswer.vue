@@ -1,6 +1,9 @@
 <template>
   <div class="c-post-answer">
-    <header class="user-wrap">
+    <header v-if="answer" class="question-wrap">
+      <h2>{{ question.subject }}</h2>
+    </header>
+    <header v-else class="user-wrap">
       <Avatar :user="logged" />
       <div class="user-info">
         <h4>{{ logged.name }}</h4>
@@ -26,6 +29,7 @@
       <IButton
         class="submit-btn"
         type="primary"
+        :loading="submitLock"
         @click="onSubmit"
       >
         提交
@@ -47,12 +51,15 @@ export default {
     TagList,
   },
   props: {
-    questionId: { type: Number, required: true },
+    question: { type: Object, required: true },
+    answer: { type: Object, default: null },
   },
   data () {
     return {
       content: '',
       anonymity: false,
+
+      submitLock: false,
     }
   },
   computed: {
@@ -61,21 +68,43 @@ export default {
     }),
   },
   mounted () {
-    if (!this.userTags.length) this.getCurrentUserTags()
+    if (this.answer) {
+      this.content = this.answer.body
+      this.activated = this.anonymity
+    } else if (!this.userTags.length) this.getCurrentUserTags()
   },
   methods: {
     ...mapActions('user', {
       getCurrentUserTags: 'getCurrentUserTags',
     }),
     async onSubmit () {
+      if (this.answer) return this.onPatchAnswer()
+
+      this.submitLock = true
       const data = {
         body: this.content,
         text_body: filterHTMLTags(this.content),
         anonymity: this.anonymity,
       }
-      const { answer } = await this.$axios.$post(`/questions/${this.questionId}/answers`, data)
+      const { answer } = await this.$axios.$post(`/questions/${this.question.id}/answers`, data)
+        .finally(() => {
+          this.submitLock = false
+        })
       this.$Message.success('回答成功！')
-      this.$router.push(`/question/${this.questionId}/answer/${answer.id}`)
+      this.$router.push(`/question/${this.question.id}/answer/${answer.id}`)
+    },
+    async onPatchAnswer () {
+      this.submitLock = true
+      const data = {
+        body: this.content,
+        anonymity: this.anonymity,
+      }
+      await this.$axios.$patch(`/question-answers/${this.answer.id}`, data)
+        .finally(() => {
+          this.submitLock = false
+        })
+      this.$Message.success('修改成功')
+      this.$emit('after-patch')
     },
   },
 }
@@ -83,6 +112,10 @@ export default {
 
 <style lang="less" scoped>
 .c-post-answer {
+  .question-wrap {
+    margin-bottom: 16px;
+  }
+
   .user-wrap {
     display: flex;
     margin-bottom: 16px;

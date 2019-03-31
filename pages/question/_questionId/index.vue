@@ -146,7 +146,7 @@
       <main class="left-wrap">
         <Collapse>
           <div v-if="showPostAnswer" class="post-answer-wrap">
-            <PostAnswer :question-id="question.id" />
+            <PostAnswer :question="question" />
           </div>
         </Collapse>
 

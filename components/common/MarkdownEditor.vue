@@ -279,48 +279,54 @@ export default {
         return this.value
       },
       set (val) {
-        console.log(val)
         this.$emit('input', val)
       },
     },
   },
   mounted () {
-    this.editor = new Editor({
-      content: this.initContent,
-      extensions: [
-        new Blockquote(),
-        new CodeBlock(),
-        new HardBreak(),
-        new Heading({ levels: [1, 2, 3] }),
-        new HorizontalRule(),
-        new OrderedList(),
-        new BulletList(),
-        new ListItem(),
-        new TodoItem(),
-        new TodoList(),
-        new Bold(),
-        new Code(),
-        new Italic(),
-        new Link(),
-        new Strike(),
-        // new Underline(),
-        new History(),
-        new Table(),
-        new TableHeader(),
-        new TableCell(),
-        new TableRow(),
-        new Placeholder({
-          empytClass: 'is-empty',
-          emptyNodeText: this.placeholder,
-        }),
-      ],
-      onUpdate: ({ getHTML, getJSON }) => {
-        this.content = getHTML()
-      },
+    this.$nextTick(() => {
+      this.initEditor()
     })
   },
   beforeDestroy () {
     this.editor.destroy()
+  },
+  methods: {
+    initEditor () {
+      this.editor = new Editor({
+        content: this.initContent || this.value,
+        extensions: [
+          new Blockquote(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new OrderedList(),
+          new BulletList(),
+          new ListItem(),
+          new TodoItem(),
+          new TodoList(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Link(),
+          new Strike(),
+          // new Underline(),
+          new History(),
+          new Table(),
+          new TableHeader(),
+          new TableCell(),
+          new TableRow(),
+          new Placeholder({
+            empytClass: 'is-empty',
+            emptyNodeText: this.placeholder,
+          }),
+        ],
+        onUpdate: ({ getHTML, getJSON }) => {
+          this.content = getHTML()
+        },
+      })
+    },
   },
 }
 </script>

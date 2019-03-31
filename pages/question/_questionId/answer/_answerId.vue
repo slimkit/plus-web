@@ -23,7 +23,7 @@
             <ul class="options" @click="showMore = false">
               <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
               <template v-if="isMyAnswer">
-                <li @click="onEdit"><svg class="icon"><use xlink:href="#icon-edit" /></svg> 编辑</li>
+                <li @click="showEdit = true"><svg class="icon"><use xlink:href="#icon-edit" /></svg> 编辑</li>
                 <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
               </template>
               <li v-else @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
@@ -33,10 +33,12 @@
       </header>
 
       <main class="article-content">
+        <ISpin v-if="loading" fix />
         <h1 class="question-title">{{ question.subject }}</h1>
 
         <div class="text-wrap" v-html="formatContent(answer.body)" />
       </main>
+
       <footer class="article-footer">
         <ArticleLike
           :like-count="answer.likes_count"
@@ -110,26 +112,44 @@
 
       <SideWidgetHotQuestions />
     </aside>
+
+    <IModal
+      v-model="showEdit"
+      title="编辑回答"
+      :transfer="false"
+      :width="640"
+      :footer-hide="true"
+    >
+      <PostAnswer
+        v-if="showEdit"
+        :question="question"
+        :answer="answer"
+        @after-patch="afterPatchAnswer"
+      />
+    </IModal>
   </article>
 </template>
 
 <script>
-import { convertLinkHTML } from '@/utils/text'
 import { noop, limit, isNumber } from '@/utils'
+import { convertLinkHTML } from '@/utils/text'
+import markdown from '@/utils/markdown'
 import SideWidget from '@/components/common/SideWidget.vue'
-import SideWidgetHotQuestions from '@/components/question/SideWidgetHotQuestions.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
 import ArticleReward from '@/components/common/ArticleReward.vue'
 import ArticleComment from '@/components/common/ArticleComment.vue'
+import SideWidgetHotQuestions from '@/components/question/SideWidgetHotQuestions.vue'
+import PostAnswer from '@/components/question/PostAnswer.vue'
 
 export default {
   name: 'QuestionAnswerDetail',
   components: {
     SideWidget,
-    SideWidgetHotQuestions,
     ArticleLike,
     ArticleReward,
     ArticleComment,
+    SideWidgetHotQuestions,
+    PostAnswer,
   },
   head: {
     title: '回答详情',
@@ -143,7 +163,9 @@ export default {
       rewards: [],
       comments: [],
 
+      loading: false,
       showMore: false,
+      showEdit: false,
       followUserLock: false,
     }
   },
@@ -186,6 +208,7 @@ export default {
   },
   methods: {
     formatContent (text) {
+      text = markdown(text)
       text = convertLinkHTML(text)
       return text
     },
@@ -291,7 +314,6 @@ export default {
         source: this.answer,
       })
     },
-    onEdit () {},
     async onDelete () {
       this.$Modal.confirm({
         title: '提示',
@@ -302,6 +324,15 @@ export default {
           this.$router.back()
         },
       })
+    },
+    afterPatchAnswer () {
+      this.fetchAnswer()
+      this.showEdit = false
+    },
+    async fetchAnswer () {
+      this.loading = true
+      this.answer = await this.$axios.$get(`/question-answers/${this.answer.id}`)
+      this.loading = false
     },
   },
 }
@@ -357,6 +388,7 @@ export default {
   }
 
   .article-content {
+    position: relative;
     margin: 30px 0;
 
     .question-title {
