@@ -20,11 +20,6 @@ export default {
     closeable: { type: Boolean, default: false },
     size: { type: String, default: 'def', validator: s => ['def', 'sm', 'lg'].includes(s) },
   },
-  data () {
-    return {
-
-    }
-  },
   methods: {
     onClose () {
       this.$emit('close')
