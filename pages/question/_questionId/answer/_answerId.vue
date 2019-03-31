@@ -311,7 +311,7 @@ export default {
       justify-content: space-between;
       margin-left: 16px;
 
-      h3 {
+      h3 > a {
         display: flex;
         align-items: flex-end;
 

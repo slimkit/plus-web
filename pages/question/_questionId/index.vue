@@ -32,7 +32,7 @@
       <p class="description">{{ question.body }}</p>
 
       <div class="extra">
-        <a @click="showComment = !showComment">
+        <a @click="showPostAnswer = false, showComment = !showComment">
           <svg class="icon"><use xlink:href="#icon-comment" /></svg>
           {{ question.comments_count }} 评论
         </a>
@@ -95,6 +95,7 @@
           class="extra-btn"
           type="primary"
           size="small"
+          @click="showComment = false, showPostAnswer = !showPostAnswer"
         >
           写回答
         </IButton>
@@ -131,6 +132,12 @@
 
     <div class="question-answers-wrap">
       <main class="left-wrap">
+        <Collapse>
+          <div v-if="showPostAnswer" class="post-answer-wrap">
+            <PostAnswer :question-id="question.id" />
+          </div>
+        </Collapse>
+
         <Collapse>
           <div v-if="showComment" class="comment-list">
             <ArticleComment
@@ -198,16 +205,18 @@ import { mapActions } from 'vuex'
 import { limit, noop } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SocialShare from '@/components/common/SocialShare.vue'
-import AnswerList from '@/components/question/AnswerList.vue'
 import ArticleComment from '@/components/common/ArticleComment.vue'
+import AnswerList from '@/components/question/AnswerList.vue'
+import PostAnswer from '@/components/question/PostAnswer.vue'
 
 export default {
   name: 'QuestionDetail',
   components: {
     SocialShare,
     SideWidget,
-    AnswerList,
     ArticleComment,
+    AnswerList,
+    PostAnswer,
   },
   data () {
     return {
@@ -218,6 +227,7 @@ export default {
 
       showMore: false,
       showComment: false,
+      showPostAnswer: false,
       followLock: false,
     }
   },
@@ -509,6 +519,12 @@ export default {
   .left-wrap {
     flex: auto;
     margin-right: 30px;
+  }
+
+  .post-answer-wrap {
+    padding: 30px;
+    background-color: #fff;
+    margin-bottom: 30px;
   }
 
   .comment-list {
