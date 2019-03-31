@@ -249,7 +249,12 @@ export default {
         source: this.post,
       })
     },
-    onReport () {},
+    onReport () {
+      this.$root.$emit('report', {
+        type: 'post',
+        id: this.postId,
+      })
+    },
     async onCollect (callback) {
       if (!this.post.collected) {
         // 收藏
