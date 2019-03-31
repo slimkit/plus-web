@@ -13,6 +13,7 @@
         type="primary"
         ghost
         :title="hasFollowed ? '点击取消关注' : '点击关注专题'"
+        @click="onFollow"
       >
         {{ hasFollowed ? '已关注' :'+ 关注' }}
       </IButton>
@@ -27,8 +28,23 @@ export default {
     topic: { type: Object, required: true },
   },
   computed: {
+    type () {
+      return this.$route.query.type || 'all'
+    },
     hasFollowed () {
-      return this.$route.query.type === 'follow' || this.topic.has_follow
+      return this.topic.has_follow
+    },
+  },
+  methods: {
+    async onFollow () {
+      if (this.hasFollowed) {
+        await this.$axios.$delete(`/user/question-topics/${this.topic.id}`)
+        this.topic.has_follow = false
+      } else {
+        await this.$axios.$put(`/user/question-topics/${this.topic.id}`)
+        this.topic.has_follow = true
+        this.$Message.success('关注成功！')
+      }
     },
   },
 }

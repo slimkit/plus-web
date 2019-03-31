@@ -30,11 +30,11 @@
     <footer class="footer">
       <nuxt-link :to="`/question/${question.id}`">
         <svg class="icon"><use xlink:href="#icon-follow" /></svg>
-        {{ question.watchers_count }}关注
+        {{ question.watchers_count }} 关注
       </nuxt-link>
       <nuxt-link :to="`/question/${question.id}`">
         <svg class="icon"><use xlink:href="#icon-comment" /></svg>
-        {{ question.answers_count }}条回答
+        {{ question.answers_count }} 条回答
       </nuxt-link>
       <nuxt-link v-if="question.amount" :to="`/question/${question.id}`">
         <svg class="icon"><use xlink:href="#icon-money" /></svg>

@@ -85,6 +85,7 @@ export const actions = {
   async getFollowedTopicList ({ commit }, params = {}) {
     params = { limit, ...params }
     const list = await this.$axios.$get('/user/question-topics', { params })
+    list.forEach(t => (t.has_follow = true)) // 标记关注
     commit(TYPES.SAVE_QUESTION_TOPICS, { type: 'followedTopics', list })
     const noMore = list.length < limit
     return noMore
