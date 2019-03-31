@@ -366,6 +366,7 @@ export default {
 
   .content {
     padding: 8px;
+    overflow: auto;
 
     .ProseMirror {
       min-height: 21px * 10;

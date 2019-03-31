@@ -117,7 +117,7 @@
       v-model="showEdit"
       title="编辑回答"
       :transfer="false"
-      :width="640"
+      :width="960"
       :footer-hide="true"
     >
       <PostAnswer
@@ -473,6 +473,11 @@ export default {
         }
       }
     }
+  }
+
+  /deep/ .ProseMirror {
+    min-height: 21px * 15;
+    max-height: 21px * 30;
   }
 }
 </style>
