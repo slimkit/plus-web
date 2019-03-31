@@ -135,6 +135,7 @@ export default {
   .footer {
     display: flex;
     align-items: center;
+    margin-bottom: 16px;
     margin-top: 16px;
 
     .submit-btn {

@@ -117,8 +117,9 @@
       v-model="showEdit"
       title="编辑回答"
       :transfer="false"
-      :width="960"
+      :width="1080"
       :footer-hide="true"
+      :mask-closable="false"
     >
       <PostAnswer
         v-if="showEdit"
@@ -477,7 +478,7 @@ export default {
 
   /deep/ .ProseMirror {
     min-height: 21px * 15;
-    max-height: 21px * 30;
+    max-height: none;
   }
 }
 </style>
