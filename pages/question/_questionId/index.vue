@@ -92,6 +92,18 @@
           {{ question.watched ? '已关注' : '关注' }}
         </IButton>
         <IButton
+          v-if="question.my_answer"
+          key="view-answer"
+          class="extra-btn"
+          type="primary"
+          size="small"
+          :to="`/question/${question.id}/answer/${question.my_answer.id}`"
+        >
+          查看回答
+        </IButton>
+        <IButton
+          v-else
+          key="create-answer"
           class="extra-btn"
           type="primary"
           size="small"
