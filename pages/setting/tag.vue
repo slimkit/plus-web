@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import TagList from '@/components/tag/TagList.vue'
 
 export default {
@@ -43,22 +44,24 @@ export default {
   data () {
     return {
       maxCount: 5,
-      userTags: [],
-      tags: [],
+
       requestLock: false,
     }
   },
   computed: {
+    ...mapState({
+      tags: state => state.tags,
+      userTags: state => state.user.userTags,
+    }),
     selected () {
       return this.userTags.map(tag => tag.id)
     },
   },
   async asyncData ({ store, $axios }) {
-    const [userTags, tags] = await Promise.all([
-      $axios.$get('/user/tags'),
-      $axios.$get('/tags'),
+    await Promise.all([
+      store.dispatch('getTags'),
+      store.dispatch('user/getCurrentUserTags'),
     ])
-    return { userTags, tags }
   },
   methods: {
     async onAppend (tag) {

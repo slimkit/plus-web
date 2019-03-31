@@ -6,6 +6,7 @@ const LOCAL_KEY = {
   RECOMMEND_USERS: 'user_recommend',
   HOT_USERS: 'user_hot',
   FRIEND: 'user_friend',
+  USER_TAGS: 'user_tags',
 }
 
 export const state = () => ({
@@ -14,6 +15,7 @@ export const state = () => ({
   recommend: [], // 推荐用户（已缓存）
   hot: [], // 热门用户（已缓存）
   new: [], // 最新用户
+  userTags: [], // 当前登录用户标签
 })
 
 export const TYPES = {
@@ -23,6 +25,7 @@ export const TYPES = {
   SAVE_HOT_USERS: 'SAVE_HOT_USERS',
   SAVE_NEW_USERS: 'SAVE_NEW_USERS',
   SAVE_FRIEND: 'SAVE_FRIEND',
+  SAVE_USER_TAGS: 'SAVE_USER_TAGS',
 }
 
 export const mutations = {
@@ -77,12 +80,22 @@ export const mutations = {
       state.new = users
     }
   },
+
+  [TYPES.SAVE_USER_TAGS] (state, tags) {
+    state.userTags = tags
+    local.set(LOCAL_KEY.USER_TAGS, tags)
+  },
 }
 
 export const actions = {
   async getCurrentUser ({ commit }) {
     const user = await this.$axios.$get('/user')
     commit(TYPES.SAVE_CURRENT_USER, user)
+  },
+
+  async getCurrentUserTags ({ commit }) {
+    const tags = await this.$axios.$get('/user/tags')
+    commit(TYPES.SAVE_USER_TAGS, tags)
   },
 
   async getUserFriends ({ commit }) {
