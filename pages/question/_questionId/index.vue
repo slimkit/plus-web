@@ -154,7 +154,7 @@
 
         <div class="answers-list">
           <nav class="answer-nav">
-            <h3>{{ allAnswers.length }} 个回答</h3>
+            <h3>{{ question.answers_count }} 个回答</h3>
             <IDropdown
               trigger="click"
               transform="true"
@@ -179,7 +179,11 @@
               @refresh="onRefresh"
               @loadmore="onLoadmore"
             >
-              <AnswerList :question="question" :answers="allAnswers" />
+              <AnswerList
+                :question="question"
+                :answers="allAnswers"
+                @delete="afterDeleteAnswer"
+              />
             </Loadmore>
 
             <div v-if="!allAnswers.length" v-empty:content />
@@ -340,6 +344,10 @@ export default {
           this.$router.back()
         },
       })
+    },
+    afterDeleteAnswer (answerId, index) {
+      this.answers = this.answers.filter(a => a.id !== answerId)
+      this.question.answers_count -= 1
     },
     async onFollow () {
       this.followLock = true

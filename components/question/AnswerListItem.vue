@@ -42,7 +42,8 @@
           <ul class="options" @click="showMore = false">
             <li :class="{active: answer.collected}" @click="onCollect"><svg class="icon"><use xlink:href="#icon-collect" /></svg> {{ answer.collected ? '已收藏' : '收藏' }}</li>
             <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
-            <li v-if="!isMyAnswer" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+            <li v-if="isMyAnswer" @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
+            <li v-else @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
           </ul>
         </template>
       </IPoptip>
@@ -149,6 +150,17 @@ export default {
           this.answer.could = true
           this.answer.onlookers_count += 1
           this.answer.onlookers_total = +this.answer.onlookers_total + amount
+        },
+      })
+    },
+    onDelete () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确定删除这条回答？',
+        onOk: async () => {
+          await this.$axios.$delete(`/question-answers/${this.answer.id}`)
+          this.$Message.success('删除成功')
+          this.$emit('delete', this.answer.id)
         },
       })
     },
