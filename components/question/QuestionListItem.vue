@@ -15,7 +15,7 @@
         <nuxt-link :to="`/user/${user.id}`" class="username">{{ user.name || '(匿名)' }}</nuxt-link>
       </div>
       <p v-if="!isBlur" class="answer-body">
-        {{ answer.body }}
+        {{ content }}
         <nuxt-link class="primary-color" :to="`/question/${question.id}/answer/${answer.id}`">查看详情</nuxt-link>
       </p>
       <p
@@ -45,6 +45,9 @@
 </template>
 
 <script>
+import { filterHTMLTags } from '@/utils/text'
+import markdown from '@/utils/markdown'
+
 export default {
   name: 'QuestionListItem',
   props: {
@@ -70,6 +73,10 @@ export default {
         this.answer.invited &&
         (!this.logged || !this.answer.could)
       )
+    },
+    content () {
+      const body = markdown(this.answer.body)
+      return filterHTMLTags(body)
     },
   },
   methods: {
