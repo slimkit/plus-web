@@ -1,20 +1,28 @@
 <template>
   <li class="c-news-list-item">
     <div class="news-image">
-      <AsyncFile
-        type="image-wrap"
-        :max-width="260"
-        :max-height="160"
-        :file="news.image || {}"
-      />
+      <nuxt-link :to="`/news/${news.id}`">
+        <AsyncFile
+          type="image-wrap"
+          :max-width="260"
+          :max-height="160"
+          :file="news.image || {}"
+        />
+      </nuxt-link>
     </div>
     <div class="news-body">
       <div class="news-content">
-        <h2 class="news-title text-cut-2">{{ news.title }}</h2>
+        <h2 class="news-title text-cut-2"><nuxt-link :to="`/news/${news.id}`">{{ news.title }}</nuxt-link></h2>
         <div class="news-subject text-cut-3"> {{ news.subject }} </div>
       </div>
       <div class="news-bottom">
-        <span v-if="!categoryId" class="badge">{{ news.category.name }}</span>
+        <nuxt-link
+          v-if="!categoryId"
+          :to="`/news?cate=${news.category.id}`"
+          class="badge"
+        >
+          {{ news.category.name }}
+        </nuxt-link>
         {{ news.from }} · {{ news.created_at }}
       </div>
     </div>
