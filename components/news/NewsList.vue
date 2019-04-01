@@ -4,6 +4,7 @@
       v-for="newsItem in news"
       :key="newsItem.id"
       :news="newsItem"
+      v-bind="$attrs"
     />
   </ul>
 </template>

@@ -14,7 +14,8 @@
         <div class="news-subject text-cut-3"> {{ news.subject }} </div>
       </div>
       <div class="news-bottom">
-        {{ news.author }} · {{ news.created_at }}
+        <span v-if="!categoryId" class="badge">{{ news.category.name }}</span>
+        {{ news.from }} · {{ news.created_at }}
       </div>
     </div>
   </li>
@@ -25,6 +26,7 @@ export default {
   name: 'NewsListItem',
   props: {
     news: { type: Object, required: true },
+    categoryId: { type: Number, default: null },
   },
 }
 </script>
@@ -59,6 +61,14 @@ export default {
       margin-top: auto;
       font-size: @font-size-small;
       color: @text-info-color;
+
+      .badge {
+        padding: 0 4px;
+        margin-right: 8px;
+        border: 1px solid @primary-color;
+        border-radius: @border-radius-base;
+        color: @primary-color;
+      }
     }
   }
 }

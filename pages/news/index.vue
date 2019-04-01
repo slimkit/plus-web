@@ -19,7 +19,11 @@
         @refresh="onRefresh"
         @loadmore="onLoadmore"
       >
-        <NewsList class="news-list" :news="news" />
+        <NewsList
+          class="news-list"
+          :news="news"
+          :category-id="cateId"
+        />
       </Loadmore>
     </main>
 
@@ -61,7 +65,7 @@ export default {
   },
   data () {
     return {
-      news: [],
+      allNews: {},
       hotType: 'month',
     }
   },
@@ -80,6 +84,14 @@ export default {
     },
     hot () {
       return this.hotNews[this.hotType] || []
+    },
+    news: {
+      get () {
+        return this.allNews[this.cateId] || []
+      },
+      set (list) {
+        this.$set(this.allNews, this.cateId, list)
+      },
     },
   },
   watch: {
@@ -123,6 +135,7 @@ export default {
 
     .news-cates-items {
       display: flex;
+      margin-bottom: 16px;
       background-color: #fff;
 
       > a {
