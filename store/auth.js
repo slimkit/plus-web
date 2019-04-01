@@ -13,7 +13,7 @@ export const mutations = {
     state.token = token || ''
     if (process.client) {
       if (token) {
-        cookie.set('access_token', token)
+        cookie.set('access_token', token, { expires: 7 })
       } else {
         cookie.remove('access_token')
       }
@@ -37,16 +37,6 @@ export const actions = {
   },
 
   async logout ({ commit }) {
-    try {
-      // 提交注销请求
-      await this.$axios.$post('/auth/logout', {}, {
-        validateStatus: s => [200, 401].includes(s),
-        timeout: 3000,
-      })
-    } catch (error) {
-      console.warn('[axios] logout request failed', error) // eslint-disable-line no-console
-    }
-
     // 清除 access token
     commit(TYPES.SAVE_TOKEN, null)
     // 清除登录用户信息

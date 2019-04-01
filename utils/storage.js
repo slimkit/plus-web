@@ -118,7 +118,7 @@ function getCookie (key, cookie) {
  * @param {string} value
  * @param {Object} attributes
  * @param {string} [attributes.path=/]
- * @param {number|Date} [attributes.expires] 为数字时单位为分
+ * @param {number|Date} [attributes.expires] 为数字时单位为天
  * @returns {string} cookie string
  */
 function setCookie (key, value, attributes) {
@@ -126,7 +126,7 @@ function setCookie (key, value, attributes) {
   const path = process.env.NUXT_ENV_PATH_PREFIX || '/'
   attributes = Object.assign({ path }, attributes)
   if (typeof attributes.expires === 'number') {
-    attributes.expires = new Date(+new Date() + attributes.expires * 60 * 1000)
+    attributes.expires = new Date(+new Date() + attributes.expires * 24 * 60 * 60 * 1000)
   }
   attributes.expires = attributes.expires ? attributes.expires.toUTCString() : ''
   try {

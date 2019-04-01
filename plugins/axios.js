@@ -32,7 +32,7 @@ export default function ({ $axios, env, store, redirect }) {
     }
   })
 
-  $axios.onError(error => {
+  $axios.onError(async error => {
     const { config = {} } = error
     if (process.client && config.progress) {
       $nuxt.$loading.fail()
@@ -48,7 +48,7 @@ export default function ({ $axios, env, store, redirect }) {
           error.tips = cookie.get('access_token')
             ? '登陆失效，请重新登录'
             : '请先登录'
-          store.dispatch('auth/logout')
+          await store.dispatch('auth/logout')
           redirect('/auth/login')
           break
         case 403:
