@@ -24,13 +24,21 @@
     </main>
 
     <aside class="news-right-container">
-      <SideWidget title="热门资讯">
-        <ul>
-          <li v-for="item in hot" :key="item.id">
-            {{ item.name }}
-          </li>
-        </ul>
+      <SideWidget key="publish">
+        <div class="publish-wrap">
+          <IButton
+            type="primary"
+            :long="true"
+            shape="circle"
+            size="large"
+          >
+            <svg class="icon"><use xlink:href="#icon-publish" /></svg>
+            投稿
+          </IButton>
+        </div>
       </SideWidget>
+
+      <SideWidgetHotNews key="hot-news" />
     </aside>
   </div>
 </template>
@@ -38,16 +46,18 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { limit, getLastField } from '@/utils'
-// import NewsListTop from '@/components/news/NewsListTop.vue'
-import NewsList from '@/components/news/NewsList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
+import SideWidgetHotNews from '@/components/news/SideWidgetHotNews.vue'
+import NewsList from '@/components/news/NewsList.vue'
+// import NewsListTop from '@/components/news/NewsListTop.vue'
 
 export default {
   name: 'NewsHome',
   components: {
-    // NewsListTop,
-    NewsList,
     SideWidget,
+    SideWidgetHotNews,
+    NewsList,
+    // NewsListTop,
   },
   data () {
     return {
@@ -85,14 +95,15 @@ export default {
       getNewsCategories: 'getNewsCategories',
     }),
     async onRefresh () {
-      this.news = await this.$axios.$get('/news', { params: this.params })
-      this.loader.afterRefresh(this.news.length < limit)
+      const list = await this.$axios.$get('/news', { params: this.params })
+      this.news = list
+      this.loader.afterRefresh(list.length < limit)
     },
     async onLoadmore () {
       const params = { ...this.params, after: getLastField(this.news) }
-      const news = await this.$axios.$get('/news', { params })
-      this.news.push(...news)
-      this.loader.afterLoadmore(news.length < limit)
+      const list = await this.$axios.$get('/news', { params })
+      this.news.push(...list)
+      this.loader.afterLoadmore(list.length < limit)
     },
   },
 }
@@ -104,34 +115,39 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
 
-  .news-cates-items {
-    display: flex;
+  .news-container {
+    flex: auto;
+    padding: 30px;
+    margin-right: 30px;
     background-color: #fff;
 
-    > a {
-      padding: 8px 1em;
-      color: @disabled-color;
+    .news-cates-items {
+      display: flex;
+      background-color: #fff;
 
-      &.exact-active,
-      &:hover {
-        color: @primary-color;
+      > a {
+        padding: 8px 1em;
+        color: @disabled-color;
+
+        &.exact-active,
+        &:hover {
+          color: @primary-color;
+        }
       }
     }
   }
 
-  .news-container {
-    flex: auto;
-    background-color: #fff;
-    padding: 30px;
-  }
-
   .news-right-container {
     position: sticky;
-    top: 0;
-    display: flex;
+    top: 30px;
     flex: none;
     width: @sidebar-width;
-    background-color: #fff;
+
+    .publish-wrap {
+      padding: 30px;
+      margin-bottom: 30px;
+      background-color: #fff;
+    }
   }
 }
 

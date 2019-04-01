@@ -14,6 +14,7 @@ export const state = () => ({
     day: [],
     week: [],
     month: [],
+    quarter: [],
   },
 })
 
@@ -54,16 +55,18 @@ export const mutations = {
 }
 
 export const actions = {
-  async getNewsCategories ({ store, commit }) {
-    if (!store.categories.my.length) commit(TYPES.LOAD_FROM_STORAGE)
+  async getNewsCategories ({ commit }) {
+    commit(TYPES.LOAD_FROM_STORAGE)
     const { my_cates: my, more_cates: more } = await this.$axios.$get('/news/cates')
     commit(TYPES.SAVE_CATEGORIES, { my, more })
   },
 
-  async getHotNews ({ store, commit }, type) {
-    if (!store.hot.week.length) commit(TYPES.LOAD_FROM_STORAGE)
-    const params = { type, limit: 10 }
-    const list = await this.$axios.$get('/news/ranks', { params })
-    commit(TYPES.SAVE_HOT, { type, list })
+  async getHotNews ({ commit }) {
+    commit(TYPES.LOAD_FROM_STORAGE);
+    ['day', 'week', 'month', 'quarter'].forEach(async type => {
+      const params = { type, limit: 9 }
+      const list = await this.$axios.$get('/news/ranks', { params })
+      commit(TYPES.SAVE_HOT, { type, list })
+    })
   },
 }
