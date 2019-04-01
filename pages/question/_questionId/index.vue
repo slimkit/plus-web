@@ -351,7 +351,7 @@ export default {
         title: '提示',
         content: '确认要删除该问题？',
         onOk: async () => {
-          await this.$axios.$delete(`/questions/${this.question.id}`)
+          await this.$axios.$delete(`/currency-questions/${this.question.id}`)
           this.$Message.success('删除成功!')
           this.$router.back()
         },

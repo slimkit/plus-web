@@ -41,7 +41,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { filterHTMLTags } from '@/utils/text'
 import markdown from '@/utils/markdown'
 import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
 import TagList from '@/components/tag/TagList.vue'
@@ -87,10 +86,9 @@ export default {
       this.submitLock = true
       const data = {
         body: this.content,
-        text_body: filterHTMLTags(this.content),
         anonymity: this.anonymity,
       }
-      const { answer } = await this.$axios.$post(`/questions/${this.question.id}/answers`, data)
+      const { answer } = await this.$axios.$post(`/currrency-questions/${this.question.id}/answers`, data)
         .finally(() => {
           this.submitLock = false
         })

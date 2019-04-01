@@ -154,7 +154,6 @@
 <script>
 import xss from 'xss'
 import { mapState, mapActions } from 'vuex'
-import { filterHTMLTags } from '@/utils/text'
 import markdown from '@/utils/markdown'
 import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
 import TagList from '@/components/tag/TagList.vue'
@@ -273,7 +272,6 @@ export default {
         ...this.form,
         topics: this.selectedTopics.map(id => ({ id })),
         invitations: this.invitations.map(user => ({ user })),
-        text_body: filterHTMLTags(this.form.body),
       }
       form.subject = form.subject.replace(/[^?？]$/, '$&?') // 尾部添加空格
       if (this.form.amount > 0) {
@@ -285,7 +283,7 @@ export default {
         this.$root.$emit('password:close')
       }
       this.submitLock = true
-      const { question } = await this.$axios.$post('/questions', form)
+      const { question } = await this.$axios.$post('/currency-questions', form)
         .finally(() => {
           this.submitLock = false
         })
