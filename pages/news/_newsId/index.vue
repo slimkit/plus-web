@@ -21,7 +21,11 @@
               <template v-slot:content>
                 <ul class="options" @click="showMore = false">
                   <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg> 转发</li>
-                  <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
+                  <template v-if="isMine">
+                    <li @click="onPinned"><svg class="icon"><use xlink:href="#icon-pinned" /></svg> 申请置顶</li>
+                    <li @click="onDelete"><svg class="icon"><use xlink:href="#icon-delete" /></svg> 删除</li>
+                  </template>
+                  <li v-else @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
                 </ul>
               </template>
             </IPoptip>
@@ -179,17 +183,11 @@ export default {
       const noMore = comments.length < limit
       callback(noMore)
     },
-    async onPinned (status) {
-      // if (status) {
-      //   await this.$axios.$patch(`/plus-group/posts/${this.news.id}/cancel`)
-      //   this.$Message.success('撤销置顶成功')
-      // } else {
-      //   this.$root.$emit('pinned', {
-      //     type: 'post',
-      //     params: { news.id: this.news.id },
-      //     isOwner: this.isManager,
-      //   })
-      // }
+    async onPinned () {
+      this.$root.$emit('pinned', {
+        type: 'news',
+        params: { newsId: this.news.id },
+      })
     },
     onRepost () {
       this.$root.$emit('repost', {
@@ -264,6 +262,21 @@ export default {
     },
     onCommentPinned (commentId) {
       // this.fetchComments()
+    },
+    onDelete () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确定删除这条资讯？',
+        onOk: async () => {
+          const { status } = await this.$axios.delete(`/news/categories/${this.news.category.id}/news/${this.news.id}`)
+          if (status === 204) {
+            this.$Message.success('删除成功')
+            this.$router.back()
+          } else {
+            this.$Message.warning('删除申请已提交，请等待审核')
+          }
+        },
+      })
     },
   },
 }
