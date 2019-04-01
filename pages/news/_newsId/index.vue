@@ -245,6 +245,7 @@ export default {
 
       // 更新评论列表
       if (replyUser.id) ret.comment.reply = replyUser
+      ret.comment.user = this.logged
       this.comments.unshift(ret.comment)
       this.news.comment_count += 1
 
