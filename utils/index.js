@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import plueMessageBundle from 'plus-message-bundle'
 
 /**
  * 空函数
@@ -52,25 +53,15 @@ export function getLastField (list, field = 'id') {
 }
 
 /**
- * 错误消息处理
- * @return {string} message
+ * ThinkSNS Plus 消息解析器，获取顶部消息.
+ *
+ * @author Seven Du <shiweidu@outlook.com>
+ * @param {Object} message
+ * @param {string} [defaultMessage]
+ * @return {string}
  */
-export const errorMessageHandler = content => {
-  if (typeof content === 'string') return content
-  if (content instanceof Object) {
-    let message
-    const { errors } = content
-    if (errors && Object.keys(errors).length) {
-      // 处理 errors 消息
-      message = Object.values(errors)[0]
-    } else {
-      // 处理普通的 message 消息
-      message = content.message
-    }
-    if (message instanceof Array) return message[0]
-    return message
-  }
-  return content
+export function errorMessageHandler (message, defaultMessage) {
+  return plueMessageBundle(message, defaultMessage).getMessage()
 }
 
 /**
