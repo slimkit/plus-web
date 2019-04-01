@@ -261,7 +261,7 @@ export default {
       callback()
     },
     onCommentPinned (commentId) {
-      // this.fetchComments()
+      this.fetchComments()
     },
     onDelete () {
       this.$Modal.confirm({

@@ -75,7 +75,7 @@ export default {
       const commentId = this.comment.id
       this.$root.$emit('pinned', {
         type: `${this.type}Comment`,
-        params: { feedId: this.comment.commentable_id, commentId },
+        params: { [`${this.type}Id`]: this.comment.commentable_id, commentId },
         isOwner: this.isOwner,
         callback: () => {
           this.$emit('pinned', commentId)
