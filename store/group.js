@@ -24,7 +24,6 @@ export const state = () => ({
 
 export const TYPES = {
   LOAD_FROM_STORAGE: 'LOAD_FROM_STORAGE',
-  CLEAR_STORAGE: 'CLEAR_STORAGE',
   SAVE_COUNT: 'SAVE_COUNT',
   SAVE_CATEGORY: 'SAVE_CATEGORY',
   SAVE_LIST: 'SAVE_LIST',
@@ -38,11 +37,6 @@ export const mutations = {
     Object.keys(LOCAL_KEY).forEach(key => {
       const data = local.get(LOCAL_KEY[key])
       if (data) state[key.toLowerCase()] = data
-    })
-  },
-  [TYPES.CLEAR_STORAGE] () {
-    Object.values(LOCAL_KEY).forEach(item => {
-      local.remove(item)
     })
   },
   [TYPES.SAVE_CATEGORY] (state, cates) {

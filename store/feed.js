@@ -38,7 +38,6 @@ export const getters = {
 
 export const TYPES = {
   LOAD_FROM_STORAGE: 'LOAD_FROM_STORAGE',
-  CLEAR_STORAGE: 'CLEAR_STORAGE',
   SAVE_LIST: 'SAVE_LIST',
   DELETE_FEED: 'DELETE_FEED',
 }
@@ -47,11 +46,6 @@ export const mutations = {
   [TYPES.LOAD_FROM_STORAGE] (state) {
     Object.keys(LOCAL_KEY).forEach(key => {
       state[key.toLowerCase()] = local.get(LOCAL_KEY[key]) || []
-    })
-  },
-  [TYPES.CLEAR_STORAGE] () {
-    Object.values(LOCAL_KEY).forEach(item => {
-      local.remove(item)
     })
   },
   [TYPES.SAVE_LIST] (state, { type, list, append = false }) {

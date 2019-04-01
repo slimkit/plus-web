@@ -1,4 +1,4 @@
-import { cookie } from '@/utils/storage'
+import { cookie, local, session } from '@/utils/storage'
 
 export const state = () => ({
   token: '', // access token
@@ -6,6 +6,7 @@ export const state = () => ({
 
 export const TYPES = {
   SAVE_TOKEN: 'SAVE_TOKEN',
+  CLEAR_STORAGE: 'CLEAR_STORAGE',
 }
 
 export const mutations = {
@@ -18,6 +19,11 @@ export const mutations = {
         cookie.remove('access_token')
       }
     }
+  },
+
+  [TYPES.CLEAR_STORAGE] () {
+    local.clear()
+    session.clear()
   },
 }
 
@@ -41,7 +47,7 @@ export const actions = {
     commit(TYPES.SAVE_TOKEN, null)
     // 清除登录用户信息
     commit('user/SAVE_CURRENT_USER', null, { root: true })
-    // 清除动态缓存
-    commit('feed/CLEAR_STORAGE', null, { root: true })
+    // 清除本地缓存
+    commit(TYPES.CLEAR_STORAGE)
   },
 }
