@@ -376,14 +376,33 @@ export default {
       this.followLock = false
     },
     async applyExtra () {
-      this.$Modal.confirm({
-        title: '提示',
-        content: '确认要申请该问题为精选问题？',
-        onOk: async () => {
-          await this.$axios.$post(`/user/question-application/${this.question.id}`)
-          this.$Message.success('申请成功!')
-        },
-      })
+      const amount = this.boot['Q&A'].apply_amount
+      if (amount > 0) {
+        this.$Modal.confirm({
+          title: '精选问答支付',
+          content: `本次申请精选您需要支付<strong class="pay-amount error-color">${amount}</strong>积分，是否继续？`,
+          onOk: async () => {
+            const password = await new Promise(resolve => {
+              this.$root.$emit('password', password => resolve(password))
+            })
+            if (!password) return
+            await this.$axios.$post(`/user/currency-question-application/${this.question.id}`, { password })
+              .finally(() => {
+                this.$root.$emit('password:close')
+              })
+            this.$Message.success('申请成功!')
+          },
+        })
+      } else {
+        this.$Modal.confirm({
+          title: '提示',
+          content: '确认要申请该问题为精选问题？',
+          onOk: async () => {
+            await this.$axios.$post(`/user/currency-question-application/${this.question.id}`)
+            this.$Message.success('申请成功!')
+          },
+        })
+      }
     },
   },
 }
