@@ -64,6 +64,18 @@
 
         <hr>
 
+        <Collapse>
+          <div v-if="relevantNews.length" class="relevant-news">
+            <h3 class="relevant-title">相关资讯</h3>
+
+            <TagList :tags="news.tags" :selected="true" />
+
+            <NewsList :news="relevantNews" />
+
+            <hr>
+          </div>
+        </Collapse>
+
         <ArticleComment
           ref="comment"
           type="news"
@@ -106,7 +118,9 @@ import SideWidget from '@/components/common/SideWidget.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
 import ArticleReward from '@/components/common/ArticleReward.vue'
 import ArticleComment from '@/components/common/ArticleComment.vue'
+import NewsList from '@/components/news/NewsList.vue'
 import SideWidgetHotNews from '@/components/news/SideWidgetHotNews.vue'
+import TagList from '@/components/tag/TagList.vue'
 
 export default {
   name: 'NewsDetail',
@@ -118,7 +132,9 @@ export default {
     ArticleLike,
     ArticleReward,
     ArticleComment,
+    NewsList,
     SideWidgetHotNews,
+    TagList,
   },
   data () {
     return {
@@ -126,6 +142,7 @@ export default {
       rewards: [],
       comments: [],
       pinnedComments: [],
+      relevantNews: [], // 相关资讯
 
       showMore: false,
     }
@@ -153,7 +170,14 @@ export default {
     const news = await $axios.$get(`/news/${newsId}`)
     return { news }
   },
+  mounted () {
+    this.fetchRelevantNews()
+  },
   methods: {
+    async fetchRelevantNews () {
+      const list = await this.$axios.$get(`/news/${this.news.id}/correlations`, { params: { limit: 3 } })
+      this.relevantNews = list
+    },
     async fetchRewards (offset = 0, callback = noop) {
       const params = { offset, limit }
       const [list, { count, amount }] = await Promise.all([
@@ -358,6 +382,10 @@ export default {
     .markdown-body {
       margin-top: 16px;
     }
+  }
+
+  .relevant-title {
+    margin-bottom: 16px;
   }
 
   .widgets {
