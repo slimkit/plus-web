@@ -71,7 +71,9 @@ export default {
         case 'qa:invitation':
           url = `/question/${data.question.id}`; break
         case 'group:join':
-          url = `/group/${data.group.id}/manage/members?type=audit`; break
+          if (data.state) url = `/group/${data.group.id}`
+          else url = `/group/${data.group.id}/manage/members?type=audit`
+          break
         case 'pinned:feed/comment':
           return this.$root.$emit('notification', { type: 'audit', auditType: 'feedCommentPinned' })
         case 'pinned:news/comment':

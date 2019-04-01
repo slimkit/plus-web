@@ -17,7 +17,8 @@ export function getNotificationDisplay (data) {
       return `你的帖子「${data.post.title}」被${data.sender.name}打赏了`
       // return i18n.t('message.system.reward_post', { user: data.sender.name, post: data.post.title })
     case 'group:join':
-      if (data.state !== 'reject') return `同意用户${(data.user || {}).name || ''}加入圈子「${data.group.name}」`
+      if (data.state === 'passed') return `你已被同意加入圈子「${data.group.name}」`
+      else if (data.state === 'reject') return `你已被拒绝加入圈子「${data.group.name}」`
       return `${data.user.name}请求加入圈子「${data.group.name}」`
       // return i18n.t(`message.system.group_join[${data.state !== 'reject' ? 1 : 0}]`, { group: data.group.name, user: (data.user || {}).name })
     case 'user-certification':
