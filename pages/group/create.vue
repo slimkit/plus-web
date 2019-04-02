@@ -80,37 +80,7 @@
         prop="tags"
         required
       >
-        <IPoptip
-          :transfer="false"
-          class="tag-selector"
-          title="选择圈子标签"
-          always
-        >
-          <div class="selected-wrap ivu-input">
-            <TagList
-              :tags="selectedTags"
-              :selected="true"
-              size="sm"
-              closeable
-              @remove="onTagRemove"
-            />
-          </div>
-
-          <template v-slot:content>
-            <div class="tags-wrap">
-              <section v-for="tagCate in tags" :key="`cate-${tagCate.id}`">
-                <h4>{{ tagCate.name }}</h4>
-                <TagList
-                  :tags="tagCate.tags"
-                  size="sm"
-                  :selected-tags="selectedTags"
-                  @append="onTagAppend"
-                  @remove="onTagRemove"
-                />
-              </section>
-            </div>
-          </template>
-        </IPoptip>
+        <TagSelector :selected-tags.sync="selectedTags" placeholder="请选择圈子标签" />
       </IFormItem>
 
       <IFormItem label="订阅模式" prop="needPaid">
@@ -202,13 +172,13 @@ import { mapState, mapActions } from 'vuex'
 import markdown from '@/utils/markdown.js'
 import { parseSearchTree } from '@/utils/location.js'
 import ImageCropper from '@/components/common/ImageCropper.vue'
-import TagList from '@/components/tag/TagList.vue'
+import TagSelector from '@/components/tag/TagSelector.vue'
 
 export default {
   name: 'GroupCreate',
   components: {
     ImageCropper,
-    TagList,
+    TagSelector,
   },
   data () {
     const rule = {
