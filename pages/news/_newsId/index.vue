@@ -93,10 +93,12 @@
       <SideWidget key="publish">
         <div class="publish-wrap">
           <IButton
+            class="publish-btn"
             type="primary"
             :long="true"
             shape="circle"
             size="large"
+            to="/news/create"
           >
             <svg class="icon"><use xlink:href="#icon-publish" /></svg>
             投稿
@@ -394,6 +396,10 @@ export default {
 
     .publish-wrap {
       padding: 30px;
+
+      a {
+        color: #fff;
+      }
     }
   }
 }

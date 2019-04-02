@@ -71,7 +71,7 @@
             title="1级标题"
             @click="commands.heading({ level: 1 })"
           >
-            <span class="icon">H1</span>
+            <span class="">H1</span>
           </button>
 
           <button
@@ -80,7 +80,7 @@
             title="2级标题"
             @click="commands.heading({ level: 2 })"
           >
-            <span class="icon">H2</span>
+            <span class="">H2</span>
           </button>
 
           <button
@@ -89,7 +89,7 @@
             title="3级标题"
             @click="commands.heading({ level: 3 })"
           >
-            <span class="icon">H3</span>
+            <span class="">H3</span>
           </button>
 
           <button
@@ -333,10 +333,15 @@ export default {
 
 <style lang="less">
 .c-markdown-editor {
-  @border-color: @text-info-color;
+  @border-color: @border-color-base;
 
   border: 1px solid @border-color;
   border-radius: @border-radius-base;
+  transition: border-color @transition-time;
+
+  .ivu-form-item-error & {
+    border-color: @error-color;
+  }
 
   .menubar {
     display: flex;

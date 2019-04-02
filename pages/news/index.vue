@@ -35,6 +35,7 @@
             :long="true"
             shape="circle"
             size="large"
+            to="/news/create"
           >
             <svg class="icon"><use xlink:href="#icon-publish" /></svg>
             投稿
@@ -160,6 +161,10 @@ export default {
       padding: 30px;
       margin-bottom: 30px;
       background-color: #fff;
+
+      a {
+        color: #fff;
+      }
     }
   }
 }

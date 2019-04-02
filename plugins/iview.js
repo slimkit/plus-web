@@ -23,6 +23,7 @@ import {
   AutoComplete,
   Select,
   Option,
+  OptionGroup,
   Dropdown,
   DropdownMenu,
   DropdownItem,
@@ -61,6 +62,7 @@ const install = function (Vue, opts = {}) {
   // 这两个需要特殊处理，不使用前缀`I`, 因为如果加了前缀使用会异常
   Vue.component('Select', Select)
   Vue.component('Option', Option)
+  Vue.component('OptionGroup', OptionGroup)
 
   Vue.prototype.$Message = Message
   Vue.prototype.$Modal = Modal
