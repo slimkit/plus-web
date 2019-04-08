@@ -54,9 +54,16 @@
         </IPoptip>
 
         <div class="set-amount">
-          <a v-if="!question.amount">未设置悬赏</a>
+          <a v-if="!question.amount" @click="isMine && $refs.setReward.open()">未设置悬赏</a>
           <a v-else-if="question.invitations.length">已邀请悬赏</a>
           <a v-else>已设置悬赏 金额：{{ question.amount }}</a>
+
+          <ModalSetReward
+            v-if="isMine"
+            ref="setReward"
+            :question-id="question.id"
+            @success="afterSetReward"
+          />
         </div>
 
         <IPoptip v-model="showMore" placement="bottom">
@@ -224,6 +231,7 @@ import SocialShare from '@/components/common/SocialShare.vue'
 import ArticleComment from '@/components/common/ArticleComment.vue'
 import AnswerList from '@/components/question/AnswerList.vue'
 import PostAnswer from '@/components/question/PostAnswer.vue'
+import ModalSetReward from '@/components/question/ModalSetReward.vue'
 
 export default {
   name: 'QuestionDetail',
@@ -233,6 +241,7 @@ export default {
     ArticleComment,
     AnswerList,
     PostAnswer,
+    ModalSetReward,
   },
   data () {
     return {
@@ -374,6 +383,9 @@ export default {
         this.$Message.success('关注问题成功！')
       }
       this.followLock = false
+    },
+    afterSetReward (amount) {
+      this.question.amount = amount
     },
     async applyExtra () {
       const amount = this.boot['Q&A'].apply_amount
