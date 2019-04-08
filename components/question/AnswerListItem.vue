@@ -25,7 +25,9 @@
       class="answer-body blur"
       @click="viewAnswer"
     >
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut ipsa vero alias autem, facere beatae aliquid laborum iure molestiae assumenda. Quis voluptates itaque culpa eum perferendis accusantium nisi vero. Delectus repudiandae officiis porro fugit eaque at hic, optio quasi, rerum, esse voluptatibus? Architecto vero temporibus quia voluptates voluptate!
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut ipsa vero alias autem, facere beatae aliquid laborum iure molestiae assumenda.
+      Quis voluptates itaque culpa eum perferendis accusantium nisi vero. Delectus repudiandae officiis porro fugit eaque at hic, optio quasi, rerum, esse voluptatibus?
+      Architecto vero temporibus quia voluptates voluptate!
     </div>
 
     <footer class="extra">
