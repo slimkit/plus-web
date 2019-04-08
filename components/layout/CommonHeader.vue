@@ -132,9 +132,11 @@ export default {
       keyword: '', // 搜索关键字
     }
   },
-  mounted () {
-    const keyword = this.$route.query.keyword
-    if (keyword) this.keyword = keyword
+  watch: {
+    '$route' (to, from) {
+      if (!to.path.match(/^\/search/)) this.keyword = ''
+      else this.keyword = this.$route.query.keyword || ''
+    },
   },
   methods: {
     onLogout () {
