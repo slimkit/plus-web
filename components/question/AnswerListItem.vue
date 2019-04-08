@@ -70,7 +70,7 @@
 export default {
   name: 'AnswerListItem',
   props: {
-    question: { type: Object, required: true },
+    question: { type: Object, default: () => ({}) },
     answer: { type: Object, required: true },
   },
   data () {
