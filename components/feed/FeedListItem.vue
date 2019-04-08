@@ -21,7 +21,7 @@
     </div>
 
     <div
-      class="feed-content"
+      class="feed-content text-cut-3"
       @click="viewDetail"
       v-html="formatContent(feed.feed_content)"
     />

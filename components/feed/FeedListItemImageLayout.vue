@@ -12,6 +12,14 @@
         @click="onImageClick(image, index)"
       >
         <AsyncFile
+          v-if="images.length === 1"
+          :file="image"
+          type="image"
+          :max-height="400"
+          :style="{width: 'auto'}"
+        />
+        <AsyncFile
+          v-else
           :file="image"
           type="image-wrap"
           :max-height="400"
@@ -84,6 +92,14 @@ export default {
 
     &.with-1 {
       grid-template-columns: 1fr;
+
+      .item {
+        padding-bottom: 0;
+
+        .image {
+          position: static;
+        }
+      }
     }
 
     &.with-2,
