@@ -4,7 +4,7 @@
       <nuxt-link :to="`/news/${news.id}`">
         <AsyncFile
           type="image-wrap"
-          :max-width="260"
+          :max-width="220"
           :max-height="160"
           :file="news.image || {}"
         />
@@ -42,12 +42,12 @@ export default {
 <style lang="less" scoped>
 .c-news-list-item {
   display: flex;
-  height: 200px;
+  height: 180px;
   justify-content: space-between;
 
   .news-image {
     flex: none;
-    width: 240px;
+    width: 220px;
   }
 
   .news-body {

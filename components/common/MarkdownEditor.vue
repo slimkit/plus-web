@@ -192,7 +192,7 @@
             title="代码块"
             @click="commands.code_block"
           >
-            <svg class="icon sm"><use xlink:href="#icon-code_block" /></svg>
+            <svg class="icon sm"><use xlink:href="#icon-code" /></svg>
           </button>
 
           <button
@@ -358,7 +358,7 @@ export default {
       border: 1px solid transparent;
       border-radius: @border-radius-base;
       background-color: transparent;
-      color: @border-color;
+      color: @disabled-color;
 
       &:hover {
         border: 1px solid @border-color;

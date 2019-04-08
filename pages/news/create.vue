@@ -116,6 +116,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { Message } from 'iview'
 import { filterHTMLTags } from '@/utils/text'
 import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
@@ -124,6 +125,7 @@ import TagSelector from '@/components/tag/TagSelector.vue'
 
 export default {
   name: 'NewsCreate',
+  middleware: ['requireAuth'],
   components: {
     MarkdownEditor,
     SideWidget,
@@ -205,6 +207,14 @@ export default {
       })
     },
   },
+  asyncData ({ store, redirect }) {
+    const logged = store.state.user.logged || {}
+    const needVerify = store.state.boot.news.contribute.verified
+    if (needVerify && !logged.verified) {
+      Message.error('投稿前需要进行实名认证')
+      return redirect('/setting/certificate')
+    }
+  },
   mounted () {
     this.getTags()
     this.getCategories()
@@ -227,6 +237,7 @@ export default {
               this.$root.$emit('password', password => resolve(password))
             })
             if (password === false) return
+            this.$root.$emit('password:close')
             this.onSubmit(password)
           },
         })
