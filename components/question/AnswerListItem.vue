@@ -1,6 +1,6 @@
 <template>
   <li class="c-answer-list-item">
-    <div class="user-wrap">
+    <div v-if="!inCollect" class="user-wrap">
       <Avatar :user="user" :anonymity="answer.anonymity" />
       <div class="user-info">
         <h4>
@@ -33,7 +33,11 @@
 
       <a @click="onLike"><svg class="icon"><use :xlink:href="answer.liked ? '#icon-likered' : '#icon-like'" /></svg> {{ answer.likes_count }} 点赞</a>
 
-      <IPoptip v-model="showMore" placement="bottom">
+      <IPoptip
+        v-if="!inCollect"
+        v-model="showMore"
+        placement="bottom"
+      >
         <template v-slot:default>
           <a><svg class="icon lg more"><use xlink:href="#icon-more" /></svg></a>
         </template>
@@ -72,6 +76,7 @@ export default {
   props: {
     question: { type: Object, default: () => ({}) },
     answer: { type: Object, required: true },
+    inCollect: { type: Boolean, default: false },
   },
   data () {
     return {
