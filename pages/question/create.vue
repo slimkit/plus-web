@@ -288,6 +288,7 @@ export default {
           this.submitLock = false
         })
       this.$Message.success('提问成功，正在跳转...')
+      this.$destroy()
       this.$router.replace(`/question/${question.id}`)
     },
     async getExpert () {

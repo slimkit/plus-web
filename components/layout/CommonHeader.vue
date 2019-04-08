@@ -25,7 +25,12 @@
 
       <!-- 右侧 搜索 + 登录状态 -->
       <div class="extra">
-        <IPoptip v-if="logged" trigger="hover">
+        <IPoptip
+          v-if="logged"
+          key="user-status"
+          class="user-status"
+          trigger="hover"
+        >
           <nuxt-link class="user-wrap" to="/user">
             <Avatar
               :user="logged"
@@ -60,15 +65,38 @@
             </ul>
           </template>
         </IPoptip>
+
         <template v-else>
           <nuxt-link class="login-btn" :to="{name: 'auth-login'}">登录</nuxt-link>
           <nuxt-link class="login-btn" :to="{name: 'auth-register'}">注册</nuxt-link>
         </template>
-        <IInput
-          class="search-box"
-          search
-          placeholder="输入关键词搜索"
-        />
+
+        <IPoptip
+          key="search"
+          trigger="hover"
+          class="search-wrap"
+          placement="bottom"
+        >
+          <template v-slot:default>
+            <IInput
+              v-model="keyword"
+              class="search-box"
+              search
+              placeholder="输入关键词搜索"
+              @on-search="onSearch"
+            />
+          </template>
+
+          <template v-slot:content>
+            <ul v-if="keyword" class="options search-tips">
+              <li v-for="item in searchTips" :key="item.to">
+                <nuxt-link :to="`${item.to}?keyword=${keyword}`">
+                  与<span class="primary-color">{{ keyword.length > 10 ? keyword.slice(0, 10) + '...' : keyword }}</span>相关的{{ item.label }}
+                </nuxt-link>
+              </li>
+            </ul>
+          </template>
+        </IPoptip>
       </div>
     </div>
   </header>
@@ -85,12 +113,28 @@ const menu = [
   // { name: 'about', label: '关于我们', to: '#' },
 ]
 
+const searchTips = [
+  { label: '动态', to: `/search/feed` },
+  { label: '话题', to: `/search/topic` },
+  { label: '资讯', to: `/search/news` },
+  { label: '问题', to: `/search/question` },
+  { label: '专题', to: `/search/question-topic` },
+  { label: '圈子', to: `/search/group` },
+  { label: '用户', to: `/search/user` },
+]
+
 export default {
   name: 'CommonHeader',
   data () {
     return {
       menu,
+      searchTips,
+      keyword: '', // 搜索关键字
     }
+  },
+  mounted () {
+    const keyword = this.$route.query.keyword
+    if (keyword) this.keyword = keyword
   },
   methods: {
     onLogout () {
@@ -105,6 +149,14 @@ export default {
           this.$router.push('/')
         },
       })
+    },
+    onSearch (keyword) {
+      if (!keyword) return this.$Message.error('请输入关键字')
+      if (this.$route.path.match(/^\/search/)) {
+        this.$router.replace({ query: { keyword } })
+      } else {
+        this.$router.push(`/search?keyword=${keyword}`)
+      }
     },
     viewUser () {
       this.$router.push('/user')
@@ -180,7 +232,6 @@ export default {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    height: 100%;
     margin-right: 24px;
 
     .ivu-poptip {
@@ -223,6 +274,17 @@ export default {
       justify-content: center;
       font-size: @font-size-base;
       width: 5em;
+    }
+
+    .search-wrap {
+      position: relative;
+      padding: 0;
+      margin: 0 24px;
+
+      /deep/ .ivu-poptip-popper {
+        left: 0;
+        width: 100%;
+      }
     }
 
     .search-box {
