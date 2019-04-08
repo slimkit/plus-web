@@ -23,7 +23,7 @@
         >
           {{ news.category.name }}
         </nuxt-link>
-        {{ news.from }} · {{ news.created_at }}
+        {{ news.from }} · {{ news.created_at | fromNow({full: true}) }}
       </div>
     </div>
   </li>
