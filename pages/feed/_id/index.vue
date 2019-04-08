@@ -92,22 +92,17 @@
         </div>
       </SideWidget>
 
-      <SideWidget
-        v-if="recommendUsers.length"
-        :users="recommendUsers"
-        type="user"
-        title="推荐用户"
-      />
+      <SideWidgetRecommendUsers />
     </aside>
   </article>
 </template>
 
 <script>
 import _ from 'lodash'
-import { mapState, mapActions } from 'vuex'
 import { convertAtHTML, convertLinkHTML } from '@/utils/text'
 import { noop, limit } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
+import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
 import ArticleReward from '@/components/common/ArticleReward.vue'
 import ArticleComment from '@/components/common/ArticleComment.vue'
@@ -116,6 +111,7 @@ export default {
   name: 'FeedDetail',
   components: {
     SideWidget,
+    SideWidgetRecommendUsers,
     ArticleLike,
     ArticleReward,
     ArticleComment,
@@ -136,9 +132,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', {
-      recommendUsers: 'recommend',
-    }),
     user () {
       return this.feed.user || {}
     },
@@ -179,13 +172,7 @@ export default {
     const feed = await $axios.$get(`/feeds/${params.id}`)
     return { feed }
   },
-  mounted () {
-    this.fetchRecommendUsers()
-  },
   methods: {
-    ...mapActions('user', {
-      fetchRecommendUsers: 'fetchRecommendUsers',
-    }),
     formatContent (text) {
       text = convertLinkHTML(text)
       text = convertAtHTML(text)

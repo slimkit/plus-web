@@ -37,24 +37,19 @@
         <CheckIn />
       </SideWidget>
 
-      <SideWidget
-        v-if="recommendUsers.length"
-        key="recommend-user"
-        :users="recommendUsers"
-        type="user"
-        title="推荐用户"
-      />
+      <SideWidgetRecommendUsers key="recommend-users" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
-import FeedList from '@/components/feed/FeedList.vue'
 import SideWidget from '@/components/common/SideWidget.vue'
+import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 import CheckIn from '@/components/feed/CheckIn.vue'
 import PostFeed from '@/components/feed/PostFeed.vue'
+import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
+import FeedList from '@/components/feed/FeedList.vue'
 
 const defaultType = 'new'
 const typeMap = {
@@ -74,6 +69,7 @@ export default {
     FeedLeftNavigation,
     FeedList,
     SideWidget,
+    SideWidgetRecommendUsers,
     CheckIn,
     PostFeed,
   },

@@ -55,13 +55,7 @@
       </main>
 
       <div class="right-container">
-        <SideWidget
-          v-if="recommendUsers.length"
-          key="recommend-user"
-          :users="recommendUsers"
-          type="user"
-          title="推荐用户"
-        />
+        <SideWidgetRecommendUsers />
       </div>
     </div>
   </div>
@@ -70,8 +64,12 @@
 <script>
 import { getFollowStatus } from '@/utils'
 import UserHome from './index.vue'
+import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 
 export default {
+  components: {
+    SideWidgetRecommendUsers,
+  },
   extends: UserHome,
   data () {
     return {

@@ -63,28 +63,21 @@
       </main>
 
       <div class="right-container">
-        <SideWidget
-          v-if="recommendUsers.length"
-          key="recommend-user"
-          :users="recommendUsers"
-          type="user"
-          title="推荐用户"
-        />
+        <SideWidgetRecommendUsers />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { getObjectUrl } from '@/utils/file'
-import SideWidget from '@/components/common/SideWidget.vue'
+import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 
 export default {
   name: 'UserHome',
   middleware: ['requireAuth'],
   components: {
-    SideWidget,
+    SideWidgetRecommendUsers,
   },
   data: function () {
     return {
@@ -95,9 +88,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', {
-      recommendUsers: 'recommend',
-    }),
     user () {
       return this.logged
     },
@@ -119,8 +109,8 @@ export default {
     }
   },
   mounted () {
+    // TODO: fixme
     document.title = `${this.user.name} 的个人主页`
-    this.$store.dispatch('user/fetchRecommendUsers')
   },
   methods: {
     onUpload () {

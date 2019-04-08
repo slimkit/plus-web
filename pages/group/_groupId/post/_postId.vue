@@ -102,22 +102,17 @@
         </div>
       </SideWidget>
 
-      <SideWidget
-        :users="recommendUsers"
-        type="user"
-        title="推荐用户"
-        :loading="!recommendUsers.length"
-      />
+      <SideWidgetRecommendUsers />
     </aside>
   </article>
 </template>
 
 <script>
 import _ from 'lodash'
-import { mapActions, mapState } from 'vuex'
 import { noop, limit } from '@/utils'
 import markdown from '@/utils/markdown'
 import SideWidget from '@/components/common/SideWidget.vue'
+import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
 import ArticleReward from '@/components/common/ArticleReward.vue'
 import ArticleComment from '@/components/common/ArticleComment.vue'
@@ -129,6 +124,7 @@ export default {
   },
   components: {
     SideWidget,
+    SideWidgetRecommendUsers,
     ArticleLike,
     ArticleReward,
     ArticleComment,
@@ -145,9 +141,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', {
-      recommendUsers: 'recommend',
-    }),
     postId () {
       return Number(this.$route.params.postId)
     },
@@ -190,13 +183,7 @@ export default {
     this.rewards = this.post.rewards || []
     this.comments = this.post.comments || []
   },
-  mounted () {
-    this.fetchRecommendUsers()
-  },
   methods: {
-    ...mapActions('user', {
-      fetchRecommendUsers: 'fetchRecommendUsers',
-    }),
     async fetchRewards (offset = 0, callback = noop) {
       const params = { offset, limit }
       const list = await this.$axios.$get(`/plus-group/group-posts/${this.postId}/rewards`, { params })
