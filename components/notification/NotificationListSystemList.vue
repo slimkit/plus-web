@@ -55,14 +55,20 @@ export default {
       switch (data.type) {
         case 'reward':
           url = `/user/${data.sender.id}`; break
-        case 'reward:feeds':
-          url = `/feed/${data.feed_id}`; break
-        case 'reward:news':
-          url = `/news/${data.news.id}`; break
-        case 'group:post-reward':
-          url = `/group/${data.group_id}/post/${data.post.id}`; break
         case 'user-certification':
           url = '/setting/certificate'; break
+
+        case 'reward:feeds':
+        case 'pinned:feeds':
+          url = `/feed/${data.feed_id}`; break
+        case 'pinned:feed/comment':
+          return this.$root.$emit('notification', { type: 'audit', auditType: 'feedCommentPinned' })
+
+        case 'reward:news':
+          url = `/news/${data.news.id}`; break
+        case 'pinned:news/comment':
+          return this.$root.$emit('notification', { type: 'audit', auditType: 'newsCommentPinned' })
+
         case 'qa:answer-adoption':
         case 'question:answer':
           url = `/question/${data.question.id}/answer/${data.answer.id}`; break
@@ -70,21 +76,26 @@ export default {
           url = `/question/${data.answer.question_id}/answer/${data.answer.id}`; break
         case 'qa:invitation':
           url = `/question/${data.question.id}`; break
+        case 'qa:question-topic:accept':
+          url = `/question/topic/${data.topic.id}`; break
+        case 'qa:question-topic:reject':
+          return
+
+        case 'qa:question-excellent:accept':
+          url = `/question/${data.application.question_id}`; break
+
         case 'group:join':
           if (data.state) url = `/group/${data.group.id}`
           else url = `/group/${data.group.id}/manage/members?type=audit`
           break
-        case 'pinned:feed/comment':
-          return this.$root.$emit('notification', { type: 'audit', auditType: 'feedCommentPinned' })
-        case 'pinned:news/comment':
-          return this.$root.$emit('notification', { type: 'audit', auditType: 'newsCommentPinned' })
+        case 'group:post-reward':
+        case 'group:pinned-admin':
+          url = `/group/${data.group_id}/post/${data.post.id}`; break
         case 'group:comment-pinned':
         case 'group:send-comment-pinned':
           return this.$root.$emit('notification', { type: 'audit', auditType: 'postCommentPinned' })
         case 'group:post-pinned':
           return this.$root.$emit('notification', { type: 'audit', auditType: 'postPinned' })
-        case 'group:pinned-admin':
-          url = `/group/${data.group_id}/post/${data.post.id}`
       }
       if (url) {
         this.$router.push(url)
