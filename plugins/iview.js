@@ -2,6 +2,7 @@ import Vue from 'vue'
 import '@/assets/less/index.less'
 
 import {
+  Alert,
   Button,
   Breadcrumb,
   BreadcrumbItem,
@@ -32,6 +33,7 @@ import {
 } from 'iview'
 
 const components = {
+  Alert,
   Button,
   Breadcrumb,
   BreadcrumbItem,

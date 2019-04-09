@@ -1,5 +1,19 @@
 <template>
   <div class="layout-default">
+    <!-- Browse Happy -->
+    <Collapse>
+      <IAlert
+        v-if="isIE"
+        banner
+        type="warning"
+        closable
+        :style="{marginBottom: 0,marginRight: logged && '48px', zIndex: 100}"
+      >
+        <!-- eslint-disable-next-line -->
+        您正在使用过时的 IE 浏览器，因此排版可能会错乱。为了您的浏览体验，强烈建议您更换至 <a class="primary-color" href="https://browsehappy.com/" target="_blank" >现代浏览器</a>
+      </IAlert>
+    </Collapse>
+
     <CommonHeader />
 
     <div class="container main">
@@ -23,6 +37,7 @@
 </template>
 
 <script>
+import { isIE } from '@/utils'
 import CommonHeader from '@/components/layout/CommonHeader.vue'
 import CommonFooter from '@/components/layout/CommonFooter.vue'
 import FloatWidget from '@/components/layout/FloatWidget.vue'
@@ -47,6 +62,18 @@ export default {
     ModalReward,
     ModalPinned,
     ModalPassword,
+  },
+  data () {
+    return {
+      isIE: false,
+    }
+  },
+  mounted () {
+    if (isIE()) {
+      setTimeout(() => {
+        this.isIE = true
+      }, 500)
+    }
   },
 }
 </script>

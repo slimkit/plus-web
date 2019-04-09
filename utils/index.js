@@ -22,6 +22,16 @@ export const isNumber = val => {
 }
 
 /**
+ * 判断是否是 IE 浏览器
+ */
+export function isIE () {
+  if (process.client) {
+    return !!window.ActiveXObject || 'ActiveXObject' in window
+  }
+  return null
+}
+
+/**
  * 获取关注状态
  * @param {boolean} follower 被关注
  * @param {boolean} following 关注
