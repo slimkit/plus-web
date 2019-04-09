@@ -68,6 +68,16 @@
           {{ answer.could ? '已围观':'围观' }}
         </IButton>
       </template>
+
+      <IButton
+        v-if="canAdoption"
+        size="small"
+        type="primary"
+        ghost
+        @click="onAdopt"
+      >
+        <span class="primary-color"><svg class="icon"><use xlink:href="#icon-adopt-answer" /></svg> 采纳</span>
+      </IButton>
     </footer>
   </li>
 </template>
@@ -90,7 +100,7 @@ export default {
       return this.answer.user || {}
     },
     isMyQuestion () {
-      return this.logged && this.logged.id === this.question.id
+      return this.logged && (this.logged.id === this.question.user_id)
     },
     isMyAnswer () {
       return this.logged && this.logged.id === this.user.id
@@ -102,6 +112,11 @@ export default {
         this.answer.invited &&
         (!this.logged || !this.answer.could)
       )
+    },
+    canAdoption () {
+      if (this.isMyAnswer) return false
+      if (this.question.adoption_answers.length) return false
+      return this.isMyQuestion && !this.answer.adoption
     },
   },
   methods: {
@@ -168,6 +183,25 @@ export default {
           await this.$axios.$delete(`/question-answers/${this.answer.id}`)
           this.$Message.success('删除成功')
           this.$emit('delete', this.answer.id)
+        },
+      })
+    },
+    onAdopt () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确定要采纳这个回答吗？',
+        loading: true,
+        onOk: async () => {
+          try {
+            await this.$axios.$put(`/questions/${this.question.id}/currency-adoptions/${this.answer.id}`)
+            this.$Modal.remove()
+            this.$Message.success('采纳成功')
+            this.answer.adoption = 1
+            this.question.adoption_answers.push(this.answer)
+            this.$emit('adopted', this.answer.id)
+          } catch (error) {
+            this.$Modal.remove()
+          }
         },
       })
     },

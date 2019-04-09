@@ -12,6 +12,17 @@
           </h3>
           <p class="time">{{ answer.created_at | fromNow }}</p>
         </div>
+
+        <IButton
+          v-if="canAdoption"
+          size="small"
+          type="primary"
+          ghost
+          @click="onAdopt"
+        >
+          <span class="primary-color"><svg class="icon"><use xlink:href="#icon-adopt-answer" /></svg> 采纳</span>
+        </IButton>
+
         <IPoptip
           v-model="showMore"
           placement="bottom"
@@ -177,8 +188,15 @@ export default {
     user () {
       return this.answer.user || {}
     },
+    isMyQuestion () {
+      return this.logged && (this.logged.id === this.question.user_id)
+    },
     isMyAnswer () {
       return this.logged && this.logged.id === this.user.id
+    },
+    canAdoption () {
+      if (this.isMyAnswer || this.answer.adoption) return false
+      return this.isMyQuestion && !this.question.has_adoption
     },
     rewardAmount: {
       get () {
@@ -326,6 +344,23 @@ export default {
         },
       })
     },
+    onAdopt () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确定要采纳这个回答吗？',
+        loading: true,
+        onOk: async () => {
+          try {
+            await this.$axios.$put(`/questions/${this.question.id}/currency-adoptions/${this.answer.id}`)
+            this.$Modal.remove()
+            this.$Message.success('采纳成功')
+            this.answer.adoption = 1
+          } catch (error) {
+            this.$Modal.remove()
+          }
+        },
+      })
+    },
     afterPatchAnswer () {
       this.fetchAnswer()
       this.showEdit = false
@@ -383,7 +418,7 @@ export default {
     }
 
     .more {
-      margin-left: auto;
+      margin-left: 8px;
       cursor: pointer;
     }
   }

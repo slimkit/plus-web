@@ -201,6 +201,7 @@
               <AnswerList
                 :question="question"
                 :answers="allAnswers"
+                @adopted="afterAdoptedAnswer"
                 @delete="afterDeleteAnswer"
               />
             </Loadmore>
@@ -224,6 +225,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapActions } from 'vuex'
 import { limit, noop } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
@@ -366,9 +368,12 @@ export default {
         },
       })
     },
-    afterDeleteAnswer (answerId, index) {
-      this.answers = this.answers.filter(a => a.id !== answerId)
+    afterDeleteAnswer (answerId) {
+      this.answers = _.filter(this.answers, a => a.id !== answerId)
       this.question.answers_count -= 1
+    },
+    afterAdoptedAnswer (answerId) {
+      this.answers = _.filter(this.answers, a => a.id !== answerId)
     },
     async onFollow () {
       this.followLock = true

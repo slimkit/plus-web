@@ -1,11 +1,11 @@
 <template>
   <ul class="c-anser-list">
     <AnswerListItem
-      v-for="(answer, index) in answers"
+      v-for="answer in answers"
       :key="answer.id"
       :answer="answer"
       v-bind="$attrs"
-      @delete="answerId => onDelete(answerId, index)"
+      v-on="$listeners"
     />
   </ul>
 </template>
@@ -20,11 +20,6 @@ export default {
   },
   props: {
     answers: { type: Array, default: () => [] },
-  },
-  methods: {
-    onDelete (answerId, index) {
-      this.$emit('delete', answerId, index)
-    },
   },
 }
 </script>
