@@ -1,12 +1,14 @@
 <template>
   <img
     v-if="type === 'image'"
+    :key="`${src}`"
     v-lazyload="src"
     class="c-async-file"
     :class="type"
   >
   <div
     v-else-if="type === 'image-wrap'"
+    :key="`${src}`"
     v-lazyload:background="src"
     class="c-async-file"
     :class="type"
@@ -36,6 +38,11 @@ export default {
     quility: { type: Number, default: null },
     blur: { type: Number, default: null },
   },
+  data () {
+    return {
+      query: '',
+    }
+  },
   computed: {
     fileSystem () {
       return this.file.url ? 'storage' : 'file'
@@ -48,6 +55,7 @@ export default {
         h: this.maxHeight,
         blur: this.blur,
         quility: this.quility,
+        query: this.query || this.file._t,
       })
     },
     isGif () {
@@ -64,6 +72,9 @@ export default {
   },
   methods: {
     getFileUrl,
+    forceUpdate () {
+      this.query = +new Date()
+    },
   },
 }
 </script>

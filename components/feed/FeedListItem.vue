@@ -209,7 +209,21 @@ export default {
     viewDetail () {
       this.$router.push(`/feed/${this.feed.id}`)
     },
-    onImageView (image, index) {
+    async onImageView (image, index) {
+      if (image.amount && !image.paid) {
+        await this.checkAuth()
+        this.$root.$emit('pay', {
+          title: '购买支付',
+          content: `您只需要支付${image.amount}积分即可查看高清大图，是否确认支付？`,
+          amount: image.amount,
+          api: `/currency/purchases/${image.paid_node}`,
+          callback: (res, amount) => {
+            this.$set(image, 'paid', true)
+            this.$set(image, '_t', +new Date())
+          },
+        })
+        return
+      }
       this.index = index
       this.viewCarousel = true
     },
@@ -315,6 +329,8 @@ export default {
 
   .feed-video {
     margin: 12px 0;
+    max-width: 100%;
+    max-height: 400px;
   }
 
   .feed-content {

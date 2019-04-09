@@ -25,6 +25,8 @@
           :max-height="400"
         />
 
+        <div v-if="image.amount && !image.paid" class="badge pay">付费</div>
+
         <div v-if="isGreatThen9 && index === 8" class="cover">+{{ images.length - 9 }}</div>
       </li>
     </ul>
@@ -68,7 +70,21 @@ export default {
       width: 100%;
       padding-bottom: 100%;
       grid-area: span 1;
+      overflow: hidden;
       cursor: zoom-in;
+
+      .badge.pay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding-top: 20px;
+        width: 5em;
+        text-align: center;
+        color: #fff;
+        background-color: #c8a06c;
+        background-image: linear-gradient(135deg, #cfac7d 50%, #c8a06c 50%);
+        transform: translate(-25px, -10px) rotateZ(-45deg);
+      }
 
       .c-async-file {
         position: absolute;

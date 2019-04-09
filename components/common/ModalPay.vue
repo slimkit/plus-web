@@ -8,6 +8,9 @@
     :transfer="false"
     @on-ok="beforeSubmit"
   >
+    <h2 v-if="showAmount" class="amount">
+      {{ amount.toLocaleString() }}
+    </h2>
     <div class="content">
       {{ content }}
     </div>
@@ -25,6 +28,7 @@ export default {
       content: '',
       api: '',
       amount: 0,
+      showAmount: true,
       params: {},
       callback: noop,
 
@@ -39,6 +43,7 @@ export default {
       if (options.api) this.api = options.api
       if (options.amount) this.amount = options.amount
       if (options.params) this.params = options.params
+      if (options.showAmount !== undefined) this.showAmount = options.showAmount
       if (options.callback) this.callback = options.callback
       this.open()
     })
@@ -83,6 +88,13 @@ export default {
 
 <style lang="less" scoped>
 .c-modal-pay {
+  .amount {
+    padding: 16px;
+    color: @warning-color;
+    font-size: @font-size-large * 2;
+    text-align: center;
+  }
+
   .content {
     padding: 24px;
     text-align: center;

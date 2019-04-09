@@ -29,15 +29,17 @@
         <div v-if="video" class="video-wrap">
           <AsyncFile type="video" :file="video" />
         </div>
-        <div v-if="images.length" class="image-wrap">
-          <template v-for="(image, index) in images">
-            <AsyncFile
-              v-if="!index"
-              :key="image.file"
-              type="image"
-              :file="image"
-            />
-          </template>
+        <div v-if="images.length" class="images-wrap">
+          <div
+            v-for="(image, index) in images"
+            :key="image.file"
+            class="image-wrap"
+            @click="viewImage(image, index)"
+          >
+            <AsyncFile type="image" :file="image" />
+
+            <div v-if="image.amount && !image.paid" class="badge pay">付费</div>
+          </div>
         </div>
 
         <div class="text-wrap" v-html="formatContent(feed.feed_content)" />
@@ -99,8 +101,9 @@
 
 <script>
 import _ from 'lodash'
-import { convertAtHTML, convertLinkHTML } from '@/utils/text'
 import { noop, limit } from '@/utils'
+import { getFileUrl } from '@/utils/file'
+import { convertAtHTML, convertLinkHTML } from '@/utils/text'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
@@ -271,6 +274,24 @@ export default {
         source: this.feed,
       })
     },
+    async viewImage (image, index) {
+      if (image.amount && !image.paid) {
+        await this.checkAuth()
+        this.$root.$emit('pay', {
+          title: '购买支付',
+          content: `您只需要支付${image.amount}积分即可查看高清大图，是否确认支付？`,
+          amount: image.amount,
+          api: `/currency/purchases/${image.paid_node}`,
+          callback: (res, amount) => {
+            this.$set(this.images[index], 'paid', true)
+            this.$set(this.images[index], '_t', +new Date())
+          },
+        })
+        return
+      }
+      const originalUrl = getFileUrl(image.file)
+      window.open(originalUrl)
+    },
   },
 }
 </script>
@@ -312,11 +333,33 @@ export default {
   .article-content {
     margin-bottom: 30px;
 
+    .images-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .image-wrap {
+      position: relative;
       display: flex;
       justify-content: center;
       background-color: @background-color-base;
       margin-bottom: 24px;
+      overflow: hidden;
+      cursor: zoom-in;
+
+      .badge.pay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding-top: 20px;
+        width: 5em;
+        text-align: center;
+        color: #fff;
+        background-color: #c8a06c;
+        background-image: linear-gradient(135deg, #cfac7d 50%, #c8a06c 50%);
+        transform: translate(-25px, -10px) rotateZ(-45deg);
+      }
     }
 
     .video-wrap {

@@ -121,6 +121,8 @@ export const getFileUrl = (file, params = {}) => {
   if (process.server) return ''
 
   const paramsString = new URLSearchParams()
+  if (params.query) paramsString.append('_t', params.query) // 强请求
+
   let url = ''
 
   const { type = 'file' } = params
