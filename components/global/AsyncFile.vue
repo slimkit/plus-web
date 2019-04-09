@@ -10,7 +10,9 @@
     v-lazyload:background="src"
     class="c-async-file"
     :class="type"
-  />
+  >
+    <span v-if="isGif" class="badge gif">GIF</span>
+  </div>
   <video
     v-else-if="type === 'video'"
     class="c-async-file"
@@ -48,6 +50,10 @@ export default {
         quility: this.quility,
       })
     },
+    isGif () {
+      if (!['image', 'image-wrap'].includes(this.type)) return false
+      return (this.file.mime || '').match(/image\/gif/)
+    },
     videoStyle () {
       if (this.type !== 'video') return null
       return {
@@ -67,9 +73,23 @@ export default {
   max-width: 100%;
 
   &.image-wrap {
+    position: relative;
     width: 100%;
     height: 100%;
     background: @normal-color center / cover no-repeat;
+
+    .badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      color: #fff;
+      font-size: @font-size-small;
+      padding: 0 4px;
+
+      &.gif {
+        background-color: @success-color;
+      }
+    }
   }
 
   &.video {

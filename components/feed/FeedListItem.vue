@@ -32,13 +32,22 @@
       type="video"
       :file="feed.video"
     />
-    <FeedListItemImageLayout
-      v-else-if="images.length"
-      class="feed-content"
-      :images="images"
-      @click="onImageView"
-      @more="viewDetail"
-    />
+    <template v-else-if="images.length">
+      <FeedListItemImageLayout
+        v-show="!viewCarousel"
+        class="feed-content layout"
+        :images="images"
+        @click="onImageView"
+        @more="viewDetail"
+      />
+      <FeedListItemImagePlayground
+        v-if="viewCarousel"
+        class="feed-content"
+        :images="images"
+        :init-index="index"
+        @close="viewCarousel = false"
+      />
+    </template>
 
     <ul v-if="topics.length" class="selected-topics">
       <Tag
@@ -118,9 +127,9 @@
 </template>
 
 <script>
-import { getFileUrl } from '@/utils/file'
 import { convertAtHTML, convertLinkHTML } from '@/utils/text'
 import FeedListItemImageLayout from './FeedListItemImageLayout.vue'
+import FeedListItemImagePlayground from './FeedListItemImagePlayground.vue'
 import ArticleListCommentList from '@/components/common/ArticleListCommentList.vue'
 import Reference from '@/components/common/Reference.vue'
 
@@ -128,6 +137,7 @@ export default {
   name: 'FeedListItem',
   components: {
     FeedListItemImageLayout,
+    FeedListItemImagePlayground,
     ArticleListCommentList,
     Reference,
   },
@@ -138,6 +148,8 @@ export default {
   data () {
     return {
       type: 'feed',
+
+      viewCarousel: false,
       hoverTime: false,
       showMore: false,
       showComments: false,
@@ -183,6 +195,11 @@ export default {
       },
     },
   },
+  watch: {
+    '$route' () {
+      this.viewCarousel = false
+    },
+  },
   methods: {
     formatContent (text) {
       text = convertLinkHTML(text)
@@ -193,9 +210,8 @@ export default {
       this.$router.push(`/feed/${this.feed.id}`)
     },
     onImageView (image, index) {
-      // TODO: 点击展开幻灯片预览
-      const originalUrl = getFileUrl(image.file)
-      window.open(originalUrl)
+      this.index = index
+      this.viewCarousel = true
     },
     async onLike () {
       await this.checkAuth()
@@ -316,7 +332,7 @@ export default {
       font-size: @font-size-large;
     }
 
-    .image {
+    &.layout .image {
       max-width: 100%;
       max-height: 400px;
     }

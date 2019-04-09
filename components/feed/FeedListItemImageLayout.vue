@@ -68,6 +68,7 @@ export default {
       width: 100%;
       padding-bottom: 100%;
       grid-area: span 1;
+      cursor: zoom-in;
 
       .c-async-file {
         position: absolute;
