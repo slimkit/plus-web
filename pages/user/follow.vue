@@ -74,8 +74,8 @@ export default {
     list () {
       return this.$data[this.type] || []
     },
-    user () {
-      return this.logged
+    userId () {
+      return this.logged.id
     },
   },
   watch: {
@@ -105,9 +105,9 @@ export default {
     },
     async fetchData (params) {
       if (this.type === 'fans') {
-        return this.$axios.$get(`/users/${this.user.id}/followers`, { params })
+        return this.$axios.$get(`/users/${this.userId}/followers`, { params })
       } else {
-        return this.$axios.$get(`/users/${this.user.id}/followings`, { params })
+        return this.$axios.$get(`/users/${this.userId}/followings`, { params })
       }
     },
   },
@@ -126,7 +126,7 @@ export default {
 
     .nav-wrap {
       height: 80px;
-      margin-bottom: 30px;
+      margin-bottom: -1px;
       .border(bottom);
       font-size: @font-size-large;
 
@@ -135,10 +135,11 @@ export default {
         align-items: center;
         height: 100%;
         margin-right: 24px;
+        border-bottom: 1px solid transparent;
       }
 
       .exact-active {
-        border-bottom: 1px solid @primary-color;
+        border-color: @primary-color;
         color: @primary-color;
       }
     }
@@ -146,7 +147,8 @@ export default {
     .user-list {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-gap: 30px
+      grid-gap: 30px;
+      margin-top: 30px;
     }
   }
 
