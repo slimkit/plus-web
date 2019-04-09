@@ -103,7 +103,7 @@
 import _ from 'lodash'
 import { noop, limit } from '@/utils'
 import { getFileUrl } from '@/utils/file'
-import { convertAtHTML, convertLinkHTML } from '@/utils/text'
+import { convertAtHTML, convertLinkHTML, cutText } from '@/utils/text'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 import ArticleLike from '@/components/common/ArticleLike.vue'
@@ -119,8 +119,11 @@ export default {
     ArticleReward,
     ArticleComment,
   },
-  head: {
-    title: '动态详情',
+  head () {
+    let username = cutText(this.feed.user.name || '', 8)
+    return {
+      title: `${username}的动态`,
+    }
   },
   validate ({ params, query }) {
     return /^\d+$/.test(params.id)
@@ -167,7 +170,7 @@ export default {
       const info = {
         title: this.feed.feed_content,
       }
-      if (this.images.length) info.image = this.images[0]
+      if (this.images.length) info.image = getFileUrl(this.images[0].file)
       return info
     },
   },

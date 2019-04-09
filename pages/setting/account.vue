@@ -9,6 +9,11 @@
 <script>
 export default {
   name: 'SettingAccount',
+  head () {
+    return {
+      title: '账号管理',
+    }
+  },
 }
 </script>
 

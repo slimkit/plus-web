@@ -102,6 +102,11 @@ import _ from 'lodash'
 export default {
   name: 'AuthRegister',
   middleware: ['forGuest'],
+  head () {
+    return {
+      title: `注册`,
+    }
+  },
   data () {
     return {
       username: '',

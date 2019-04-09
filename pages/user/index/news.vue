@@ -1,9 +1,27 @@
 <template>
   <div class="p-user-news">
     <nav class="cate-wrap">
-      <nuxt-link :to="{query: {type: 'publish'}}" :class="{'exact-active': type === 'publish'}">已发布</nuxt-link>
-      <nuxt-link :to="{query: {type: 'audit'}}" :class="{'exact-active': type === 'audit'}">投稿中</nuxt-link>
-      <nuxt-link :to="{query: {type: 'reject'}}" :class="{'exact-active': type === 'reject'}">被驳回</nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'publish'}}"
+        :class="{'exact-active': type === 'publish'}"
+      >
+        已发布
+      </nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'audit'}}"
+        :class="{'exact-active': type === 'audit'}"
+      >
+        投稿中
+      </nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'reject'}}"
+        :class="{'exact-active': type === 'reject'}"
+      >
+        被驳回
+      </nuxt-link>
     </nav>
 
     <Loadmore

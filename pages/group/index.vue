@@ -73,6 +73,11 @@ const typeMap = [
 
 export default {
   name: 'GroupIndex',
+  head () {
+    return {
+      title: `圈子`,
+    }
+  },
   components: {
     GroupList,
     SideWidget,

@@ -17,6 +17,11 @@
 
 export default {
   name: 'SettingWallet',
+  head () {
+    return {
+      title: '我的钱包',
+    }
+  },
   computed: {
     page () {
       const match = /^\/setting\/currency\/(\w+)$/.exec(this.$route.path)

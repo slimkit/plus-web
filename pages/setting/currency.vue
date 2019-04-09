@@ -16,6 +16,11 @@
 
 export default {
   name: 'SettingCurrency',
+  head () {
+    return {
+      title: '我的积分',
+    }
+  },
   computed: {
     page () {
       const match = /^\/setting\/currency\/(\w+)$/.exec(this.$route.path)

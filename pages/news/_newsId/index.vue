@@ -126,6 +126,14 @@ import TagList from '@/components/tag/TagList.vue'
 
 export default {
   name: 'NewsDetail',
+  head () {
+    return {
+      title: `${this.news.title} - 资讯`,
+      meta: [
+        { hid: 'description', name: 'description', content: this.news.subject },
+      ],
+    }
+  },
   validate ({ params }) {
     return isNumber(params.newsId)
   },

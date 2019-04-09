@@ -4,6 +4,11 @@ import TopicCreate from '@/pages/topic/create.vue'
 
 export default {
   name: 'TopicEdit',
+  head () {
+    return {
+      title: `编辑话题`,
+    }
+  },
   extends: TopicCreate,
   validate ({ params }) {
     return /^\d+$/.test(params.topicId)

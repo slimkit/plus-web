@@ -27,10 +27,10 @@
         </figcaption>
       </figure>
       <nav class="sub-navigation">
-        <nuxt-link :to="`/user/${user.id}/feed`">TA 的主页</nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/group`">TA 的圈子</nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/news`">TA 的文章</nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/question`">TA 的问答</nuxt-link>
+        <nuxt-link replace :to="`/user/${user.id}/feed`">TA 的主页</nuxt-link>
+        <nuxt-link replace :to="`/user/${user.id}/group`">TA 的圈子</nuxt-link>
+        <nuxt-link replace :to="`/user/${user.id}/news`">TA 的文章</nuxt-link>
+        <nuxt-link replace :to="`/user/${user.id}/question`">TA 的问答</nuxt-link>
 
         <div class="actions">
           <button class="button" @click="onFollow">{{ followStatus }}</button>
@@ -67,6 +67,9 @@ import UserHome from './index.vue'
 import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
 
 export default {
+  validator ({ params }) {
+    return /^\d+$/.test(params.id)
+  },
   components: {
     SideWidgetRecommendUsers,
   },

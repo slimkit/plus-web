@@ -160,6 +160,11 @@ import TagList from '@/components/tag/TagList.vue'
 
 export default {
   name: 'QuestionCreate',
+  head () {
+    return {
+      title: `提问`,
+    }
+  },
   components: {
     MarkdownEditor,
     TagList,

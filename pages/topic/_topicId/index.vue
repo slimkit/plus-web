@@ -141,16 +141,21 @@
 <script>
 import _ from 'lodash'
 import { mapState, mapActions } from 'vuex'
+import { limit, getLastField } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotTopics from '@/components/topic/SideWidgetHotTopics.vue'
 import SocialShare from '@/components/common/SocialShare.vue'
 import FeedList from '@/components/feed/FeedList.vue'
 import PostFeed from '@/components/feed/PostFeed.vue'
 import TopicParticipants from '@/components/topic/TopicParticipants.vue'
-import { limit, getLastField } from '@/utils'
 
 export default {
   name: 'TopicDetail',
+  head () {
+    return {
+      title: `${this.topic.name} - 话题`,
+    }
+  },
   components: {
     SideWidget,
     SideWidgetHotTopics,
@@ -194,16 +199,19 @@ export default {
       return this.logged && this.logged.id === this.topic.creator_user_id
     },
   },
+  async asyncData ({ store, params }) {
+    const topicId = params.topicId
+    await store.dispatch('topic/getTopic', topicId)
+  },
   async mounted () {
-    this.fetchTopic()
+    this.fetchCreator()
     this.fetchParticipants()
   },
   methods: {
     ...mapActions('topic', {
       getTopic: 'getTopic',
     }),
-    async fetchTopic () {
-      await this.getTopic(this.topicId)
+    async fetchCreator () {
       this.creator = await this.$axios.$get(`/users/${this.topic.creator_user_id}`)
     },
     async onRefresh () {

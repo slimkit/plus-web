@@ -237,6 +237,11 @@ import ModalSetReward from '@/components/question/ModalSetReward.vue'
 
 export default {
   name: 'QuestionDetail',
+  head () {
+    return {
+      title: `${this.question.subject} - 问题`,
+    }
+  },
   components: {
     SocialShare,
     SideWidget,

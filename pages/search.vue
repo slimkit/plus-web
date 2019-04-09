@@ -39,6 +39,11 @@ const searchTips = [
 
 export default {
   name: 'SearchIndex',
+  head () {
+    return {
+      title: '搜索结果',
+    }
+  },
   components: {
     SideWidgetRecommendUsers,
   },

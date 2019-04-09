@@ -125,6 +125,11 @@ import TagSelector from '@/components/tag/TagSelector.vue'
 
 export default {
   name: 'NewsCreate',
+  head () {
+    return {
+      title: `资讯投稿`,
+    }
+  },
   middleware: ['requireAuth'],
   components: {
     MarkdownEditor,

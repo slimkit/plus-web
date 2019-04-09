@@ -16,6 +16,11 @@
 <script>
 export default {
   name: 'RankHome',
+  head () {
+    return {
+      title: '排行榜',
+    }
+  },
   fetch ({ route, redirect }) {
     if (route.name === 'rank') return redirect(301, '/rank/user')
   },

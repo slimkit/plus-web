@@ -54,7 +54,7 @@ function checkPasswordConfirm (rule, value, callback) {
 export default {
   name: 'SettingSecurity',
   head: {
-    title: '修改密码',
+    title: '安全设置',
   },
   data: function () {
     return {

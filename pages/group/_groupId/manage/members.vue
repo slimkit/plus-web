@@ -1,9 +1,27 @@
 <template>
   <div class="p-group-manage-members">
     <nav class="nav-wrap">
-      <nuxt-link :to="{query: {type: 'all'}}" :class="{'exact-active': type === 'all'}">全部成员</nuxt-link>
-      <nuxt-link :to="{query: {type: 'audit'}}" :class="{'exact-active': type === 'audit'}">待审核</nuxt-link>
-      <nuxt-link :to="{query: {type: 'blacklist'}}" :class="{'exact-active': type === 'blacklist'}">黑名单</nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'all'}}"
+        :class="{'exact-active': type === 'all'}"
+      >
+        全部成员
+      </nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'audit'}}"
+        :class="{'exact-active': type === 'audit'}"
+      >
+        待审核
+      </nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'blacklist'}}"
+        :class="{'exact-active': type === 'blacklist'}"
+      >
+        黑名单
+      </nuxt-link>
     </nav>
 
     <main>

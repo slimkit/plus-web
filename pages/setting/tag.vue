@@ -36,7 +36,7 @@ import TagList from '@/components/tag/TagList.vue'
 export default {
   name: 'SettingTag',
   head: {
-    title: '选择标签',
+    title: '标签管理',
   },
   components: {
     TagList,

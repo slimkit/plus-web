@@ -42,6 +42,11 @@ import UserCard from '@/components/user/UserCard.vue'
 
 export default {
   name: 'PeopleHome',
+  head () {
+    return {
+      title: '找伙伴',
+    }
+  },
   components: {
     SideWidget,
     UserCard,

@@ -88,6 +88,11 @@ import { parseSearchTree } from '@/utils/location'
 
 export default {
   name: 'SettingProfile',
+  head () {
+    return {
+      title: '基本资料',
+    }
+  },
   components: {
     ImageCropper,
   },

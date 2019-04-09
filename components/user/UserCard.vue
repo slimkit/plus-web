@@ -2,7 +2,7 @@
   <div class="c-user-card">
     <Avatar :user="user" />
     <div class="user-info">
-      <h3 class="username">
+      <h3 class="username text-cut">
         <nuxt-link :to="`/user/${user.id}`">{{ user.name }}</nuxt-link>
         <button
           v-if="!isMine"
@@ -15,8 +15,8 @@
       </h3>
       <p class="text-cut-2">{{ user.bio | placeholder('bio') }}</p>
       <div class="follow-info">
-        <nuxt-link :to="`/user/${user.id}/fans`">粉丝 <span class="primary">{{ followersCount }}</span></nuxt-link>
-        <nuxt-link :to="`/user/${user.id}/following`">关注 <span class="primary">{{ followingsCount }}</span></nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/follow?type=fans`">粉丝 <span class="primary">{{ followersCount }}</span></nuxt-link>
+        <nuxt-link :to="`/user/${user.id}/follow?type=following`">关注 <span class="primary">{{ followingsCount }}</span></nuxt-link>
       </div>
     </div>
   </div>

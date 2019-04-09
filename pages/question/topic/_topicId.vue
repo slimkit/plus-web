@@ -87,6 +87,11 @@ import SocialShare from '@/components/common/SocialShare.vue'
 
 export default {
   name: 'QuestionTopicDetail',
+  head () {
+    return {
+      title: `${this.topic.name} - 专题`,
+    }
+  },
   components: {
     SideWidget,
     SideWidgetHotQuestionTopics,

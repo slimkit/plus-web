@@ -155,6 +155,11 @@ import PostAnswer from '@/components/question/PostAnswer.vue'
 
 export default {
   name: 'QuestionAnswerDetail',
+  head () {
+    return {
+      title: `${this.question.subject} - ${this.user.name}的回答`,
+    }
+  },
   components: {
     SideWidget,
     ArticleLike,
@@ -162,9 +167,6 @@ export default {
     ArticleComment,
     SideWidgetHotQuestions,
     PostAnswer,
-  },
-  head: {
-    title: '回答详情',
   },
   validate ({ params }) {
     return isNumber(params.questionId) && isNumber(params.answerId)

@@ -76,7 +76,12 @@ const userLabels = {
 
 export default {
   name: 'SettingCertificate',
-  data: function () {
+  head () {
+    return {
+      title: '认证管理',
+    }
+  },
+  data () {
     return {
       typeMap,
       statusMap,

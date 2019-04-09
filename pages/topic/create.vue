@@ -89,6 +89,11 @@ import ImageCropper from '@/components/common/ImageCropper.vue'
 
 export default {
   name: 'TopicCreate',
+  head () {
+    return {
+      title: `创建话题`,
+    }
+  },
   components: {
     ImageCropper,
   },

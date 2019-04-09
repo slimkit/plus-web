@@ -60,6 +60,11 @@ import QuestionList from '@/components/question/QuestionList.vue'
 
 export default {
   name: 'QuestionIndex',
+  head () {
+    return {
+      title: `问答`,
+    }
+  },
   components: {
     SideWidget,
     SideWidgetHotQuestions,

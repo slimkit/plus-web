@@ -49,11 +49,11 @@
         />
       </figure>
       <nav class="sub-navigation">
-        <nuxt-link to="/user/feed">主页</nuxt-link>
-        <nuxt-link to="/user/group">圈子</nuxt-link>
-        <nuxt-link to="/user/question">问答</nuxt-link>
-        <nuxt-link to="/user/news">资讯</nuxt-link>
-        <nuxt-link to="/user/collect">收藏</nuxt-link>
+        <nuxt-link replace to="/user/feed">主页</nuxt-link>
+        <nuxt-link replace to="/user/group">圈子</nuxt-link>
+        <nuxt-link replace to="/user/question">问答</nuxt-link>
+        <nuxt-link replace to="/user/news">资讯</nuxt-link>
+        <nuxt-link replace to="/user/collect">收藏</nuxt-link>
       </nav>
     </header>
 
@@ -75,6 +75,11 @@ import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers
 
 export default {
   name: 'UserHome',
+  head () {
+    return {
+      title: `${this.user.name}的个人主页`,
+    }
+  },
   middleware: ['requireAuth'],
   components: {
     SideWidgetRecommendUsers,
@@ -107,10 +112,6 @@ export default {
     return {
       tags,
     }
-  },
-  mounted () {
-    // TODO: fixme
-    document.title = `${this.user.name} 的个人主页`
   },
   methods: {
     onUpload () {

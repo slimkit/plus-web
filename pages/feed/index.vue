@@ -62,7 +62,7 @@ export default {
   name: 'FeedHome',
   head () {
     return {
-      title: '动态',
+      title: '首页',
     }
   },
   components: {

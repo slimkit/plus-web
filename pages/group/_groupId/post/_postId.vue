@@ -110,6 +110,7 @@
 <script>
 import _ from 'lodash'
 import { noop, limit } from '@/utils'
+import { cutText } from '@/utils/text'
 import markdown from '@/utils/markdown'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetRecommendUsers from '@/components/user/SideWidgetRecommendUsers.vue'
@@ -119,6 +120,16 @@ import ArticleComment from '@/components/common/ArticleComment.vue'
 
 export default {
   name: 'GroupPostDetail',
+  head () {
+    const name = cutText(this.post.title)
+    const groupName = cutText(this.group.name)
+    return {
+      title: `${name} - ${groupName}`,
+      meta: [
+        { hid: 'description', name: 'description', content: this.post.summary },
+      ],
+    }
+  },
   validate ({ params }) {
     return /^\d+$/.test(params.postId)
   },

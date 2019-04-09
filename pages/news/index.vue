@@ -58,6 +58,11 @@ import NewsList from '@/components/news/NewsList.vue'
 
 export default {
   name: 'NewsHome',
+  head () {
+    return {
+      title: `资讯`,
+    }
+  },
   components: {
     SideWidget,
     SideWidgetHotNews,

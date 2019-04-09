@@ -63,6 +63,11 @@ const typeMap = {
 
 export default {
   name: 'TopicIndex',
+  head () {
+    return {
+      title: '话题',
+    }
+  },
   components: {
     SideWidget,
     SideWidgetHotTopics,

@@ -176,6 +176,11 @@ import TagSelector from '@/components/tag/TagSelector.vue'
 
 export default {
   name: 'GroupCreate',
+  head () {
+    return {
+      title: `创建圈子`,
+    }
+  },
   components: {
     ImageCropper,
     TagSelector,

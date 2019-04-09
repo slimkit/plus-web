@@ -54,6 +54,11 @@ import UserCard from '@/components/user/UserCard.vue'
 
 export default {
   name: 'UserFollow',
+  head () {
+    return {
+      title: `${this.logged.name}${this.type === 'fans' ? '的粉丝' : '关注的人'}`,
+    }
+  },
   components: {
     SideWidget,
     UserCard,

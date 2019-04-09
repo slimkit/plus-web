@@ -69,8 +69,10 @@ export default {
   name: 'AuthLogin',
   layout: 'auth',
   middleware: ['forGuest'],
-  head: {
-    title: '登录',
+  head () {
+    return {
+      title: `登录`,
+    }
   },
   data () {
     return {

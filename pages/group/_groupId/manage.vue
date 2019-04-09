@@ -1,9 +1,16 @@
 <script>
 import { mapState } from 'vuex'
+import { cutText } from '@/utils/text'
 import SettingTemplate from '@/pages/setting.vue'
 
 export default {
   name: 'GroupManage',
+  head () {
+    const name = cutText(this.group.name, 6)
+    return {
+      title: `${name} - 圈子管理`,
+    }
+  },
   validate ({ params }) {
     if (!params.groupId.match(/^\d+$/)) return false
     return true

@@ -1,10 +1,34 @@
 <template>
   <div class="p-group-manage-reports">
     <nav class="nav-wrap">
-      <nuxt-link :to="{query: {type: 'all'}}" :class="{'exact-active': type === 'all'}">全部</nuxt-link>
-      <nuxt-link :to="{query: {type: 'unhandled'}}" :class="{'exact-active': type === 'unhandled'}">未处理</nuxt-link>
-      <nuxt-link :to="{query: {type: 'accept'}}" :class="{'exact-active': type === 'accept'}">已处理</nuxt-link>
-      <nuxt-link :to="{query: {type: 'reject'}}" :class="{'exact-active': type === 'reject'}">已驳回</nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'all'}}"
+        :class="{'exact-active': type === 'all'}"
+      >
+        全部
+      </nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'unhandled'}}"
+        :class="{'exact-active': type === 'unhandled'}"
+      >
+        未处理
+      </nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'accept'}}"
+        :class="{'exact-active': type === 'accept'}"
+      >
+        已处理
+      </nuxt-link>
+      <nuxt-link
+        replace
+        :to="{query: {type: 'reject'}}"
+        :class="{'exact-active': type === 'reject'}"
+      >
+        已驳回
+      </nuxt-link>
 
       <IDatePicker
         v-model="date"

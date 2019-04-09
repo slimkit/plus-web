@@ -61,6 +61,11 @@ import QuestionTopicList from '@/components/question/QuestionTopicList.vue'
 
 export default {
   name: 'QuestionIndex',
+  head () {
+    return {
+      title: `专题`,
+    }
+  },
   components: {
     SideWidget,
     SideWidgetHotQuestionTopics,

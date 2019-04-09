@@ -4,6 +4,7 @@
       <nuxt-link
         v-for="item in navMap"
         :key="item.label"
+        replace
         :to="item.to"
       >
         <svg v-if="item.icon" class="icon"><use :xlink:href="item.icon" /></svg>
@@ -30,6 +31,11 @@ const navMap = [
 
 export default {
   name: 'SettingHome',
+  head () {
+    return {
+      title: '设置',
+    }
+  },
   middleware: ['requireAuth'],
   data () {
     return {
