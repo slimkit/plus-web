@@ -11,7 +11,7 @@
         :key="index.id"
         @click="jumpTo(data)"
       >
-        <p>{{ data | getNotificationDisplay }}</p>
+        <p>{{ index }}{{ data | getNotificationDisplay }}</p>
         <time>{{ created_at | fromNow }}</time>
       </li>
     </ul>
@@ -57,17 +57,21 @@ export default {
           url = `/user/${data.sender.id}`; break
         case 'user-certification':
           url = '/setting/certificate'; break
+        case 'user-cash':
+          url = '/setting/wallet/detail'; break
+        case 'user-currency:cash':
+          url = '/setting/currency/detail'; break
 
         case 'reward:feeds':
         case 'pinned:feeds':
           url = `/feed/${data.feed_id}`; break
+
         case 'pinned:feed/comment':
-          return this.$root.$emit('notification', { type: 'audit', auditType: 'feedCommentPinned' })
+          url = `/feed/${data.feed.id}`; break
 
         case 'reward:news':
-          url = `/news/${data.news.id}`; break
         case 'pinned:news/comment':
-          return this.$root.$emit('notification', { type: 'audit', auditType: 'newsCommentPinned' })
+          url = `/news/${data.news.id}`; break
 
         case 'qa:answer-adoption':
         case 'question:answer':
@@ -90,12 +94,10 @@ export default {
           break
         case 'group:post-reward':
         case 'group:pinned-admin':
-          url = `/group/${data.group_id}/post/${data.post.id}`; break
         case 'group:comment-pinned':
         case 'group:send-comment-pinned':
-          return this.$root.$emit('notification', { type: 'audit', auditType: 'postCommentPinned' })
         case 'group:post-pinned':
-          return this.$root.$emit('notification', { type: 'audit', auditType: 'postPinned' })
+          url = `/group/${data.group_id}/post/${data.post.id}`; break
       }
       if (url) {
         this.$router.push(url)
