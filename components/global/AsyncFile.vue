@@ -33,7 +33,7 @@ export default {
   props: {
     type: { type: String, default: 'image', validator: val => ['image', 'image-wrap', 'video'].includes(val) },
     url: { type: String, default: '' },
-    file: { type: Object, default: null },
+    file: { type: Object, default: () => ({}) },
     maxWidth: { type: Number, default: null },
     maxHeight: { type: Number, default: null },
     quility: { type: Number, default: null },

@@ -1,52 +1,57 @@
 <template>
   <div class="p-news-index">
-    <!-- <NewsListTop /> -->
-    <main class="news-container">
-      <nav class="news-cates-items">
-        <nuxt-link :to="{query: {cate: 0}}" :class="{'exact-active': cateId === 0}">推荐</nuxt-link>
-        <nuxt-link
-          v-for="cate in categories"
-          :key="cate.id"
-          :to="{query: {cate: cate.id}}"
-          :class="{'exact-active': cateId === cate.id}"
-        >
-          {{ cate.name }}
-        </nuxt-link>
-      </nav>
+    <div class="banner">
+      <AdvertiseBanner type="news" />
+    </div>
 
-      <Loadmore
-        ref="loader"
-        @refresh="onRefresh"
-        @loadmore="onLoadmore"
-      >
-        <NewsList
-          class="news-list"
-          :news="news"
-          :category-id="cateId"
-        />
-      </Loadmore>
-    </main>
-
-    <aside class="news-right-container">
-      <SideWidget key="publish">
-        <div class="publish-wrap">
-          <IButton
-            type="primary"
-            :long="true"
-            shape="circle"
-            size="large"
-            to="/news/create"
+    <div class="main-wrap">
+      <main class="news-container">
+        <nav class="news-cates-items">
+          <nuxt-link :to="{query: {cate: 0}}" :class="{'exact-active': cateId === 0}">推荐</nuxt-link>
+          <nuxt-link
+            v-for="cate in categories"
+            :key="cate.id"
+            :to="{query: {cate: cate.id}}"
+            :class="{'exact-active': cateId === cate.id}"
           >
-            <svg class="icon"><use xlink:href="#icon-publish" /></svg>
-            投稿
-          </IButton>
-        </div>
-      </SideWidget>
+            {{ cate.name }}
+          </nuxt-link>
+        </nav>
 
-      <SideWidgetHotNews key="hot-news" />
+        <Loadmore
+          ref="loader"
+          @refresh="onRefresh"
+          @loadmore="onLoadmore"
+        >
+          <NewsList
+            class="news-list"
+            :news="news"
+            :category-id="cateId"
+          />
+        </Loadmore>
+      </main>
 
-      <AdvertiseRightSide type="news" />
-    </aside>
+      <aside class="news-right-container">
+        <SideWidget key="publish">
+          <div class="publish-wrap">
+            <IButton
+              type="primary"
+              :long="true"
+              shape="circle"
+              size="large"
+              to="/news/create"
+            >
+              <svg class="icon"><use xlink:href="#icon-publish" /></svg>
+              投稿
+            </IButton>
+          </div>
+        </SideWidget>
+
+        <SideWidgetHotNews key="hot-news" />
+
+        <AdvertiseRightSide type="news" />
+      </aside>
+    </div>
   </div>
 </template>
 
@@ -56,9 +61,8 @@ import { limit, getLastField } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotNews from '@/components/news/SideWidgetHotNews.vue'
 import NewsList from '@/components/news/NewsList.vue'
+import AdvertiseBanner from '@/components/advertise/AdvertiseBanner.vue'
 import AdvertiseRightSide from '@/components/advertise/AdvertiseRightSide.vue'
-
-// import NewsListTop from '@/components/news/NewsListTop.vue'
 
 export default {
   name: 'NewsHome',
@@ -71,8 +75,8 @@ export default {
     SideWidget,
     SideWidgetHotNews,
     NewsList,
+    AdvertiseBanner,
     AdvertiseRightSide,
-    // NewsListTop,
   },
   data () {
     return {
@@ -134,9 +138,12 @@ export default {
 
 <style lang="less" scoped>
 .p-news-index {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+
+  .main-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
 
   .news-container {
     flex: auto;
