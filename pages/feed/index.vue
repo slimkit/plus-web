@@ -199,6 +199,8 @@ export default {
   }
 
   .right-container {
+    position: sticky;
+    top: 30px;
     flex: none;
     width: @sidebar-width;
   }

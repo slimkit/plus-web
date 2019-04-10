@@ -61,7 +61,7 @@ export default {
   props: {
     autoLoad: { type: Boolean, default: true },
     showBottom: { type: [Boolean, Number], default: true },
-    limit: { type: [Boolean, Number], default: 2 },
+    limit: { type: [Boolean, Number], default: 1 },
   },
   data () {
     return {
