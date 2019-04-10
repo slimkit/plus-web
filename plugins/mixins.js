@@ -7,6 +7,12 @@ import { mapState } from 'vuex'
 import { noop } from '@/utils'
 
 const mixins = {
+  data () {
+    let pathPrefix = process.env.NUXT_ENV_PATH_PREFIX || '/'
+    return {
+      pathPrefix: pathPrefix.replace(/\/$/, ''),
+    }
+  },
   computed: {
     ...mapState({
       boot: 'boot',
