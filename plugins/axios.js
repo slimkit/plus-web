@@ -97,8 +97,8 @@ export default function ({ $axios, env, store, redirect }) {
     } else {
       error.tips = '网络不可用，请检查！'
     }
-    console.error(error) // eslint-disable-line no-console
     const message = errorMessageHandler(error.tips)
     if (process.client) Message.error(message)
+    return Promise.reject(error)
   })
 }
