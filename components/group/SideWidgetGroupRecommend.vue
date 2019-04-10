@@ -10,8 +10,10 @@
         :key="group.id"
         :class="{top3: index < 3}"
       >
-        <h2>{{ group.name }}</h2>
-        <p>帖子 {{ group.posts_count || 0 }} 成员 {{ group.users_count || 0 }}</p>
+        <nuxt-link :to="`/group/${group.id}`">
+          <h2>{{ group.name }}</h2>
+          <p>帖子 {{ group.posts_count || 0 }} 成员 {{ group.users_count || 0 }}</p>
+        </nuxt-link>
       </li>
     </ul>
   </SideWidget>
