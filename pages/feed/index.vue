@@ -14,7 +14,7 @@
             :to="{query: {type:name}}"
             replace
             class="sort-item"
-            :class="{active: type === name}"
+            :class="{'exact-active': type === name}"
           >
             {{ item.label }}
           </nuxt-link>
@@ -183,7 +183,7 @@ export default {
         font-size: @font-size-large;
         color: @disabled-color;
 
-        &.active {
+        &.exact-active {
           color: @text-color;
         }
       }
