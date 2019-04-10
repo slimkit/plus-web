@@ -53,7 +53,7 @@ export default function ({ $axios, env, store, redirect }) {
           break
         case 403:
           error.tips = '拒绝访问'
-          const { data } = error.response
+          const { data } = error.response || {}
           error.tips = data || { message: '拒绝访问' }
           break
         case 404:
@@ -66,7 +66,7 @@ export default function ({ $axios, env, store, redirect }) {
           error.tips = '请求超时'
           break
         case 422: {
-          const { data } = error.response
+          const { data } = error.response || {}
           error.tips = data || { message: '错误请求' }
           break
         }
@@ -99,6 +99,7 @@ export default function ({ $axios, env, store, redirect }) {
     }
     const message = errorMessageHandler(error.tips)
     if (process.client) Message.error(message)
+    console.error(error.toString()) // eslint-disable-line no-console
     return Promise.reject(error)
   })
 }

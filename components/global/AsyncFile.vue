@@ -32,7 +32,8 @@ export default {
   name: 'AsyncFile',
   props: {
     type: { type: String, default: 'image', validator: val => ['image', 'image-wrap', 'video'].includes(val) },
-    file: { type: Object, required: true },
+    url: { type: String, default: '' },
+    file: { type: Object, default: null },
     maxWidth: { type: Number, default: null },
     maxHeight: { type: Number, default: null },
     quility: { type: Number, default: null },
@@ -48,6 +49,7 @@ export default {
       return this.file.url ? 'storage' : 'file'
     },
     src () {
+      if (this.url) return this.url
       const file = this.fileSystem === 'file' ? (this.file.file || this.file.id) : this.file.url
       return getFileUrl(file, {
         type: this.fileSystem,

@@ -48,6 +48,7 @@ import ModalPay from '@/components/common/ModalPay.vue'
 import ModalReward from '@/components/common/ModalReward.vue'
 import ModalPinned from '@/components/common/ModalPinned.vue'
 import ModalPassword from '@/components/common/ModalPassword.vue'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'DefaultLayout',
@@ -74,6 +75,22 @@ export default {
         this.isIE = true
       }, 500)
     }
+
+    this.checkAdvertise()
+  },
+  methods: {
+    ...mapActions('advertise', {
+      getAdvertiseSpace: 'getAdvertiseSpace',
+      getPcAdvertises: 'getPcAdvertises',
+    }),
+    async checkAdvertise () {
+      // 获取所有广告位
+      await this.getAdvertiseSpace()
+
+      // 获取 PC 端广告列表
+      this.getPcAdvertises()
+        .catch(err => { console.log(err.response) })
+    },
   },
 }
 </script>

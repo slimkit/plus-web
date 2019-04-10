@@ -44,6 +44,8 @@
       </SideWidget>
 
       <SideWidgetHotNews key="hot-news" />
+
+      <AdvertiseRightSide type="news" />
     </aside>
   </div>
 </template>
@@ -54,6 +56,8 @@ import { limit, getLastField } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
 import SideWidgetHotNews from '@/components/news/SideWidgetHotNews.vue'
 import NewsList from '@/components/news/NewsList.vue'
+import AdvertiseRightSide from '@/components/advertise/AdvertiseRightSide.vue'
+
 // import NewsListTop from '@/components/news/NewsListTop.vue'
 
 export default {
@@ -67,6 +71,7 @@ export default {
     SideWidget,
     SideWidgetHotNews,
     NewsList,
+    AdvertiseRightSide,
     // NewsListTop,
   },
   data () {

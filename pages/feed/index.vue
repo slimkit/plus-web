@@ -38,6 +38,8 @@
       </SideWidget>
 
       <SideWidgetRecommendUsers key="recommend-users" />
+
+      <AdvertiseRightSide type="feed" />
     </div>
   </div>
 </template>
@@ -50,6 +52,7 @@ import CheckIn from '@/components/feed/CheckIn.vue'
 import PostFeed from '@/components/feed/PostFeed.vue'
 import FeedLeftNavigation from '@/components/feed/FeedLeftNavigation.vue'
 import FeedList from '@/components/feed/FeedList.vue'
+import AdvertiseRightSide from '@/components/advertise/AdvertiseRightSide.vue'
 
 const defaultType = 'new'
 const typeMap = {
@@ -72,6 +75,7 @@ export default {
     SideWidgetRecommendUsers,
     CheckIn,
     PostFeed,
+    AdvertiseRightSide,
   },
   data () {
     return {
