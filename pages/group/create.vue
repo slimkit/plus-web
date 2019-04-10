@@ -15,8 +15,12 @@
         label="圈子头像"
         required
       >
-        <figure class="avatar-wrap" @click="$refs.cropper.open()">
-          <div class="avatar-src" :style="{backgroundImage: `url(${avatar.preview})`}" />
+        <figure class="avatar-wrap">
+          <div
+            class="avatar-src"
+            :style="{backgroundImage: `url(${avatar.preview})`}"
+            @click="$refs.cropper.open()"
+          />
 
           <ImageCropper
             ref="cropper"
