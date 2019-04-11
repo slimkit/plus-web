@@ -68,6 +68,7 @@ export default {
       this.content = ''
     },
     async onSubmit () {
+      if (!this.content) return this.$Message.error('请输入举报理由')
       const api = apiMap[this.type].bind(this)
       await api(this.id, this.content)
       this.$Message.success('举报成功')
