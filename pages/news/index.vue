@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { limit, getLastField } from '@/utils'
 import SideWidget from '@/components/common/SideWidget.vue'
@@ -84,6 +85,7 @@ export default {
       hotType: 'month',
     }
   },
+
   computed: {
     ...mapState('news', {
       hotNews: 'hot',
@@ -102,11 +104,30 @@ export default {
     },
     news: {
       get () {
-        return this.allNews[this.cateId] || []
+        if (this.cateId) return this.allNews[this.cateId] || []
+        return this.newsMixinAdvertise
       },
       set (list) {
         this.$set(this.allNews, this.cateId, list)
       },
+    },
+    newsMixinAdvertise () {
+      const chunks = _.chunk(this.allNews[0], limit)
+      let i = 0
+      for (; i < chunks.length; i++) {
+        chunks[i].push(this.newsAdvertiseList[i])
+      }
+      const list = _.flatten(chunks)
+      if (i < this.newsAdvertiseList.length) list.push(...this.newsAdvertiseList.slice(i))
+      return list
+    },
+    newsAdvertiseList () {
+      const space = 'pc:news:list'
+      return this.$store.getters['advertise/getListBySpace'](space)
+        .map(item => {
+          item.itemType = 'advertise'
+          return item
+        })
     },
   },
   watch: {

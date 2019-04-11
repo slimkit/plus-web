@@ -1,40 +1,52 @@
 <template>
   <li class="c-news-list-item">
     <div class="news-image">
-      <nuxt-link :to="`/news/${news.id}`">
+      <a :href="news.data.link" :target="getLinkTarget(news.data.link)">
         <AsyncFile
           type="image-wrap"
           :max-width="220"
           :max-height="160"
-          :file="news.image || {}"
+          :url="news.data.image || {}"
         />
-      </nuxt-link>
+      </a>
     </div>
-    <div class="news-body">
+    <a
+      class="news-body"
+      :href="news.data.link"
+      :target="getLinkTarget(news.data.link)"
+    >
       <div class="news-content">
-        <h2 class="news-title text-cut"><nuxt-link :to="`/news/${news.id}`">{{ news.title }}</nuxt-link></h2>
-        <div class="news-subject text-cut-2"> {{ news.subject }} </div>
+        <h2 class="news-title text-cut-2">{{ news.title }}</h2>
+        <div class="news-subject text-cut-3"> {{ news.data.content }} </div>
       </div>
       <div class="news-bottom">
-        <nuxt-link
-          v-if="!categoryId"
-          :to="`/news?cate=${news.category.id}`"
-          class="badge"
-        >
-          {{ news.category.name }}
-        </nuxt-link>
-        {{ news.from }} · {{ news.created_at | fromNow({full: true}) }}
+        {{ news.data.name }} · {{ news.data.time | fromNow({full: true}) }}
+        <span class="badge ad">广告</span>
       </div>
-    </div>
+    </a>
   </li>
 </template>
 
 <script>
+
 export default {
-  name: 'NewsListItem',
+  name: 'NewsListAdvertiseItem',
   props: {
     news: { type: Object, required: true },
-    categoryId: { type: Number, default: null },
+  },
+  computed: {
+
+  },
+  methods: {
+    getFileUrl (url) {
+      if (url.match(new RegExp('/api/v2/files/\\d+$'))) url += '?w=235'
+      return url
+    },
+    getLinkTarget (url) {
+      const host = location.origin
+      if (url.match(new RegExp(`^${host}`))) return null
+      return '_blank'
+    },
   },
 }
 </script>
@@ -72,10 +84,10 @@ export default {
 
       .badge {
         padding: 0 4px;
-        margin-right: 8px;
-        border: 1px solid @primary-color;
-        border-radius: @border-radius-base;
-        color: @primary-color;
+        margin-left: 8px;
+        border: 1px solid @border-color-base;
+        border-radius: @border-radius-small;
+        color: @text-info-color;
       }
     }
   }
