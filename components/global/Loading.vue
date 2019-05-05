@@ -90,7 +90,7 @@ export default {
 <style lang="less">
 @keyframes scale {
   0%, 100% {
-    transfrom: scale(1);
+    transform: scale(1);
   }
   50% {
     transform: scale(0.66);
