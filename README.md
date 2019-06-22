@@ -1,5 +1,7 @@
 # ThinkSNS+ Desktop Client
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mutoe/plus-web.svg?token=bc2ccc8cdcfbb7b34d4488d447215e132998dc593e8b0b48aff15854d11764bd&ts=1561180860788)](https://greenkeeper.io/)
+
 > **(prototype)** VUE SSR version for ThinkSNS+ Desktop View.
 
 ## Build Setup
