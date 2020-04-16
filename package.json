@@ -21,7 +21,7 @@
     "github-markdown-css": "^3.0.0",
     "iview": "^3.3.3",
     "js-md5": "^0.7.3",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "markdown-it": "^8.4.2",
     "markdown-it-plus-image": "^1.0.1",
     "nuxt": "^2.5.0",
