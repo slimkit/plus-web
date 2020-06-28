@@ -18,7 +18,7 @@
     </div>
     <div class="right">
       <span v-if="pinned" class="pinned">置顶</span>
-      <IPoptip v-model="showMore" placement="bottom">
+      <Poptip v-model="showMore" placement="bottom">
         <svg class="icon lg more"><use xlink:href="#icon-more" /></svg>
 
         <template v-slot:content>
@@ -30,7 +30,7 @@
             <li v-if="!isMine" @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
           </ul>
         </template>
-      </IPoptip>
+      </Poptip>
     </div>
   </li>
 </template>

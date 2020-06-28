@@ -30,14 +30,14 @@
     <div class="right-container">
       <SideWidget class="topic-widget">
         <nuxt-link to="/topic/create">
-          <IButton
+          <Button
             type="primary"
             :long="true"
             size="large"
             shape="circle"
           >
             <svg class="icon"><use xlink:href="#icon-topic4" /></svg> 创建话题
-          </IButton>
+          </Button>
         </nuxt-link>
       </SideWidget>
 

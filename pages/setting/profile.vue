@@ -5,7 +5,7 @@
     </nav>
 
     <div class="container-wrap">
-      <IForm
+      <Form
         ref="form"
         :model="form"
         :rules="rules"
@@ -18,8 +18,8 @@
             size="xl"
             :link="false"
           />
-          <IButton :loading="avatarUploadingLock" @click="$refs.cropper.open()">更换头像</IButton>
-          <ImageCropper
+          <Button :loading="avatarUploadingLock" @click="$refs.cropper.open()">更换头像</Button>
+          <mageCropper
             ref="cropper"
             title="更换头像"
             :circle="true"
@@ -37,37 +37,37 @@
             @finish="afterAvatarUpload"
           />
         </div>
-        <IFormItem prop="name" label="昵称">
-          <IInput
+        <FormItem prop="name" label="昵称">
+          <Input
             v-model="form.name"
             type="text"
             size="large"
           />
-        </IFormItem>
-        <IFormItem prop="bio" label="简介">
-          <IInput
+        </FormItem>
+        <FormItem prop="bio" label="简介">
+          <Input
             v-model="form.bio"
             type="text"
             size="large"
             :maxlength="50"
           />
-        </IFormItem>
-        <IFormItem prop="sex" label="性别">
-          <IRadioGroup v-model="form.sex">
-            <IRadio :label="1">男</IRadio>
-            <IRadio :label="2">女</IRadio>
-            <IRadio :label="0">不方便透露</IRadio>
-          </IRadioGroup>
-        </IFormItem>
-        <IFormItem prop="location" label="地区">
-          <IAutoComplete
+        </FormItem>
+        <FormItem prop="sex" label="性别">
+          <RadioGroup v-model="form.sex">
+            <Radio :label="1">男</Radio>
+            <Radio :label="2">女</Radio>
+            <Radio :label="0">不方便透露</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem prop="location" label="地区">
+          <AutoComplete
             v-model="form.location"
             :data="searchLocation"
             size="large"
             @on-search="onSearchLocation"
           />
-        </IFormItem>
-        <IButton
+        </FormItem>
+        <Button
           class="submit-button"
           type="primary"
           html-type="submit"
@@ -75,8 +75,8 @@
           :loading="submitLock"
         >
           保存
-        </IButton>
-      </IForm>
+        </Button>
+      </Form>
     </div>
   </div>
 </template>

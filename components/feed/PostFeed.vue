@@ -27,7 +27,7 @@
     </Collapse>
 
     <div class="tools">
-      <IButton
+      <Button
         v-if="!isRepost"
         type="text"
         class="button tool"
@@ -35,35 +35,35 @@
       >
         <svg class="icon"><use xlink:href="#icon-img" /></svg>
         图片
-      </IButton>
+      </Button>
 
-      <IPoptip
+      <Poptip
         key="topic-selector"
         v-model="showTopic"
         placement="bottom"
       >
-        <IButton type="text" class="button tool">
+        <Button type="text" class="button tool">
           <svg class="icon"><use xlink:href="#icon-topic4" /></svg>
           话题
-        </IButton>
+        </Button>
 
         <template v-slot:content>
           <TopicSelector v-if="showTopic" @select="addTopic" />
         </template>
-      </IPoptip>
+      </Poptip>
 
-      <IButton
+      <Button
         type="text"
         class="button tool"
         @click="onMention"
       >
         <svg class="icon"><use xlink:href="#icon-mention" /></svg>
         某人
-      </IButton>
+      </Button>
 
       <div class="divider" />
 
-      <IPoptip
+      <Poptip
         v-if="!isRepost"
         v-model="showPayOptions"
         class="need-pay"
@@ -80,8 +80,8 @@
             <li @click="needPay = true">付费</li>
           </ul>
         </template>
-      </IPoptip>
-      <IButton
+      </Poptip>
+      <Button
         type="primary"
         class="button submit-button"
         :disabled="disabled"
@@ -89,7 +89,7 @@
         @click="beforeSubmit"
       >
         {{ isRepost ? '转发' : '分享' }}
-      </IButton>
+      </Button>
     </div>
 
     <PostFeedImages
@@ -100,7 +100,7 @@
       @set-amount="onSetAmount"
     />
 
-    <IModal
+    <Modal
       v-if="needPay"
       v-model="showPayModal"
       title="付费设置"
@@ -109,25 +109,25 @@
       @on-ok="afterSetAmount"
     >
       <p>设置{{ images.length ? '图片' :'文字' }}收费金额</p>
-      <IRadioGroup
+      <RadioGroup
         v-model="selectedAmount"
         class="select-wrap"
         type="button"
       >
-        <IRadio
+        <Radio
           v-for="item in amountItems"
           :key="item"
           :label="item"
         />
-      </IRadioGroup>
-      <IInputNumber
+      </RadioGroup>
+      <InputNumber
         ref="custom"
         v-model="customAmount"
         class="custom-wrap"
         :min="0"
         placeholder="自定义金额，必须为整数"
       />
-    </IModal>
+    </Modal>
   </div>
 </template>
 

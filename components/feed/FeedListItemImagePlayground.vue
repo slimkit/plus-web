@@ -6,13 +6,13 @@
     </div>
 
     <div class="preview-wrap">
-      <ICarousel
+      <Carousel
         ref="carousel"
         v-model="index"
         dots="none"
         :height="imageHeight"
       >
-        <ICarouselItem
+        <CarouselItem
           v-for="img in images"
           :key="img.file"
         >
@@ -28,18 +28,18 @@
               class="pay-cover"
               @click="close"
             >
-              <IButton
+              <Button
                 ghost
                 type="warning"
                 size="large"
                 @click.stop="onPay(img)"
               >
                 <svg class="icon"><use xlink:href="#icon-money" /></svg> 付费查看
-              </IButton>
+              </Button>
             </div>
           </div>
-        </ICarouselItem>
-      </ICarousel>
+        </CarouselItem>
+      </Carousel>
     </div>
 
     <ul class="image-list">

@@ -2,13 +2,13 @@
   <div class="p-topic-detail">
     <main class="main-container">
       <header class="topic-cover" :style="{backgroundImage: cover.url && `url(${cover.url})`}">
-        <ISpin v-if="!topic.name" fix />
+        <Spin v-if="!topic.name" fix />
 
         <h1 class="name">{{ topic.name }}</h1>
         <p class="creator" :class="{show: creator.name}">创建者：{{ creator.name }}</p>
         <p class="description">{{ topic.desc }}</p>
 
-        <IButton
+        <Button
           v-if="isCreator"
           class="report-btn"
           ghost
@@ -17,8 +17,8 @@
           :to="`/topic/${topicId}/edit`"
         >
           编辑话题
-        </IButton>
-        <IButton
+        </Button>
+        <Button
           v-else
           class="report-btn"
           ghost
@@ -27,7 +27,7 @@
           @click="onReport"
         >
           举报
-        </IButton>
+        </Button>
       </header>
 
       <Collapse>
@@ -55,7 +55,7 @@
 
     <aside class="side-container">
       <SideWidget class="topic-widget" :loading="!topic.name">
-        <IButton
+        <Button
           v-if="!logged || !isCreator"
           shape="circle"
           size="large"
@@ -71,9 +71,9 @@
             <svg class="icon"><use xlink:href="#icon-topic" /></svg>
             关注话题
           </template>
-        </IButton>
+        </Button>
 
-        <IButton
+        <Button
           shape="circle"
           size="large"
           type="primary"
@@ -82,7 +82,7 @@
         >
           <svg class="icon"><use xlink:href="#icon-edit" /></svg>
           发动态
-        </IButton>
+        </Button>
       </SideWidget>
 
       <SideWidget
@@ -118,7 +118,7 @@
       >
         <template v-if="participants.length > 9" v-slot:footer>
           <div class="view-more" @click="showMoreParticipants = true">更多</div>
-          <IModal
+          <Modal
             v-model="showMoreParticipants"
             title="参与话题的人"
             :footer-hide="true"
@@ -129,7 +129,7 @@
               :topic-id="topicId"
               :initial-participants="participants"
             />
-          </IModal>
+          </Modal>
         </template>
       </SideWidget>
 

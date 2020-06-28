@@ -1,5 +1,5 @@
 <template>
-  <IModal
+  <Modal
     v-model="show"
     class="c-modal-password"
     title="输入密码"
@@ -9,7 +9,7 @@
     @on-cancel="close"
   >
     <div class="password-confirm-wrap">
-      <IInput
+      <nput
         ref="password"
         v-model="password"
         class="password-input"
@@ -17,7 +17,7 @@
         placeholder="请输入登录密码"
         @on-enter="onSubmit"
       />
-      <IButton
+      <Button
         type="primary"
         class="password-button"
         :disabled="password.length < 6 || password.length > 16"
@@ -26,12 +26,12 @@
         @click="onSubmit"
       >
         确认
-      </IButton>
+      </Button>
     </div>
     <div class="forgot">
       <nuxt-link to="/auth/find">忘记密码?</nuxt-link>
     </div>
-  </IModal>
+  </Modal>
 </template>
 
 <script>

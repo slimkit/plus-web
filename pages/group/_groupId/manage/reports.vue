@@ -30,7 +30,7 @@
         已驳回
       </nuxt-link>
 
-      <IDatePicker
+      <DatePicker
         v-model="date"
         class="date-picker"
         type="daterange"

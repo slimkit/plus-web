@@ -3,7 +3,7 @@
     <h3 v-if="title" class="title">{{ title }}</h3>
     <!-- loading content -->
     <div>
-      <ISpin v-if="loading" fix />
+      <Spin v-if="loading" fix />
       <div class="panel" :class="{'no-title': !title}">
         <!-- 用户列表挂件 -->
         <template v-if="type === 'user'">

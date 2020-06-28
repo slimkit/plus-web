@@ -34,7 +34,7 @@
     />
 
     <!-- 图片预览 modal -->
-    <IModal
+    <Modal
       v-model="previewShow"
       class="preview-wrap"
       :title="`${previewTitle} - 预览`"
@@ -43,7 +43,7 @@
       :styles="{width: 'auto', maxWidth: '100%'}"
     >
       <img :src="previewSrc" class="preivew-image">
-    </IModal>
+    </Modal>
   </div>
 </template>
 

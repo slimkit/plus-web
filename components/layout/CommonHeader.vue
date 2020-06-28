@@ -25,7 +25,7 @@
 
       <!-- 右侧 搜索 + 登录状态 -->
       <div class="extra">
-        <IPoptip
+        <Poptip
           v-if="logged"
           key="user-status"
           class="user-status"
@@ -64,21 +64,21 @@
               <a class="popup-item" @click="onLogout">退出登录</a>
             </ul>
           </template>
-        </IPoptip>
+        </Poptip>
 
         <template v-else>
           <nuxt-link class="login-btn" :to="{name: 'auth-login'}">登录</nuxt-link>
           <nuxt-link class="login-btn" :to="{name: 'auth-register'}">注册</nuxt-link>
         </template>
 
-        <IPoptip
+        <Poptip
           key="search"
           trigger="hover"
           class="search-wrap"
           placement="bottom"
         >
           <template v-slot:default>
-            <IInput
+            <Input
               v-model="keyword"
               class="search-box"
               search
@@ -96,7 +96,7 @@
               </li>
             </ul>
           </template>
-        </IPoptip>
+        </Poptip>
       </div>
     </div>
   </header>

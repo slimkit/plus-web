@@ -31,7 +31,7 @@
       <SideWidget key="question-create">
         <div class="question-container">
           <nuxt-link to="/question/create">
-            <IButton
+            <Button
               type="primary"
               :long="true"
               size="large"
@@ -39,7 +39,7 @@
             >
               <svg class="icon"><use xlink:href="#icon-publish" /></svg>
               提问
-            </IButton>
+            </Button>
           </nuxt-link>
         </div>
       </SideWidget>

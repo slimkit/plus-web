@@ -1,26 +1,26 @@
 <template>
   <div class="p-news-create">
     <main class="main-container">
-      <IForm
+      <Form
         ref="form"
         :model="validateForm"
         :rules="validator"
         :label-width="20"
         @submit.native.prevent
       >
-        <IFormItem prop="title" label=" ">
-          <IInput
+        <FormItem prop="title" label=" ">
+          <Input
             v-model="form.title"
             size="large"
             placeholder="请在此输入20字以内的资讯标题"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="subject">
-          <IInput v-model="form.subject" placeholder="请在此输入200字以内的摘要" />
-        </IFormItem>
+        <FormItem prop="subject">
+          <Input v-model="form.subject" placeholder="请在此输入200字以内的摘要" />
+        </FormItem>
 
-        <IFormItem prop="category" label=" ">
+        <FormItem prop="category" label=" ">
           <Select
             v-model="form.category"
             class="category-wrap"
@@ -33,21 +33,21 @@
               :label="category.name"
             />
           </Select>
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="content" label=" ">
+        <FormItem prop="content" label=" ">
           <MarkdownEditor v-model="form.content" placeholder="请输入资讯内容，支持 Markdown 语法" />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem
+        <FormItem
           class="tag"
           prop="tags"
           label=" "
         >
           <TagSelector :selected-tags.sync="selectedTags" placeholder="请选择资讯标签" />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="cover">
+        <FormItem prop="cover">
           <figure class="cover-wrap">
             <div
               class="cover-src"
@@ -55,7 +55,7 @@
               @click="$refs.cropper.open()"
             />
 
-            <ImageCropper
+            <mageCropper
               ref="cropper"
               title="上传资讯封面"
               :preview="false"
@@ -76,19 +76,19 @@
               点击上传封面
             </figcaption>
           </figure>
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem>
-          <IInput v-model="form.author" placeholder="文章作者（选填）" />
-        </IFormItem>
+        <FormItem>
+          <Input v-model="form.author" placeholder="文章作者（选填）" />
+        </FormItem>
 
-        <IFormItem>
-          <IInput v-model="form.from" placeholder="文章来源（原创可不填）" />
-        </IFormItem>
+        <FormItem>
+          <Input v-model="form.from" placeholder="文章来源（原创可不填）" />
+        </FormItem>
 
         <div class="submit-wrap">
           <p>投稿后，我们将在两个工作日内给予反馈，谢谢合作！</p>
-          <IButton
+          <Button
             class="submit-btn"
             type="primary"
             size="large"
@@ -96,9 +96,9 @@
             @click="beforeSubmit"
           >
             投稿
-          </IButton>
+          </Button>
         </div>
-      </IForm>
+      </Form>
     </main>
 
     <aside class="side-container">

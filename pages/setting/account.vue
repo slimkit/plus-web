@@ -6,37 +6,37 @@
     </nav>
 
     <main class="account-container">
-      <ISpin v-if="loading" fix />
+      <Spin v-if="loading" fix />
 
       <ul class="list">
         <li>
           <span class="label">绑定手机</span>
-          <IButton v-if="!isBindPhone" type="primary" title="点击绑定" @click="bindAccount('phone')">去绑定</IButton>
-          <IButton v-else class="disabled" title="点击解除绑定" @click="unbindAccount('phone')">已绑定</IButton>
+          <Button v-if="!isBindPhone" type="primary" title="点击绑定" @click="bindAccount('phone')">去绑定</Button>
+          <Button v-else class="disabled" title="点击解除绑定" @click="unbindAccount('phone')">已绑定</Button>
         </li>
         <li>
           <span class="label">绑定邮箱</span>
-          <IButton v-if="!isBindEmail" type="primary" title="点击绑定" @click="bindAccount('email')">去绑定</IButton>
-          <IButton v-else class="disabled" title="点击解除绑定" @click="unbindAccount('email')">已绑定</IButton>
+          <Button v-if="!isBindEmail" type="primary" title="点击绑定" @click="bindAccount('email')">去绑定</Button>
+          <Button v-else class="disabled" title="点击解除绑定" @click="unbindAccount('email')">已绑定</Button>
         </li>
         <li>
           <span class="label">绑定 QQ</span>
-          <IButton v-if="!isBindQQ" type="primary" title="点击绑定" @click="bindSocial('qq')">去绑定</IButton>
-          <IButton v-else class="disabled" title="点击解除绑定" @click="unbindSocial('qq')">已绑定</IButton>
+          <Button v-if="!isBindQQ" type="primary" title="点击绑定" @click="bindSocial('qq')">去绑定</Button>
+          <Button v-else class="disabled" title="点击解除绑定" @click="unbindSocial('qq')">已绑定</Button>
         </li>
         <li>
           <span class="label">绑定微信</span>
-          <IButton v-if="!isBindWechat" type="primary" title="点击绑定" @click="bindSocial('wechat')">去绑定</IButton>
-          <IButton v-else class="disabled" title="点击解除绑定" @click="unbindSocial('wechat')">已绑定</IButton>
+          <Button v-if="!isBindWechat" type="primary" title="点击绑定" @click="bindSocial('wechat')">去绑定</Button>
+          <Button v-else class="disabled" title="点击解除绑定" @click="unbindSocial('wechat')">已绑定</Button>
         </li>
         <li>
           <span class="label">绑定微博</span>
-          <IButton v-if="!isBindWeibo" type="primary" title="点击绑定" @click="bindSocial('weibo')">去绑定</IButton>
-          <IButton v-else class="disabled" title="点击解除绑定" @click="unbindSocial('weibo')">已绑定</IButton>
+          <Button v-if="!isBindWeibo" type="primary" title="点击绑定" @click="bindSocial('weibo')">去绑定</Button>
+          <Button v-else class="disabled" title="点击解除绑定" @click="unbindSocial('weibo')">已绑定</Button>
         </li>
       </ul>
 
-      <IModal
+      <Modal
         v-model="showModal"
         :title="isBind ? '绑定账号' : '解绑账号'"
         :transfer="false"
@@ -44,9 +44,9 @@
         :footer-hide="true"
         @on-ok="onSubmitBind"
       >
-        <IForm v-if="showModal" ref="form" label-position="top" :model="formModel" :rules="formRules">
-          <IFormItem :label="bindType === 'phone' ? '手机号' : '邮箱'" :prop="bindType">
-            <IInput
+        <Form v-if="showModal" ref="form" label-position="top" :model="formModel" :rules="formRules">
+          <FormItem :label="bindType === 'phone' ? '手机号' : '邮箱'" :prop="bindType">
+            <Input
               v-model="account"
               :type="bindType === 'phone' ? 'tel' : 'text'"
               :maxlength="bindType === 'phone' ? 11 : 60"
@@ -54,19 +54,19 @@
               @on-enter="sendCode"
             >
               <template v-slot:append>
-                <IButton
+                <Button
                   type="primary"
                   :disabled="!!countdown"
                   :loading="sendLock"
                   @click="sendCode"
                 >
                   {{ countdown ? `${countdown}s 后重试` : '获取验证码' }}
-                </IButton>
+                </Button>
               </template>
-            </IInput>
-          </IFormItem>
-          <IFormItem label="验证码" prop="code">
-            <IInput
+            </Input>
+          </FormItem>
+          <FormItem label="验证码" prop="code">
+            <Input
               ref="code"
               v-model="code"
               type="text"
@@ -74,9 +74,9 @@
               class="code-input"
               @on-enter="isBind ? onSubmitBind() : $refs.password.focus()"
             />
-          </IFormItem>
-          <IFormItem v-if="!isBind" label="登录密码" prop="password">
-            <IInput
+          </FormItem>
+          <FormItem v-if="!isBind" label="登录密码" prop="password">
+            <Input
               ref="password"
               v-model="password"
               type="password"
@@ -84,11 +84,11 @@
               class="code-input"
               @on-enter="onSubmitBind"
             />
-          </IFormItem>
+          </FormItem>
 
-          <IButton type="primary" :loading="submitLock" :disabled="!account || !code" @click="onSubmitBind">提交</IButton>
-        </IForm>
-      </IModal>
+          <Button type="primary" :loading="submitLock" :disabled="!account || !code" @click="onSubmitBind">提交</Button>
+        </Form>
+      </Modal>
     </main>
   </div>
 </template>

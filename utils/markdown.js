@@ -47,7 +47,7 @@ export function syntaxTextAndImage (markdownText) {
    *
    * @type {Array}
    */
-  let images = []
+  const images = []
 
   // For each all image.
   if (imageHtmlCodes instanceof Array) {
@@ -57,7 +57,7 @@ export function syntaxTextAndImage (markdownText) {
        *
        * @type {Array}
        */
-      let result = imageHtmlCode.match(/src=['"]?([^'"]*)['"]?/i)
+      const result = imageHtmlCode.match(/src=['"]?([^'"]*)['"]?/i)
 
       // If matched push to images array.
       if (result !== null && result[1]) {

@@ -14,7 +14,7 @@
           class="markdown-editor"
           placeholder="请输入帖子内容，支持 Markdown 语法"
         />
-        <ICheckbox
+        <Checkbox
           v-if="allowSyncToFeed"
           v-model="syncToFeed"
           class="sync-feed"
@@ -23,8 +23,8 @@
           size="large"
         >
           同步分享至动态
-        </ICheckbox>
-        <IButton
+        </Checkbox>
+        <Button
           class="submit-btn"
           type="primary"
           size="large"
@@ -32,7 +32,7 @@
           @click="onSubmit"
         >
           确定
-        </IButton>
+        </Button>
       </form>
     </main>
 

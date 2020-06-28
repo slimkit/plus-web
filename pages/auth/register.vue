@@ -6,7 +6,7 @@
         <nuxt-link :to="{query: {type: 'email'}}" :class="{'exact-active': type === 'email'}">邮箱注册</nuxt-link>
       </nav>
 
-      <IForm
+      <Form
         ref="form"
         class="form"
         :label-width="80"
@@ -15,38 +15,38 @@
         :rules="validator"
         @submit.native.prevent="onSubmit"
       >
-        <IFormItem
+        <FormItem
           v-if="type === 'phone'"
           prop="phone"
           label="手机号"
         >
-          <IInput
+          <Input
             v-model="phone"
             placeholder="输入11位手机号码"
             :maxlength="11"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem
+        <FormItem
           v-else
           prop="email"
           label="邮箱"
         >
-          <IInput
+          <Input
             v-model="email"
             placeholder="输入邮箱地址"
             type="email"
             :maxlength="80"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="code" label="验证码">
-          <IInput
+        <FormItem prop="code" label="验证码">
+          <Input
             v-model="code"
             :placeholder="type === 'phone' ? '输入手机验证码' : '输入邮箱验证码'"
             :maxlength="6"
           >
-            <IButton
+            <Button
               slot="append"
               type="primary"
               :disabled="codeLimit > 0"
@@ -54,44 +54,44 @@
               @click="getCode"
             >
               {{ codeLimit ? `${codeLimit}s 后重试` : '获取验证码' }}
-            </IButton>
-          </IInput>
-        </IFormItem>
+            </Button>
+          </Input>
+        </FormItem>
 
-        <IFormItem prop="username" label="设置昵称">
-          <IInput
+        <FormItem prop="username" label="设置昵称">
+          <Input
             v-model="username"
             placeholder="2-8个字符"
             :maxlength="8"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="password" label="设置密码">
-          <IInput
+        <FormItem prop="password" label="设置密码">
+          <Input
             v-model="password"
             placeholder="6-15个字符，区分大小写"
             type="password"
             :maxlength="15"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="confirmPassword" label="确认密码">
-          <IInput
+        <FormItem prop="confirmPassword" label="确认密码">
+          <Input
             v-model="confirmPassword"
             placeholder="再次输入密码"
             type="password"
             :maxlength="15"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IButton
+        <Button
           type="primary"
           html-type="submit"
           :loading="submitLock"
         >
           注册
-        </IButton>
-      </IForm>
+        </Button>
+      </Form>
     </main>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div ref="report" class="c-modal-report">
-    <IModal
+    <Modal
       ref="modal"
       v-model="show"
       :loading="true"
@@ -15,7 +15,7 @@
         class="editor"
         placeholder="请输入举报理由，不超过190字"
       />
-    </IModal>
+    </Modal>
   </div>
 </template>
 

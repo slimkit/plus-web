@@ -19,22 +19,22 @@
     />
 
     <footer class="footer">
-      <ICheckbox
+      <Checkbox
         v-model="anonymity"
         class="anonymity"
         size="large"
       >
         启动匿名
-      </ICheckbox>
+      </Checkbox>
 
-      <IButton
+      <Button
         class="submit-btn"
         type="primary"
         :loading="submitLock"
         @click="onSubmit"
       >
         提交
-      </IButton>
+      </Button>
     </footer>
   </div>
 </template>

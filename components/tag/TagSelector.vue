@@ -1,6 +1,6 @@
 <template>
   <div class="c-tag-selector">
-    <IPoptip
+    <Poptip
       :transfer="false"
       class="tag-selector"
       title="请选择标签"
@@ -34,7 +34,7 @@
           </section>
         </div>
       </template>
-    </IPoptip>
+    </Poptip>
   </div>
 </template>
 

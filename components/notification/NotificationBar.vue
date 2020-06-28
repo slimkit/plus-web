@@ -2,49 +2,49 @@
   <aside class="c-notification-bar">
     <ul class="list">
       <NotificationBarItem :badge="at.badge">
-        <ITooltip
+        <Tooltip
           placement="left"
           theme="light"
           :content="previewAt"
         >
           <svg class="icon lg" @click="showNotificationModal('at')"><use xlink:href="#icon-side-mention" /></svg>
-        </ITooltip>
+        </Tooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="comment.badge">
-        <ITooltip
+        <Tooltip
           placement="left"
           theme="light"
           :content="previewComment"
         >
           <svg class="icon lg" @click="showNotificationModal('comment')"><use xlink:href="#icon-side-msg" /></svg>
-        </ITooltip>
+        </Tooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="like.badge">
-        <ITooltip
+        <Tooltip
           placement="left"
           theme="light"
           :content="previewLike"
         >
           <svg class="icon lg" @click="showNotificationModal('like')"><use xlink:href="#icon-side-like" /></svg>
-        </ITooltip>
+        </Tooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="system.badge">
-        <ITooltip
+        <Tooltip
           placement="left"
           theme="light"
           :content="previewSystem"
         >
           <svg class="icon lg" @click="showNotificationModal('system')"><use xlink:href="#icon-side-notice" /></svg>
-        </ITooltip>
+        </Tooltip>
       </NotificationBarItem>
       <NotificationBarItem :badge="unreadAudits">
-        <ITooltip
+        <Tooltip
           placement="left"
           theme="light"
           :content="previewAudit"
         >
           <svg class="icon lg" @click="showNotificationModal('audit')"><use xlink:href="#icon-side-auth" /></svg>
-        </ITooltip>
+        </Tooltip>
       </NotificationBarItem>
     </ul>
 

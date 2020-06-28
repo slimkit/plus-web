@@ -1,6 +1,6 @@
 <template>
   <div ref="repost" class="c-modal-repost">
-    <IModal
+    <Modal
       ref="modal"
       v-model="show"
       :loading="true"
@@ -21,7 +21,7 @@
         :repost-id="source.id"
         @post="onSubmit"
       />
-    </IModal>
+    </Modal>
   </div>
 </template>
 

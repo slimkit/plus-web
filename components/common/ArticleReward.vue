@@ -1,13 +1,13 @@
 <template>
   <section class="c-article-reward">
-    <IButton
+    <Button
       type="error"
       size="large"
       class="reward-button"
       @click="onReward"
     >
       打 赏
-    </IButton>
+    </Button>
     <p class="reward-info">
       <span>{{ count }}</span> 人打赏，
       共 <span>{{ amount }}</span> 积分
@@ -22,7 +22,7 @@
       <svg class="icon lg" @click="showList = true"><use xlink:href="#icon-icon07" /></svg>
     </div>
 
-    <IModal
+    <Modal
       v-model="showList"
       title="打赏列表"
       :transfer="false"
@@ -46,7 +46,7 @@
           </li>
         </ul>
       </Loadmore>
-    </IModal>
+    </Modal>
   </section>
 </template>
 

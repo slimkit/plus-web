@@ -88,7 +88,7 @@
           </span>
         </div>
         <div class="right">
-          <IPoptip
+          <Poptip
             v-model="showMore"
             class="more"
             placement="bottom"
@@ -108,7 +108,7 @@
                 </template>
               </ul>
             </template>
-          </IPoptip>
+          </Poptip>
         </div>
       </div>
       <Collapse>

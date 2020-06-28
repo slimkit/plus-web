@@ -5,7 +5,7 @@
     <div class="info">
       <h2><nuxt-link :to="`/question/topic/${topic.id}`">{{ topic.name }}</nuxt-link></h2>
       <p>关注 <span>{{ topic.follows_count }}</span> 回答 <span>{{ topic.questions_count }}</span></p>
-      <IButton
+      <Button
         class="follow-btn"
         :class="{disabled: hasFollowed}"
         size="small"
@@ -16,7 +16,7 @@
         @click="onFollow"
       >
         {{ hasFollowed ? '已关注' :'+ 关注' }}
-      </IButton>
+      </Button>
     </div>
   </li>
 </template>

@@ -2,14 +2,14 @@
   <main class="p-topic-create">
     <h1>{{ topicId ? '编辑话题' : '创建话题' }}</h1>
 
-    <IForm
+    <Form
       ref="form"
       label-position="top"
       :model="form"
       :rules="validator"
       @submit.native.prevent="onSubmit"
     >
-      <IFormItem prop="logo">
+      <FormItem prop="logo">
         <div class="cover">
           <div
             v-if="!cover.preview"
@@ -25,7 +25,7 @@
             class="image"
             :style="{backgroundImage: `url(${cover.preview})`}"
           >
-            <IButton
+            <Button
               class="change-btn"
               ghost
               shape="circle"
@@ -33,10 +33,10 @@
               @click="$refs.cropper.open()"
             >
               改变话题封面
-            </IButton>
+            </Button>
           </div>
 
-          <ImageCropper
+          <mageCropper
             ref="cropper"
             title="上传话题封面"
             :fixed="true"
@@ -52,25 +52,25 @@
             :preview-size="{height: 400, width: 1080}"
           />
         </div>
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem prop="name">
-        <IInput
+      <FormItem prop="name">
+        <Input
           v-model="name"
           size="large"
           placeholder="输入话题标题（必填）"
           :disabled="!!topicId"
         />
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem prop="desc">
-        <IInput v-model="desc" placeholder="简单介绍以下话题内容" />
-      </IFormItem>
+      <FormItem prop="desc">
+        <Input v-model="desc" placeholder="简单介绍以下话题内容" />
+      </FormItem>
 
       <div class="submit">
         <p class="tips">话题创建成功后，标题不可更改</p>
 
-        <IButton
+        <Button
           class="submit-btn"
           type="primary"
           html-type="submit"
@@ -78,9 +78,9 @@
           :disabled="!modifiedForm"
         >
           提交
-        </IButton>
+        </Button>
       </div>
-    </IForm>
+    </Form>
   </main>
 </template>
 

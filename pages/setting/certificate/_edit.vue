@@ -11,23 +11,23 @@
     </nav>
 
     <div class="content-wrap">
-      <IForm
+      <Form
         ref="form"
         :model="form"
         :label-width="100"
         :rules="rules"
         @submit.native.prevent="onSubmit"
       >
-        <IFormItem
+        <FormItem
           v-for="item in Object.keys(labels)"
           :key="item"
           :prop="item"
           :label="labels[item].label"
         >
-          <IInput v-model="form[item]" :maxlength="item === 'phone' ? 11 : null" />
-        </IFormItem>
+          <Input v-model="form[item]" :maxlength="item === 'phone' ? 11 : null" />
+        </FormItem>
 
-        <IFormItem
+        <FormItem
           key="file"
           prop="file"
           label="认证资料"
@@ -67,17 +67,17 @@
             type="file"
             @finish="image => $set(form.files, 1, image.value)"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IButton
+        <Button
           type="primary"
           html-type="submit"
           :loading="loading"
           :disabled="disabled"
         >
           保存
-        </IButton>
-      </IForm>
+        </Button>
+      </Form>
     </div>
   </div>
 </template>

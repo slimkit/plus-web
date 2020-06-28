@@ -45,7 +45,7 @@
 
         <div class="header">
           <h3>交易记录</h3>
-          <IDatePicker
+          <DatePicker
             v-model="date"
             class="date-picker"
             type="daterange"

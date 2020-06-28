@@ -1,7 +1,7 @@
 <template>
   <div class="p-user-question">
     <nav class="cate-wrap">
-      <IPoptip
+      <Poptip
         v-model="showQuestionCate"
         class="cate"
         placement="bottom"
@@ -19,9 +19,9 @@
             <li :class="{active: type == 'questionOther'}" @click="type = 'questionOther'">其他提问</li>
           </ul>
         </template>
-      </IPoptip>
+      </Poptip>
 
-      <IPoptip
+      <Poptip
         v-model="showAnswerCate"
         class="cate"
         placement="bottom"
@@ -39,7 +39,7 @@
             <li :class="{active: type == 'answersOther'}" @click="type = 'answersOther'">其他回答</li>
           </ul>
         </template>
-      </IPoptip>
+      </Poptip>
     </nav>
 
     <Loadmore

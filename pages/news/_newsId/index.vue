@@ -10,8 +10,8 @@
           浏览量 {{ news.hits }} ·
           发布时间 {{ news.created_at | fromNow }}
 
-          <no-ssr>
-            <IPoptip
+          <client-only>
+            <Poptip
               v-model="showMore"
               placement="bottom"
               class="more"
@@ -28,8 +28,8 @@
                   <li v-else @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
                 </ul>
               </template>
-            </IPoptip>
-          </no-ssr>
+            </Poptip>
+          </client-only>
         </p>
 
         <blockquote v-if="news.subject" class="subject">
@@ -92,7 +92,7 @@
     <aside class="widgets">
       <SideWidget key="publish">
         <div class="publish-wrap">
-          <IButton
+          <Button
             class="publish-btn"
             type="primary"
             :long="true"
@@ -102,7 +102,7 @@
           >
             <svg class="icon"><use xlink:href="#icon-publish" /></svg>
             投稿
-          </IButton>
+          </Button>
         </div>
       </SideWidget>
 

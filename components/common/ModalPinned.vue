@@ -1,5 +1,5 @@
 <template>
-  <IModal
+  <Modal
     v-model="show"
     class="c-modal-pinned"
     :title="title"
@@ -9,23 +9,23 @@
     @on-ok="beforeSubmit"
   >
     <p class="label">选择置顶天数</p>
-    <IRadioGroup
+    <RadioGroup
       v-model="day"
       class="select-wrap"
       type="button"
     >
-      <IRadio
+      <Radio
         v-for="item in days"
         :key="item"
         :label="item"
       >
         {{ item }}d
-      </IRadio>
-    </IRadioGroup>
+      </Radio>
+    </RadioGroup>
 
     <template v-if="!isOwner">
       <p class="label">设置置顶金额</p>
-      <IInputNumber
+      <nputNumber
         ref="custom"
         v-model="custom"
         class="custom-wrap"
@@ -36,7 +36,7 @@
       <p class="label">需要支付总金额：</p>
       <p class="amount">{{ amount }}</p>
     </template>
-  </IModal>
+  </Modal>
 </template>
 
 <script>

@@ -14,7 +14,7 @@
       <span v-else>每日签到</span>
     </footer>
 
-    <ISpin v-if="loading" fix />
+    <Spin v-if="loading" fix />
   </div>
 </template>
 

@@ -14,7 +14,7 @@
           class="content-input"
           placeholder="TODO: 此处替换为富文本编辑器"
         />
-        <ICheckbox
+        <Checkbox
           v-model="syncToFeed"
           class="sync-feed"
           :true-value="1"
@@ -22,15 +22,15 @@
           size="large"
         >
           同步分享至动态
-        </ICheckbox>
-        <IButton
+        </Checkbox>
+        <Button
           class="submit-btn"
           type="primary"
           size="large"
           html-type="submit"
         >
           确定
-        </IButton>
+        </Button>
       </form>
     </main>
 

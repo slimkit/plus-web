@@ -1,5 +1,5 @@
 <template>
-  <IModal
+  <Modal
     v-model="show"
     class="c-modal-notification"
     width="720"
@@ -27,7 +27,7 @@
         <!-- <ChatList v-else /> -->
       </main>
     </div>
-  </IModal>
+  </Modal>
 </template>
 
 <script>

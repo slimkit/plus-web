@@ -3,14 +3,14 @@
     <h1>创建圈子</h1>
     <hr>
 
-    <IForm
+    <Form
       ref="form"
       :model="validateFields"
       :rules="rule"
       :label-width="80"
       @submit.native.prevent="onSubmit"
     >
-      <IFormItem
+      <FormItem
         prop="avatar"
         label="圈子头像"
         required
@@ -22,7 +22,7 @@
             @click="$refs.cropper.open()"
           />
 
-          <ImageCropper
+          <mageCropper
             ref="cropper"
             title="上传圈子头像"
             :preview="true"
@@ -44,25 +44,25 @@
             上传圈子头像
           </figcaption>
         </figure>
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem label="圈子名称" prop="name">
-        <IInput
+      <FormItem label="圈子名称" prop="name">
+        <Input
           v-model="form.name"
           placeholder="最多20个字"
         />
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem label="圈子简介" prop="summary">
-        <IInput
+      <FormItem label="圈子简介" prop="summary">
+        <Input
           v-model="form.summary"
           type="textarea"
           :rows="3"
           placeholder="最多255个字"
         />
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem label="圈子分类" prop="category">
+      <FormItem label="圈子分类" prop="category">
         <Select
           v-model.number="category"
           filterable
@@ -76,97 +76,97 @@
             :label="cate.name"
           />
         </Select>
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem
+      <FormItem
         class="tag"
         label="圈子标签"
         prop="tags"
         required
       >
         <TagSelector :selected-tags.sync="selectedTags" placeholder="请选择圈子标签" />
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem label="订阅模式" prop="needPaid">
-        <IRadioGroup v-model="needPaid">
-          <IRadio :label="0">免费</IRadio>
-          <IRadio :label="1">付费</IRadio>
-        </IRadioGroup>
-      </IFormItem>
+      <FormItem label="订阅模式" prop="needPaid">
+        <RadioGroup v-model="needPaid">
+          <Radio :label="0">免费</Radio>
+          <Radio :label="1">付费</Radio>
+        </RadioGroup>
+      </FormItem>
 
-      <IFormItem
+      <FormItem
         v-show="needPaid"
         label="入圈金额"
         prop="amount"
         required
       >
-        <IInputNumber
+        <InputNumber
           v-model="paidAmount"
           :min="1"
           :max="99999999"
         />
         积分
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem v-show="!needPaid" label="是否公开">
-        <IRadioGroup v-model="isPublic">
-          <IRadio :label="1">公开圈子</IRadio>
-          <IRadio :label="0">私密圈子</IRadio>
-        </IRadioGroup>
-      </IFormItem>
+      <FormItem v-show="!needPaid" label="是否公开">
+        <RadioGroup v-model="isPublic">
+          <Radio :label="1">公开圈子</Radio>
+          <Radio :label="0">私密圈子</Radio>
+        </RadioGroup>
+      </FormItem>
 
-      <IFormItem label="分享设置">
-        <IRadioGroup v-model="allowFeed">
-          <IRadio :label="0">帖子可分享至动态</IRadio>
-          <IRadio :label="1">帖子不可分享至动态</IRadio>
-        </IRadioGroup>
-      </IFormItem>
+      <FormItem label="分享设置">
+        <RadioGroup v-model="allowFeed">
+          <Radio :label="0">帖子可分享至动态</Radio>
+          <Radio :label="1">帖子不可分享至动态</Radio>
+        </RadioGroup>
+      </FormItem>
 
-      <IFormItem prop="location" label="圈子位置">
+      <FormItem prop="location" label="圈子位置">
         <!-- TODO: 获取经纬度信息 -->
-        <IAutoComplete
+        <AutoComplete
           v-model="form.location"
           :data="searchLocation"
           size="large"
           placeholder="搜索所在地区"
           @on-search="onSearchLocation"
         />
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem label="圈子公告">
-        <IInput
+      <FormItem label="圈子公告">
+        <Input
           v-model="form.notice"
           type="textarea"
           :rows="3"
           placeholder="编辑自己的圈子公告或规则"
         />
-      </IFormItem>
+      </FormItem>
 
-      <IFormItem prop="agree">
-        <ICheckbox v-model="agree">
+      <FormItem prop="agree">
+        <Checkbox v-model="agree">
           我已阅读并遵守 <span class="primary-color" @click="showProtocol = true">ThinkSNS+ 圈子创建协议</span>
-        </ICheckbox>
+        </Checkbox>
 
-        <IModal
+        <Modal
           v-model="showProtocol"
           title="ThinkSNS+ 圈子创建协议"
           :footer-hide="true"
         >
           <div class="markdown-body" v-html="markdown(protocol)" />
-        </IModal>
-      </IFormItem>
+        </Modal>
+      </FormItem>
 
       <div class="bottom">
         <p>提交后，我们将在2个工作日内给予反馈，谢谢合作！</p>
-        <IButton
+        <Button
           size="large"
           type="primary"
           html-type="submit"
         >
           提 交
-        </IButton>
+        </Button>
       </div>
-    </IForm>
+    </Form>
   </div>
 </template>
 

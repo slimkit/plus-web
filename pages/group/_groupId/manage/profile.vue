@@ -5,7 +5,7 @@
     </nav>
 
     <div class="container-wrap">
-      <IForm
+      <Form
         ref="form"
         :model="form"
         :rules="rules"
@@ -19,8 +19,8 @@
             :link="false"
             :square="true"
           />
-          <IButton :loading="avatarUploadingLock" @click="$refs.cropper.open()">更换圈子头像</IButton>
-          <ImageCropper
+          <Button :loading="avatarUploadingLock" @click="$refs.cropper.open()">更换圈子头像</Button>
+          <mageCropper
             ref="cropper"
             title="更换圈子头像"
             :preview="true"
@@ -38,16 +38,16 @@
           />
         </div>
 
-        <IFormItem prop="name" label="圈子名称">
-          <IInput
+        <FormItem prop="name" label="圈子名称">
+          <Input
             v-model="form.name"
             type="text"
             size="large"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="summary" label="圈子简介">
-          <IInput
+        <FormItem prop="summary" label="圈子简介">
+          <Input
             v-model="form.summary"
             type="textarea"
             :rows="3"
@@ -55,9 +55,9 @@
             :maxlength="255"
             placeholder="最多255字"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="category" label="圈子分类">
+        <FormItem prop="category" label="圈子分类">
           <Select v-model="form.category_id">
             <Option
               v-for="cate in categories"
@@ -66,15 +66,15 @@
               :value="cate.id"
             />
           </Select>
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem
+        <FormItem
           class="tag"
           label="圈子标签"
           prop="tags"
           required
         >
-          <IPoptip
+          <Poptip
             :transfer="false"
             class="tag-selector"
             title="选择圈子标签"
@@ -104,70 +104,70 @@
                 </section>
               </div>
             </template>
-          </IPoptip>
-        </IFormItem>
+          </Poptip>
+        </FormItem>
 
-        <IFormItem label="订阅模式" prop="needPaid">
-          <IRadioGroup v-model="needPaid">
-            <IRadio :disabled="group.mode === 'paid'" :label="0">免费</IRadio>
-            <IRadio :label="1">付费</IRadio>
-          </IRadioGroup>
+        <FormItem label="订阅模式" prop="needPaid">
+          <RadioGroup v-model="needPaid">
+            <Radio :disabled="group.mode === 'paid'" :label="0">免费</Radio>
+            <Radio :label="1">付费</Radio>
+          </RadioGroup>
           <p v-if="group.mode === 'paid'" class="disabled">付费圈子不能改为免费圈子</p>
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem
+        <FormItem
           v-show="needPaid"
           label="入圈金额"
           prop="amount"
           required
         >
-          <IInputNumber
+          <InputNumber
             v-model="form.money"
             :min="1"
             :max="99999999"
           />
           积分
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem v-show="!needPaid" label="是否公开">
-          <IRadioGroup v-model="isPublic">
-            <IRadio :label="1">公开圈子</IRadio>
-            <IRadio :label="0">私密圈子</IRadio>
-          </IRadioGroup>
-        </IFormItem>
-        <IFormItem prop="location" label="圈子位置">
-          <IAutoComplete
+        <FormItem v-show="!needPaid" label="是否公开">
+          <RadioGroup v-model="isPublic">
+            <Radio :label="1">公开圈子</Radio>
+            <Radio :label="0">私密圈子</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem prop="location" label="圈子位置">
+          <AutoComplete
             v-model="form.location"
             :data="searchLocation"
             size="large"
             @on-search="onSearchLocation"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="notice" label="圈子公告">
-          <IInput
+        <FormItem prop="notice" label="圈子公告">
+          <Input
             v-model="form.notice"
             type="textarea"
             placeholder="编辑自己的圈子公告或规则（选填）"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="permission" label="发帖权限">
-          <IRadioGroup v-model="form.permissions">
-            <IRadio label="administrator">仅圈主</IRadio>
-            <IRadio label="administrator,founder">圈主和管理员</IRadio>
-            <IRadio label="member,administrator,founder">所有成员</IRadio>
-          </IRadioGroup>
-        </IFormItem>
+        <FormItem prop="permission" label="发帖权限">
+          <RadioGroup v-model="form.permissions">
+            <Radio label="administrator">仅圈主</Radio>
+            <Radio label="administrator,founder">圈主和管理员</Radio>
+            <Radio label="member,administrator,founder">所有成员</Radio>
+          </RadioGroup>
+        </FormItem>
 
-        <IFormItem prop="share" label="分享设置">
-          <IRadioGroup v-model="form.allow_feed">
-            <IRadio :label="1">帖子可分享至动态</IRadio>
-            <IRadio :label="0">帖子不可分享至动态</IRadio>
-          </IRadioGroup>
-        </IFormItem>
+        <FormItem prop="share" label="分享设置">
+          <RadioGroup v-model="form.allow_feed">
+            <Radio :label="1">帖子可分享至动态</Radio>
+            <Radio :label="0">帖子不可分享至动态</Radio>
+          </RadioGroup>
+        </FormItem>
 
-        <IButton
+        <Button
           class="submit-button"
           type="primary"
           html-type="submit"
@@ -175,8 +175,8 @@
           :loading="submitLock"
         >
           保存
-        </IButton>
-      </IForm>
+        </Button>
+      </Form>
     </div>
   </div>
 </template>

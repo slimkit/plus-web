@@ -1,6 +1,6 @@
 <template>
   <div class="p-auth-login">
-    <IForm
+    <Form
       ref="form"
       class="form"
       :model="form"
@@ -8,34 +8,34 @@
       autocomplete="on"
       @submit.native.prevent
     >
-      <IFormItem prop="account">
-        <IInput
+      <FormItem prop="account">
+        <Input
           v-model="form.account"
           type="text"
           placeholder="输入手机号/邮箱/昵称"
           autocomplete="on"
         />
-      </IFormItem>
-      <IFormItem prop="password">
-        <IInput
+      </FormItem>
+      <FormItem prop="password">
+        <Input
           v-model="form.password"
           type="password"
           placeholder="输入密码"
           :maxlength="16"
         />
-      </IFormItem>
+      </FormItem>
       <div class="others">
         <span class="use-code" title="验证码登录">验证码登录</span>
         <nuxt-link to="/auth/find">忘记密码</nuxt-link>
       </div>
-      <IButton
+      <Button
         size="large"
         type="primary"
         html-type="submit"
         @click="onSubmit"
       >
         登录
-      </IButton>
+      </Button>
       <div class="footage">
         <span>没有账号？<nuxt-link class="active" to="/auth/register">注册</nuxt-link></span>
         <span class="right">三方登录：</span>
@@ -43,7 +43,7 @@
         <svg class="icon socialite-button" :style="{color: '#54c58c'}"><use xlink:href="#icon-weixin" /></svg>
         <svg class="icon socialite-button" :style="{color: '#5fbddf'}"><use xlink:href="#icon-qq" /></svg>
       </div>
-    </IForm>
+    </Form>
     <div class="welcome">
       <h1 class="title">欢迎来到ThinkSNS+</h1>
       <img class="qrcode" src="https://www.pgyer.com/app/qrcode/thinksns-plus">

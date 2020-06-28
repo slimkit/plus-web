@@ -5,7 +5,7 @@
     </nav>
 
     <div class="container-wrap">
-      <IForm
+      <Form
         ref="form"
         :model="form"
         :rules="rules"
@@ -18,29 +18,29 @@
           name="account"
           :value="logged.name"
         >
-        <IFormItem prop="oldPassword" label="原密码">
-          <IInput
+        <FormItem prop="oldPassword" label="原密码">
+          <Input
             v-model="form.oldPassword"
             type="password"
             size="large"
           />
-        </IFormItem>
-        <IFormItem prop="newPassword" label="设置新密码">
-          <IInput
+        </FormItem>
+        <FormItem prop="newPassword" label="设置新密码">
+          <Input
             v-model="form.newPassword"
             type="password"
             size="large"
           />
-        </IFormItem>
-        <IFormItem prop="confirmPassword" label="确认新密码">
-          <IInput
+        </FormItem>
+        <FormItem prop="confirmPassword" label="确认新密码">
+          <Input
             v-model="form.confirmPassword"
             type="password"
             size="large"
           />
-        </IFormItem>
-        <IButton html-type="submit">保存</IButton>
-      </IForm>
+        </FormItem>
+        <Button html-type="submit">保存</Button>
+      </Form>
     </div>
   </div>
 </template>

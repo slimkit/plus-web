@@ -18,13 +18,13 @@
       <Loading v-if="loading" />
       <span v-else-if="noMore">没有更多</span>
       <span v-else-if="loadCount < limit">加载更多</span>
-      <IButton
+      <Button
         v-else
         type="primary"
         @click="beforeLoadmore"
       >
         点击加载更多
-      </IButton>
+      </Button>
     </div>
   </div>
 </template>

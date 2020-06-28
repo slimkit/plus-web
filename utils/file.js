@@ -136,7 +136,7 @@ export const getFileUrl = (file, params = {}) => {
     if (token) paramsString.append('token', token)
   } else {
     url = file
-    let rule = []
+    const rule = []
     if (params.w) rule.push(`w_${params.w}`)
     if (params.h) rule.push(`h_${params.h}`)
     if (params.quility) rule.push(`q_${params.quility}`)

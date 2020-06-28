@@ -1,13 +1,13 @@
 <template>
   <div class="c-social-share">
-    <no-ssr>
+    <client-only>
       分享至：
       <div class="social-shares">
         <a href="javascript:;" class="social-share-icon icon-weibo"><svg class="icon lg share-icon" :style="{color: '#f97d72'}"><use xlink:href="#icon-weibo" /></svg></a>
         <a href="javascript:;" class="social-share-icon icon-wechat"><svg class="icon lg share-icon" :style="{color: '#54c58c'}"><use xlink:href="#icon-weixin" /></svg></a>
         <a href="javascript:;" class="social-share-icon icon-qq"><svg class="icon lg share-icon" :style="{color: '#5fbddf'}"><use xlink:href="#icon-qq" /></svg></a>
       </div>
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 
@@ -29,6 +29,7 @@ export default {
     description: { type: String, default: null }, // 不填则获取 meta.description
   },
   mounted () {
+    console.log(window.socialShare)
     if (process.client) this.initSocialShare()
   },
   methods: {

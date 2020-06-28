@@ -1,6 +1,6 @@
 <template>
   <div class="c-image-cropper">
-    <IModal
+    <Modal
       v-model="show"
       :title="title"
       :footer-hide="!image"
@@ -41,27 +41,27 @@
       <template v-slot:footer>
         <div class="footer">
           <div class="tools">
-            <IButton size="small" @click="$refs.input.click()">更换图片</IButton>
+            <Button size="small" @click="$refs.input.click()">更换图片</Button>
             <div class="devide" />
-            <IButton size="small" @click="$refs.cropper.changeScale(1)"><span class="icon">+</span></IButton>
-            <IButton size="small" @click="$refs.cropper.changeScale(-1)"><span class="icon">-</span></IButton>
+            <Button size="small" @click="$refs.cropper.changeScale(1)"><span class="icon">+</span></Button>
+            <Button size="small" @click="$refs.cropper.changeScale(-1)"><span class="icon">-</span></Button>
             <div class="devide" />
-            <IButton size="small" @click="$refs.cropper.rotateLeft()"><span class="icon">↺</span></IButton>
-            <IButton size="small" @click="$refs.cropper.rotateRight()"><span class="icon">↻</span></IButton>
+            <Button size="small" @click="$refs.cropper.rotateLeft()"><span class="icon">↺</span></Button>
+            <Button size="small" @click="$refs.cropper.rotateRight()"><span class="icon">↻</span></Button>
           </div>
           <div class="tools">
-            <IButton
+            <Button
               size="small"
               :long="true"
               type="primary"
               @click="onConfirm"
             >
               确定
-            </IButton>
+            </Button>
           </div>
         </div>
       </template>
-    </IModal>
+    </Modal>
   </div>
 </template>
 

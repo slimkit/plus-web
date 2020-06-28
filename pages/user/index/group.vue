@@ -1,7 +1,7 @@
 <template>
   <div class="p-user-group">
     <nav class="cate-wrap">
-      <IPoptip
+      <Poptip
         v-model="showGroupCate"
         class="cate"
         placement="bottom"
@@ -17,9 +17,9 @@
             <li class="disabled" @click="$Message.error('接口未实现')">待审核的</li>
           </ul>
         </template>
-      </IPoptip>
+      </Poptip>
 
-      <IPoptip
+      <Poptip
         v-model="showPostCate"
         class="cate"
         placement="bottom"
@@ -36,7 +36,7 @@
             <li :class="{active: type == 'postPinnedAudit'}" @click="type = 'postPinnedAudit'">置顶待审核</li>
           </ul>
         </template>
-      </IPoptip>
+      </Poptip>
     </nav>
 
     <Loadmore

@@ -3,7 +3,7 @@
     <header class="header">
       <figure class="cover">
         <div class="image" :style="{backgroundImage: `url(${userBackground})`}">
-          <ISpin v-if="loading" fix />
+          <Spin v-if="loading" fix />
         </div>
         <figcaption class="info-wrap">
           <Avatar

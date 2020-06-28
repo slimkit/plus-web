@@ -5,13 +5,13 @@
         <data class="wallet">{{ (balance || 0).toLocaleString('en-US') }}</data>
         <p>账户余额（元）</p>
       </div>
-      <IButton
+      <Button
         class="recharge-btn"
         type="primary"
         size="large"
       >
         充值
-      </IButton>
+      </Button>
     </div>
 
     <hr>

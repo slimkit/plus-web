@@ -3,13 +3,13 @@
     <div class="main-wrap">
       <header class="group-header">
         <nav class="bread-wrap">
-          <IBreadcrumb separator="&gt;">
-            <IBreadcrumbItem to="/group">圈子</IBreadcrumbItem>
-            <IBreadcrumbItem :to="`/group?type=${group.category_id}`">{{ group.category.name }}</IBreadcrumbItem>
-            <IBreadcrumbItem>{{ group.name }}</IBreadcrumbItem>
-          </IBreadcrumb>
+          <Breadcrumb separator="&gt;">
+            <BreadcrumbItem to="/group">圈子</BreadcrumbItem>
+            <BreadcrumbItem :to="`/group?type=${group.category_id}`">{{ group.category.name }}</BreadcrumbItem>
+            <BreadcrumbItem>{{ group.name }}</BreadcrumbItem>
+          </Breadcrumb>
 
-          <IInput
+          <Input
             v-model="searchKeyword"
             search
             :readonly="isPreview"
@@ -35,7 +35,7 @@
           <div class="group-info">
             <h1>
               {{ group.name }}
-              <IPoptip
+              <Poptip
                 v-model="showShareMenu"
                 class="more"
                 placement="bottom"
@@ -47,11 +47,11 @@
                     <li @click="onRepost"><svg class="icon"><use xlink:href="#icon-share" /></svg>转发</li>
                   </ul>
                 </template>
-              </IPoptip>
+              </Poptip>
             </h1>
             <div class="group-desc">
               <p class="description text-cut-2">{{ group.summary }}</p>
-              <IPoptip
+              <Poptip
                 trigger="hover"
                 placement="bottom"
                 class="poptip-social-share"
@@ -67,7 +67,7 @@
                     :image="group.avatar.url"
                   />
                 </template>
-              </IPoptip>
+              </Poptip>
             </div>
             <div class="meta-wrap">
               <span>帖子 <span class="primary-color">{{ group.posts_count || 0 }}</span></span>
@@ -78,14 +78,14 @@
                 <span class="primary-color text-cut">{{ location }}</span>
               </address>
 
-              <IButton
+              <Button
                 class="report-btn"
                 type="text"
                 @click="onReport"
               >
                 举报圈子
-              </IButton>
-              <IButton
+              </Button>
+              <Button
                 class="join-btn"
                 type="primary"
                 shape="circle"
@@ -103,7 +103,7 @@
                   <svg class="icon sm"><use xlink:href="#icon-add" /></svg>
                   加入
                 </template>
-              </IButton>
+              </Button>
             </div>
           </div>
         </div>
@@ -184,7 +184,7 @@
     <aside class="side-wrap">
       <div :class="{preview: isPreview}" @click.capture="capturePreview">
         <nuxt-link to="post/create" append>
-          <IButton
+          <Button
             class="post-btn"
             type="primary"
             shape="circle"
@@ -193,7 +193,7 @@
           >
             <svg class="icon"><use xlink:href="#icon-writing" /></svg>
             发帖
-          </IButton>
+          </Button>
         </nuxt-link>
       </div>
 
@@ -218,13 +218,13 @@
             查看详细公告
           </footer>
 
-          <IModal
+          <Modal
             v-model="showNotice"
             :footer-hide="true"
             title="圈子公告"
           >
             <article class="text-pre">{{ group.notice }}</article>
-          </IModal>
+          </Modal>
         </template>
       </SideWidget>
 
@@ -251,14 +251,14 @@
           <Avatar :user="group.founder.user" />
           <div class="founder-info">
             <p>圈主：{{ group.founder.user.name }}</p>
-            <IButton
+            <Button
               v-if="!isMine"
               size="small"
               type="primary"
               @click="contactFounder"
             >
               联系圈主
-            </IButton>
+            </Button>
           </div>
         </div>
 
@@ -273,7 +273,7 @@
           查看更多成员
         </footer>
 
-        <IModal
+        <Modal
           v-model="showMembers"
           title="圈子成员"
           :footer-hide="true"
@@ -284,7 +284,7 @@
             :group-id="groupId"
             :members="membersGrouped"
           />
-        </IModal>
+        </Modal>
       </SideWidget>
 
       <SideWidgetGroupRecommend key="recommend-group" />

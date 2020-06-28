@@ -13,7 +13,7 @@
           <p class="time">{{ answer.created_at | fromNow }}</p>
         </div>
 
-        <IButton
+        <Button
           v-if="canAdoption"
           size="small"
           type="primary"
@@ -21,9 +21,9 @@
           @click="onAdopt"
         >
           <span class="primary-color"><svg class="icon"><use xlink:href="#icon-adopt-answer" /></svg> 采纳</span>
-        </IButton>
+        </Button>
 
-        <IPoptip
+        <Poptip
           v-model="showMore"
           placement="bottom"
           class="more"
@@ -40,11 +40,11 @@
               <li v-else @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
             </ul>
           </template>
-        </IPoptip>
+        </Poptip>
       </header>
 
       <main class="article-content">
-        <ISpin v-if="loading" fix />
+        <Spin v-if="loading" fix />
         <h1 class="question-title">{{ question.subject }}</h1>
 
         <div class="text-wrap" v-html="formatContent(answer.body)" />
@@ -90,7 +90,7 @@
         <div class="user">
           <div class="avatar-wrap">
             <Avatar :user="user" :anonymity="answer.anonymity" />
-            <IButton
+            <Button
               v-if="!answer.anonymity"
               type="primary"
               size="small"
@@ -103,7 +103,7 @@
               <template v-if="!followUserLock">
                 {{ user.follower ? '已关注' : '+ 关注' }}
               </template>
-            </IButton>
+            </Button>
           </div>
           <div class="info">
             <h3>
@@ -124,7 +124,7 @@
       <SideWidgetHotQuestions />
     </aside>
 
-    <IModal
+    <Modal
       v-model="showEdit"
       title="编辑回答"
       :transfer="false"
@@ -138,7 +138,7 @@
         :answer="answer"
         @after-patch="afterPatchAnswer"
       />
-    </IModal>
+    </Modal>
   </article>
 </template>
 

@@ -8,23 +8,23 @@
       @submit="onSubmit"
     />
     <div class="tools">
-      <IButton
+      <Button
         type="text"
         class="button tool"
         @click="onMention"
       >
         <svg class="icon"><use xlink:href="#icon-mention" /></svg>
         某人
-      </IButton>
+      </Button>
       <span class="count">还可输入 <span>{{ maxlength - content.length }}</span> 字</span>
-      <IButton
+      <Button
         type="primary"
         class="button submit-button"
         :disabled="disabled"
         @click="onSubmit"
       >
         评 论
-      </IButton>
+      </Button>
     </div>
   </div>
 </template>

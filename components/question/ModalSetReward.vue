@@ -1,5 +1,5 @@
 <template>
-  <IModal
+  <Modal
     v-model="show"
     class="c-question-modal-set-reward"
     title="公开悬赏"
@@ -9,26 +9,26 @@
     @on-ok="beforeSubmit"
   >
     <p>选择公开悬赏金额</p>
-    <IRadioGroup
+    <RadioGroup
       v-model="selected"
       class="select-wrap"
       type="button"
     >
-      <IRadio
+      <Radio
         v-for="item in recommendItems"
         :key="item"
         :label="item"
       />
-    </IRadioGroup>
+    </RadioGroup>
 
-    <IInputNumber
+    <InputNumber
       ref="custom"
       v-model="custom"
       class="custom-wrap"
       :min="0"
       placeholder="自定义金额，必须为整数"
     />
-  </IModal>
+  </Modal>
 </template>
 
 <script>

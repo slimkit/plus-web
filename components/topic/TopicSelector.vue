@@ -1,6 +1,6 @@
 <template>
   <div class="c-topic-selector">
-    <IInput
+    <Input
       v-model.trim="keyword"
       search
       placeholder="搜索话题"
@@ -16,7 +16,7 @@
     </template>
 
     <div v-else class="search-container">
-      <ISpin v-if="searchLock" fix />
+      <Spin v-if="searchLock" fix />
 
       <template v-else-if="result.length">
         <h4 class="topic-title">为你找到以下话题</h4>

@@ -7,7 +7,7 @@
           <h3>{{ user.name }}</h3>
           <p class="time">{{ feed.created_at | fromNow }}</p>
         </div>
-        <IPoptip
+        <Poptip
           v-model="showMore"
           placement="bottom"
           class="more"
@@ -20,7 +20,7 @@
               <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
             </ul>
           </template>
-        </IPoptip>
+        </Poptip>
       </header>
 
       <hr>

@@ -1,7 +1,7 @@
 <template>
   <div class="c-advertise-banner">
     <Collapse>
-      <ICarousel
+      <Carousel
         v-if="list.length"
         v-model="index"
         :height="bannerHeight"
@@ -9,7 +9,7 @@
         autoplay
         :autoplay-speed="3000"
       >
-        <ICarouselItem v-for="(item, idx) in list" :key="`advertise-right-${idx}`">
+        <CarouselItem v-for="(item, idx) in list" :key="`advertise-right-${idx}`">
           <a
             class="banner-wrap"
             :href="item.data.link"
@@ -19,8 +19,8 @@
             <AsyncFile type="image-wrap" :url="getFileUrl(item.data.image)" />
             <h3 class="title">{{ item.title }}</h3>
           </a>
-        </ICarouselItem>
-      </ICarousel>
+        </CarouselItem>
+      </Carousel>
     </Collapse>
   </div>
 </template>

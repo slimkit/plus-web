@@ -1,6 +1,6 @@
 <template>
   <article class="c-reference-question">
-    <ISpin v-if="loading" fix />
+    <Spin v-if="loading" fix />
 
     <template v-if="notFound">
       该资源不存在或已被删除

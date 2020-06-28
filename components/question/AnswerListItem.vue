@@ -35,7 +35,7 @@
 
       <a @click="onLike"><svg class="icon"><use :xlink:href="answer.liked ? '#icon-likered' : '#icon-like'" /></svg> {{ answer.likes_count }} 点赞</a>
 
-      <IPoptip
+      <Poptip
         v-if="!inCollect"
         v-model="showMore"
         placement="bottom"
@@ -52,13 +52,13 @@
             <li v-else @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
           </ul>
         </template>
-      </IPoptip>
+      </Poptip>
 
       <div class="devide" />
 
       <template v-if="question.look && answer.invited">
         <span>{{ answer.onlookers_count }}人正在围观</span>
-        <IButton
+        <Button
           type="primary"
           size="small"
           class="onlook-btn"
@@ -66,10 +66,10 @@
           @click="onLook"
         >
           {{ answer.could ? '已围观':'围观' }}
-        </IButton>
+        </Button>
       </template>
 
-      <IButton
+      <Button
         v-if="canAdoption"
         size="small"
         type="primary"
@@ -77,7 +77,7 @@
         @click="onAdopt"
       >
         <span class="primary-color"><svg class="icon"><use xlink:href="#icon-adopt-answer" /></svg> 采纳</span>
-      </IButton>
+      </Button>
     </footer>
   </li>
 </template>

@@ -12,8 +12,8 @@
             </p>
           </div>
           <div class="extra">
-            <div><IButton class="">已关注</IButton></div>
-            <IPoptip
+            <div><Button class="">已关注</Button></div>
+            <Poptip
               trigger="hover"
               placement="bottom"
               class="poptip-social-share"
@@ -29,7 +29,7 @@
                   :image="topic.avatar"
                 />
               </template>
-            </IPoptip>
+            </Poptip>
           </div>
         </div>
         <p>专题简介：{{ topic.description }}</p>
@@ -60,7 +60,7 @@
       <SideWidget key="question-create">
         <div class="question-container">
           <nuxt-link to="/question/create">
-            <IButton
+            <Button
               type="primary"
               :long="true"
               size="large"
@@ -68,7 +68,7 @@
             >
               <svg class="icon"><use xlink:href="#icon-publish" /></svg>
               提问
-            </IButton>
+            </Button>
           </nuxt-link>
         </div>
       </SideWidget>

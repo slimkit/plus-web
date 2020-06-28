@@ -36,7 +36,7 @@
           <svg class="icon"><use xlink:href="#icon-comment" /></svg>
           {{ question.comments_count }} 评论
         </a>
-        <IPoptip
+        <Poptip
           trigger="hover"
           placement="bottom"
           class="poptip-social-share"
@@ -51,7 +51,7 @@
               :description="question.body"
             />
           </template>
-        </IPoptip>
+        </Poptip>
 
         <div class="set-amount">
           <a v-if="!question.amount" @click="isMine && $refs.setReward.open()">未设置悬赏</a>
@@ -66,7 +66,7 @@
           />
         </div>
 
-        <IPoptip v-model="showMore" placement="bottom">
+        <Poptip v-model="showMore" placement="bottom">
           <a><svg class="icon lg more"><use xlink:href="#icon-more" /></svg></a>
 
           <template v-slot:content>
@@ -81,13 +81,13 @@
               </template>
             </ul>
           </template>
-        </IPoptip>
+        </Poptip>
 
         <div class="devide" />
 
         <span v-if="question.amount && question.invitations.length && totalLookAmount" class="onlook-amount">总围观金额：{{ totalLookAmount }}</span>
 
-        <IButton
+        <Button
           class="extra-btn"
           :class="{disabled: question.watched}"
           type="primary"
@@ -97,8 +97,8 @@
           @click="onFollow"
         >
           {{ question.watched ? '已关注' : '关注' }}
-        </IButton>
-        <IButton
+        </Button>
+        <Button
           v-if="question.my_answer"
           key="view-answer"
           class="extra-btn"
@@ -107,8 +107,8 @@
           :to="`/question/${question.id}/answer/${question.my_answer.id}`"
         >
           查看回答
-        </IButton>
-        <IButton
+        </Button>
+        <Button
           v-else
           key="create-answer"
           class="extra-btn"
@@ -117,7 +117,7 @@
           @click="showComment = false, showPostAnswer = !showPostAnswer"
         >
           写回答
-        </IButton>
+        </Button>
       </div>
 
       <div class="other-info">
@@ -174,7 +174,7 @@
         <div class="answers-list">
           <nav class="answer-nav">
             <h3>{{ question.answers_count }} 个回答</h3>
-            <IDropdown
+            <Dropdown
               trigger="click"
               transform="true"
               @on-click="val => (orderType = val)"
@@ -183,12 +183,12 @@
                 <a>{{ orderType === 'default' ? '默认排序' : '时间排序' }} <svg class="icon sm triangle"><use xlink:href="#icon-arrowDown-copy" /></svg></a>
               </template>
               <template v-slot:list>
-                <IDropdownMenu>
-                  <IDropdownItem name="default" :selected="orderType === 'default'">默认排序</IDropdownItem>
-                  <IDropdownItem name="time" :selected="orderType === 'time'">时间排序</IDropdownItem>
-                </IDropdownMenu>
+                <DropdownMenu>
+                  <DropdownItem name="default" :selected="orderType === 'default'">默认排序</DropdownItem>
+                  <DropdownItem name="time" :selected="orderType === 'time'">时间排序</DropdownItem>
+                </DropdownMenu>
               </template>
-            </IDropdown>
+            </Dropdown>
           </nav>
 
           <div class="answers">

@@ -35,7 +35,7 @@
         <div class="actions">
           <button class="button" @click="onFollow">{{ followStatus }}</button>
           <button class="button"><svg class="icon"><use xlink:href="#icon-messaged" /></svg> 聊天</button>
-          <IPoptip v-model="showMore" placement="bottom">
+          <Poptip v-model="showMore" placement="bottom">
             <button class="button more"><svg class="icon lg"><use xlink:href="#icon-more" /></svg></button>
 
             <template v-slot:content>
@@ -44,7 +44,7 @@
                 <li @click="onReport"><svg class="icon"><use xlink:href="#icon-report" /></svg> 举报</li>
               </ul>
             </template>
-          </IPoptip>
+          </Poptip>
         </div>
       </nav>
     </header>

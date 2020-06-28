@@ -48,5 +48,5 @@ export function convertAtHTML (string) {
  */
 export function convertLinkHTML (string) {
   string = xss(string)
-  return string.replace(linkMatcher, `<a class="text-link" href="$1" target="_blank">访问链接+</a>`)
+  return string.replace(linkMatcher, `<a class='text-link' href='$1' target='_blank'>访问链接+</a>`)
 }

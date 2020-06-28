@@ -34,7 +34,7 @@
       <aside class="news-right-container">
         <SideWidget key="publish">
           <div class="publish-wrap">
-            <IButton
+            <Button
               type="primary"
               :long="true"
               shape="circle"
@@ -43,7 +43,7 @@
             >
               <svg class="icon"><use xlink:href="#icon-publish" /></svg>
               投稿
-            </IButton>
+            </Button>
           </div>
         </SideWidget>
 

@@ -10,7 +10,7 @@
         <nuxt-link :to="`/user/${member.user_id}`">
           <span class="text-cut">{{ member.user.name }}</span>
         </nuxt-link>
-        <IPoptip
+        <Poptip
           v-if="menu.length"
           v-model="showMenu[index]"
           placement="bottom"
@@ -31,7 +31,7 @@
               </li>
             </ul>
           </template>
-        </IPoptip>
+        </Poptip>
       </div>
     </li>
   </ul>

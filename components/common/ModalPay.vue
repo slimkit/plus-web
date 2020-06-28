@@ -1,5 +1,5 @@
 <template>
-  <IModal
+  <Modal
     v-model="show"
     class="c-modal-pay"
     :title="title"
@@ -14,7 +14,7 @@
     <div class="content">
       {{ content }}
     </div>
-  </IModal>
+  </Modal>
 </template>
 
 <script>

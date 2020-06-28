@@ -23,7 +23,7 @@
         <span class="manager-badge">{{ roleMap[joined.role] }}</span>
       </template>
       <template v-else>
-        <IButton
+        <Button
           class="join-btn"
           type="primary"
           size="small"
@@ -42,7 +42,7 @@
             <svg class="icon sm"><use xlink:href="#icon-add" /></svg>
             加入
           </template>
-        </IButton>
+        </Button>
       </template>
     </div>
   </li>

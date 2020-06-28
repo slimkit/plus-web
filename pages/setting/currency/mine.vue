@@ -5,13 +5,13 @@
         <data class="currency">{{ (logged.currency.sum || 0).toLocaleString('en-US') }}</data>
         <p>当前积分</p>
       </div>
-      <IButton
+      <Button
         class="recharge-btn"
         type="primary"
         size="large"
       >
         充值
-      </IButton>
+      </Button>
     </div>
 
     <hr>

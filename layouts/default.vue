@@ -2,7 +2,7 @@
   <div class="layout-default">
     <!-- Browse Happy -->
     <Collapse>
-      <IAlert
+      <Alert
         v-if="isIE"
         banner
         type="warning"
@@ -11,7 +11,7 @@
       >
         <!-- eslint-disable-next-line -->
         您正在使用过时的 IE 浏览器，因此排版可能会错乱。为了您的浏览体验，强烈建议您更换至 <a class="primary-color" href="https://browsehappy.com/" target="_blank" >现代浏览器</a>
-      </IAlert>
+      </Alert>
     </Collapse>
 
     <CommonHeader />

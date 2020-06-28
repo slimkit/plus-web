@@ -17,23 +17,23 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.NUXT_ENV_APP_DESCRIPTION },
-      { hid: 'keywords', name: 'keywords', content: process.env.NUXT_ENV_APP_KEYWORDS },
+      { hid: 'keywords', name: 'keywords', content: process.env.NUXT_ENV_APP_KEYWORDS }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
       // fonticon
       { src: '//at.alicdn.com/t/font_800619_tomqzgbu5k.js' },
       // social share https://github.com/overtrue/share.js/
-      { src: '/scripts/social-share.min.js' },
-    ],
+      { src: '/scripts/social-share.min.js' }
+    ]
   },
 
   env: {
     debug: debug !== undefined ? debug : IS_DEV,
     baseURL,
-    apiURL: baseURL + '/api/v2',
+    apiURL: baseURL + '/api/v2'
   },
 
   /*
@@ -45,27 +45,27 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'github-markdown-css',
+    'github-markdown-css'
   ],
 
   router: {
     base: process.env.NUXT_ENV_PATH_PREFIX || '/',
     linkActiveClass: 'active',
-    linkExactActiveClass: 'exact-active',
+    linkExactActiveClass: 'exact-active'
   },
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '@/plugins/version', ssr: false },
-    { src: '@/plugins/axios', ssr: true },
-    { src: '@/plugins/iview', ssr: true },
-    { src: '@/plugins/mixins', ssr: true },
-    { src: '@/plugins/components', ssr: true },
-    { src: '@/plugins/filters', ssr: true },
-    { src: '@/plugins/directives', ssr: true },
-    { src: '@/plugins/vueCropper', ssr: false },
+    { src: '@/plugins/version', model: 'client' },
+    { src: '@/plugins/axios', model: 'server' },
+    { src: '@/plugins/iview', model: 'server' },
+    { src: '@/plugins/mixins', model: 'server' },
+    { src: '@/plugins/components', model: 'server' },
+    { src: '@/plugins/filters', model: 'server' },
+    { src: '@/plugins/directives', model: 'server' },
+    { src: '@/plugins/vueCropper', model: 'client' }
   ],
 
   /*
@@ -77,7 +77,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     // inject style
-    '@nuxtjs/style-resources',
+    '@nuxtjs/style-resources'
   ],
   /*
   ** Axios module configuration
@@ -87,19 +87,19 @@ module.exports = {
     // baseURL: https?://[host]:[port][prefix]
     baseURL: `${baseURL}/api/v2`,
     proxy: true,
-    prefix: '/api/v2',
+    prefix: '/api/v2'
   },
 
   proxy: {
-    '/api': baseURL,
+    '/api': baseURL
   },
 
   styleResources: {
     // inject the theme variables into every Vue components
     less: [
       '@/assets/less/theme.less',
-      '@/assets/less/mixins.less',
-    ],
+      '@/assets/less/mixins.less'
+    ]
   },
 
   /*
@@ -115,7 +115,7 @@ module.exports = {
     vendor: [
       'iview',
       'lodash',
-      'vue-cropper',
+      'vue-cropper'
     ],
     /*
     ** You can extend webpack config here
@@ -133,9 +133,9 @@ module.exports = {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/,
+          exclude: /(node_modules)/
         })
       }
-    },
-  },
+    }
+  }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="p-question-create">
-    <IForm
+    <Form
       ref="form"
       :model="validateModel"
       :rules="validator"
@@ -8,15 +8,15 @@
     >
       <div v-if="step === 1" class="step1">
         <h1>提问</h1>
-        <IFormItem prop="subject">
-          <IInput
+        <FormItem prop="subject">
+          <Input
             v-model="form.subject"
             placeholder="请输入问题 (必填)"
             size="large"
           />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="topics">
+        <FormItem prop="topics">
           <Select
             v-model="selectedTopics"
             filterable
@@ -30,29 +30,29 @@
               :label="topic.name"
             />
           </Select>
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem prop="body">
+        <FormItem prop="body">
           <MarkdownEditor v-model="form.body" placeholder="请输入问题描述，支持 Markdown 语法" />
-        </IFormItem>
+        </FormItem>
 
-        <IFormItem>
-          <ICheckbox
+        <FormItem>
+          <Checkbox
             v-model="form.anonymity"
             :true-value="1"
             :false-value="0"
           >
             匿名提问
-          </ICheckbox>
-        </IFormItem>
+          </Checkbox>
+        </FormItem>
 
-        <IButton
+        <Button
           type="primary"
           :disabled="disabled"
           @click="step = 2"
         >
           下一步
-        </IButton>
+        </Button>
       </div>
 
       <div v-if="step === 2" class="step2">
@@ -64,19 +64,19 @@
           </a>
         </h2>
 
-        <IFormItem prop="amount" label="设置悬赏金额">
-          <IRadioGroup v-model="selectedAmount" type="button">
-            <IRadio :label="0">不设置</IRadio>
-            <IRadio
+        <FormItem prop="amount" label="设置悬赏金额">
+          <RadioGroup v-model="selectedAmount" type="button">
+            <Radio :label="0">不设置</Radio>
+            <Radio
               v-for="item in selectAmountItems"
               :key="item"
               :label="item"
             >
               {{ item }}
-            </IRadio>
-          </IRadioGroup>
+            </Radio>
+          </RadioGroup>
 
-          <IInputNumber
+          <InputNumber
             v-model="customAmount"
             class="custom-amount"
             placeholder="自定义悬赏金额"
@@ -84,24 +84,24 @@
             :max="1e8"
             :step="10"
           />
-        </IFormItem>
+        </FormItem>
 
         <Collapse>
-          <IFormItem
+          <FormItem
             v-if="form.amount"
             prop="invite"
             label="邀请悬赏"
           >
-            <IRadioGroup v-model="invite">
-              <IRadio :label="1">是</IRadio>
-              <IRadio :label="0">否</IRadio>
-            </IRadioGroup>
-          </IFormItem>
+            <RadioGroup v-model="invite">
+              <Radio :label="1">是</Radio>
+              <Radio :label="0">否</Radio>
+            </RadioGroup>
+          </FormItem>
         </Collapse>
 
         <Collapse>
           <div v-if="form.amount && invite" class="invite-wrap">
-            <IFormItem prop="expert" label="邀请回答">
+            <FormItem prop="expert" label="邀请回答">
               <Select
                 v-model="invitations"
                 filterable
@@ -126,28 +126,28 @@
                   />
                 </Option>
               </Select>
-            </IFormItem>
+            </FormItem>
 
-            <IFormItem label="是否开启围观">
-              <IRadioGroup v-model="form.look">
-                <IRadio :label="1">是</IRadio>
-                <IRadio :label="0">否</IRadio>
-              </IRadioGroup>
-            </IFormItem>
+            <FormItem label="是否开启围观">
+              <RadioGroup v-model="form.look">
+                <Radio :label="1">是</Radio>
+                <Radio :label="0">否</Radio>
+              </RadioGroup>
+            </FormItem>
           </div>
         </Collapse>
 
-        <IButton @click="step = 1">上一步</IButton>
-        <IButton
+        <Button @click="step = 1">上一步</Button>
+        <Button
           type="primary"
           :disabled="disabled"
           :loading="submitLock"
           @click="onSubmit"
         >
           发布问题
-        </IButton>
+        </Button>
       </div>
-    </IForm>
+    </Form>
   </div>
 </template>
 

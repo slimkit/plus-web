@@ -1,7 +1,7 @@
 <template>
   <section class="c-article-like">
     <div class="meta-item">
-      <IButton
+      <Button
         size="large"
         class="meta-button"
         :class="{active: collected}"
@@ -9,8 +9,8 @@
       >
         <svg class="icon"><use xlink:href="#icon-collect" /></svg>
         {{ collected ? '取消收藏' : '收藏' }}
-      </IButton>
-      <IButton
+      </Button>
+      <Button
         size="large"
         class="meta-button"
         :class="{active: liked}"
@@ -18,7 +18,7 @@
       >
         <svg class="icon"><use xlink:href="#icon-like" /></svg>
         {{ likeCount }} 人喜欢
-      </IButton>
+      </Button>
     </div>
 
     <div class="meta-item">
