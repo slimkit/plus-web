@@ -25,7 +25,7 @@
 
     <template v-if="!isOwner">
       <p class="label">设置置顶金额</p>
-      <nputNumber
+      <inputNumber
         ref="custom"
         v-model="custom"
         class="custom-wrap"

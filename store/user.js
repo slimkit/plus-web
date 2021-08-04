@@ -13,6 +13,7 @@ export const state = () => ({
   logged: null, // 已登录用户
   friend: [], // 好友
   recommend: [], // 推荐用户（已缓存）
+  recommendLoading: false, // 推荐用户加载中
   hot: [], // 热门用户（已缓存）
   new: [], // 最新用户
   userTags: [], // 当前登录用户标签
@@ -26,9 +27,13 @@ export const TYPES = {
   SAVE_NEW_USERS: 'SAVE_NEW_USERS',
   SAVE_FRIEND: 'SAVE_FRIEND',
   SAVE_USER_TAGS: 'SAVE_USER_TAGS',
+  SET_RECOMMEND_USER_LOADING: 'SET_RECOMMEND_USER_LOADING',
 }
 
 export const mutations = {
+  [TYPES.SET_RECOMMEND_USER_LOADING] (state, status) {
+    state.recommendLoading = status
+  },
   [TYPES.LOAD_FROM_STORAGE] (state) {
     // 加载推荐用户
     const recommend = local.get(LOCAL_KEY.RECOMMEND_USERS)
@@ -104,12 +109,16 @@ export const actions = {
     commit(TYPES.SAVE_FRIEND, users)
   },
 
-  async fetchRecommendUsers ({ commit }, offset) {
-    const params = { offset, limit }
-    const users = await this.$axios.$get('/user/recommends', { params })
-    commit(TYPES.SAVE_RECOMMEND_USERS, { users, offset })
-    const noMore = users.length < limit
-    return noMore
+  async fetchRecommendUsers ({ commit, state }, offset) {
+    if (!state.recommendLoading) {
+      commit(TYPES.SET_RECOMMEND_USER_LOADING, true)
+      const params = { offset, limit }
+      const users = await this.$axios.$get('/user/recommends', { params })
+      commit(TYPES.SET_RECOMMEND_USER_LOADING, false)
+      commit(TYPES.SAVE_RECOMMEND_USERS, { users, offset })
+      const noMore = users.length < limit
+      return noMore
+    }
   },
 
   async fetchHotUsers ({ commit }, offset) {

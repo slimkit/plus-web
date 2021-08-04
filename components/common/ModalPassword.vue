@@ -9,7 +9,7 @@
     @on-cancel="close"
   >
     <div class="password-confirm-wrap">
-      <nput
+      <input
         ref="password"
         v-model="password"
         class="password-input"

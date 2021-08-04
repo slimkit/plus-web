@@ -3,7 +3,7 @@
     :users="recommendUsers"
     type="user"
     title="推荐用户"
-    :loading="!recommendUsers.length"
+    :loading="loading"
   />
 </template>
 
@@ -19,6 +19,7 @@ export default {
   computed: {
     ...mapState('user', {
       recommendUsers: 'recommend',
+      loading: 'recommendLoading',
     }),
   },
   mounted () {
